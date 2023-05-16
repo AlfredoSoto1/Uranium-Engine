@@ -174,3 +174,37 @@
 //
 //    return 0;
 //}
+
+#include <iostream>
+#include <Core/Application/Application.h>
+
+#include <Graphics/Display/Window.h>
+#include <Graphics/Display/WindowProps.h>
+#include <Graphics/Display/Monitor.h>
+
+using namespace Uranium::Core::Application;
+using namespace Uranium::Graphics::Display;
+
+class MyApp : public ApplicationProgram {
+public:
+
+	MyApp() {
+		std::cout << "Created program" << std::endl;
+
+		Window window("First display", 1280, 720);
+
+		if (!window.init())
+			return; // failed to initiate window
+
+		window.run();
+
+	}
+
+	~MyApp() {
+		std::cout << "Destroyed program" << std::endl;
+	}
+};
+
+int main() {
+	Application::start(std::make_shared<MyApp>());
+}

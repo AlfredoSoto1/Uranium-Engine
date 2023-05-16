@@ -90,6 +90,19 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\Core\Application\Application.cpp" />
+    <ClCompile Include="src\Core\Application\ApplicationProgram.cpp" />
+    <ClCompile Include="src\Core\Math\mat2.cpp" />
+    <ClCompile Include="src\Core\Math\mat3.cpp" />
+    <ClCompile Include="src\Core\Math\mat4.cpp" />
+    <ClCompile Include="src\Core\Math\Operation.cpp" />
+    <ClCompile Include="src\Core\Math\vec2.cpp" />
+    <ClCompile Include="src\Core\Math\vec3.cpp" />
+    <ClCompile Include="src\Core\Math\vec4.cpp" />
+    <ClCompile Include="src\Graphics\Display\Monitor.cpp" />
+    <ClCompile Include="src\Graphics\Display\Window.cpp" />
+    <ClCompile Include="src\Graphics\Display\WindowProps.cpp" />
+    <ClCompile Include="src\Input\WindowCallback.cpp" />
     <ClCompile Include="src\STL_pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
@@ -97,6 +110,20 @@
     <ClCompile Include="src\Vendor\stb_image.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\Core\Application\Application.h" />
+    <ClInclude Include="src\Core\Application\ApplicationProgram.h" />
+    <ClInclude Include="src\Core\Math\Constants.h" />
+    <ClInclude Include="src\Core\Math\mat2.h" />
+    <ClInclude Include="src\Core\Math\mat3.h" />
+    <ClInclude Include="src\Core\Math\mat4.h" />
+    <ClInclude Include="src\Core\Math\Operation.h" />
+    <ClInclude Include="src\Core\Math\vec2.h" />
+    <ClInclude Include="src\Core\Math\vec3.h" />
+    <ClInclude Include="src\Core\Math\vec4.h" />
+    <ClInclude Include="src\Graphics\Display\Monitor.h" />
+    <ClInclude Include="src\Graphics\Display\Window.h" />
+    <ClInclude Include="src\Graphics\Display\WindowProps.h" />
+    <ClInclude Include="src\Input\WindowCallback.h" />
     <ClInclude Include="src\STL_pch.h" />
     <ClInclude Include="src\Vendor\stb_image.h" />
   </ItemGroup>
