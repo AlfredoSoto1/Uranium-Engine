@@ -44,19 +44,22 @@ namespace Uranium::Graphics::Display {
 
 		unsigned int getWindowTransparency();
 
+		unsigned int getWidth();
+		unsigned int getHeight();
+
 		void getSize(unsigned int& width, unsigned int& height);
 		void getPosition(int& xpos, int& ypos);
 		void getOpenGlVersion(unsigned int& mayor, unsigned int& minor);
 		
-		bool isRestored();
-		bool isMaximized();
-		bool isMinimized();
-
-		bool isVisible();
-		bool isResizable();
-		bool isDecorated();
-		bool isFullscreen();
-		bool isAlwaysOnTop();
+		bool isRestored();		 // 
+		bool isMaximized();		 // 
+		bool isMinimized();		 // 
+								 // 
+		bool isVisible();		 // Current Window status
+		bool isResizable();		 // 
+		bool isDecorated();		 // 
+		bool isFullscreen();	 // 
+		bool isAlwaysOnTop();	 // 
 
 	private:
 		/*

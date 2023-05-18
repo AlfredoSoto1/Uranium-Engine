@@ -2,41 +2,58 @@
 
 #define GLEW_STATIC
 
-#include <iostream>
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 
 #include "Monitor.h"
 #include "WindowProps.h"
 
-#include "Input/WindowCallback.h"
+#include "Core/Application/UraniumApi.h"
+#include "Core/Application/Application.h"
 
-using namespace Uranium::Input;
+using namespace Uranium::Core::Application;
 using namespace Uranium::Graphics::Display;
-
-static void error_callback(int error, const char* description) {
-	fprintf(stderr, "Error: %s\n", description);
-}
 
 Window::Window(const std::string& title, unsigned int width, unsigned int height) :
 	window(nullptr),
-	monitor(nullptr)
+	windowProps(nullptr),
+	monitor(nullptr),
+	hasFailed(false),
+	hasDisposed(false)
 {
+	/*
+	* Check conditions that verify if window can be created
+	* in current context.
+	*/
+	if (Application::get() == nullptr) {
+		print_warning(hasFailed = true, "Window cannot be initialized if there is not and Application");
+		return;
+	}
+
+	if (!Application::get()->hasProgramInitiated()) {
+		print_warning(hasFailed = true, "Window cannot be initialized if the GLFW lib. is not initialized");
+		return;
+	}
+
 	windowProps = new WindowProps(title, width,height);
 	windowProps->setContext(this);
 }
 
 Window::~Window() {
 
-	if(callback != nullptr)
-		delete callback;
-	
-	delete windowProps;
-
-	if (!window)
+	// check flag before continuing
+	if (hasDisposed)
 		return;
 
-	glfwDestroyWindow(window);
+	if (hasFailed)
+		return;
+	/*
+	* dispose window content
+	* if and only if, the 
+	* dispose() method has never
+	* been called.
+	*/
+	dispose();
 }
 
 Window::operator GLFWwindow* () {
@@ -49,6 +66,19 @@ void Window::setMonitor(std::shared_ptr<Monitor> monitor) {
 
 std::shared_ptr<Monitor> Window::getMonitor() {
 	return monitor;
+}
+
+bool Window::hasClosed() {
+	
+	// throw error in case has no context
+	throw_error(!window, "'this' window has no GLFW context.");
+
+	// return in built glfw flag
+	return glfwWindowShouldClose(window);
+}
+
+bool Window::failedOnCreation() {
+	return hasFailed;
 }
 
 WindowProps& Window::getProperties() {
@@ -114,14 +144,7 @@ void Window::createWindow() {
 	window = glfwCreateWindow(windowProps->width, windowProps->height, windowProps->getTitle().c_str(), activeMonitor, nullptr);
 }
 
-bool Window::init() {
-	if (!glfwInit()) {
-		std::cerr << "Failed to initiate GLFW" << std::endl;
-		return false;
-	}
-
-	// set default GLFW error callback
-	glfwSetErrorCallback(&error_callback);
+void Window::init() {
 
 	// Load GLFW hints
 	prepareWindowHints();
@@ -130,99 +153,79 @@ bool Window::init() {
 	createWindow();
 
 	if (!window) {
-		std::cerr << "Failed to create GLFW window" << std::endl;
-		glfwTerminate();
-		return false;
+		print_warning(hasFailed = true, "Failed to create GLFW window");
+		return;
 	}
 
-	/// 
-	/// Load GLFW Context-Dependent hints
-	/// 
+	// Load GLFW Context-Dependent hints
 	prepareContextHints();
 
-	/// 
-	/// Set context to be current in this thread
-	/// and prepare GLEW and all render related stuff
-	/// (non window GLFW related)
-	/// 
+	/*
+	*  Set context to be current in this thread
+	*  and prepare GLEW and all render related stuff
+	*  (non window GLFW related)
+	*/
 	glfwMakeContextCurrent(window);
 	glfwShowWindow(window);
 
 	glfwSwapInterval(0); // set to max FPS TEMP
 
 	if (glewInit() != GLEW_OK) {
-		std::cerr << "Failed to initiate GLEW." << std::endl;
-		return false;
+		print_warning(hasFailed = true, "Failed to initiate GLEW.");
+		// dispose if error occours 
+		dispose();
+		return;
 	}
 	
 	std::cout << glGetString(GL_VERSION) << std::endl;
 	
 	glViewport(0, 0, windowProps->width, windowProps->height);
-
-	// Initiate window Callbacks
-	callback = new WindowCallback(this);
-
-	// set custom pointer to GLFW remember in context
-	//glfwSetWindowUserPointer(getWindow(), this);
-	return true;
 }
 
-void Window::run() {
-	while (!glfwWindowShouldClose(window)) {
-		// update
-		//appProgram->update();
-		// reset viewport
-		if (callback->hasResized()) {
-			glViewport(0, 0, windowProps->width, windowProps->height);
-		}
+void Window::setRunnable() {
 
-		// draw
-		//appProgram->draw();
-
-		// post processing
-
-		// swap buffers
-		glfwSwapBuffers(window);
-
-		// post draw
-		callback->has_Resized = false;
-		//appProgram->afterDraw();
-
-		// poll events
-		glfwPollEvents();
-
-		//mouse->update();
-		//keyboard->update();
-	}
-	// closes the application
-	//appProgram->dispose();
-
-	// disposes everything after application has ended
-	dispose();
-}
-
-void Window::exit(int errorCode) {
-}
-
-void Window::dispose() {
-	glfwDestroyWindow(window);
-
-	glfwTerminate();
 }
 
 void Window::focus() {
-	if (window) glfwFocusWindow(window);
-	else std::cerr << "'this' window has no GLFW context." << std::endl;
+
+	// throw error in case has no context
+	throw_error(!window, "'this' window has no GLFW context.");
+
+	// focus window
+	glfwFocusWindow(window);
 }
 
 void Window::close() {
-	if (window) glfwSetWindowShouldClose(window, GLFW_TRUE);
-	else std::cerr << "'this' window has no GLFW context." << std::endl;
+
+	// throw error in case has no context
+	throw_error(!window, "'this' window has no GLFW context.");
+	
+	// update glfw close flag
+	glfwSetWindowShouldClose(window, GLFW_TRUE);
+}
+
+void Window::dispose() {
+
+	// throw possible errors
+	throw_error(!window, "Cannot dispose on a window out of context.");
+	throw_error(hasDisposed, "Cannot dispose on a window that has already been disposed.");
+
+	// free window props
+	delete windowProps;
+
+	// destroy window context
+	glfwDestroyWindow(window);
+
+	// update flag
+	hasDisposed = true;
 }
 
 void Window::requestAttention() {
-	if (window) glfwRequestWindowAttention(window);
-	else std::cerr << "'this' window has no GLFW context." << std::endl;
+	// throw error if window == nullptr
+	throw_error(!window, "'this' window has no GLFW context.");
+
+	// request attention by glfw
+	glfwRequestWindowAttention(window);
 }
 
 void Window::restore() {
@@ -266,6 +269,8 @@ void Window::fullscreen(unsigned int width, unsigned int height) {
 	else {
 		glfwSetWindowMonitor(window, 0, xpos, ypos, windowProps->width, windowProps->height, 0);
 	}
+
+	glfwGetWindowUserPointer();
 	callback->has_Resized = true;
 }
 

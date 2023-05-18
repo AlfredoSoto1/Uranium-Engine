@@ -5,13 +5,7 @@
 
 struct GLFWwindow;
 
-namespace Uranium::Input {
-	class WindowCallback;
-}
-
 namespace Uranium::Graphics::Display {
-
-	namespace Input = Uranium::Input;
 
 	class Monitor;
 	class WindowProps;
@@ -26,33 +20,39 @@ namespace Uranium::Graphics::Display {
 		operator GLFWwindow* ();
 		
 		WindowProps& getProperties();
-		
 		std::shared_ptr<Monitor> getMonitor();
+
+		bool hasClosed();
+		bool failedOnCreation();
+
+		void init();				// 
+		void close();				// main methods that controls
+		void dispose();				// the initialization and finalization of window
+		void setRunnable();			// 
 		
-		bool init();
-		void exit(int errorCode);
-		void close();
-		void dispose();
-		void run();
-		
-		void focus();
-		void restore();
-		void maximize();
-		void minimize();
-		void requestAttention();
-		void centerWindow();
+		void focus();				// 
+		void restore();				// These are the basic integrated window
+		void maximize();			// commands used for modifying the aspect
+		void minimize();			// of the window itself
+		void requestAttention();	// 
+		void centerWindow();		// 
 
 		// set fullscreen with a resolution
 		void fullscreen(unsigned int width, unsigned int height);
 		
 	private:
 		/*
+		* Friend with other classes
+		*/
+		//friend Application::ApplicationProgram;
+
+	private:
+		/*
 		* Private methods
 		*/
-		void prepareWindowHints();
-		void prepareWindowGLVersion();
-
-		void prepareContextHints();
+		void prepareWindowHints();		//
+		void prepareWindowGLVersion();	// Constructs window hints beforea
+		void prepareContextHints();		// and after creation.
 
 		void createWindow();
 
@@ -60,10 +60,11 @@ namespace Uranium::Graphics::Display {
 		/*
 		* Private members
 		*/
+		bool hasFailed;
+		bool hasDisposed;
+		
 		GLFWwindow* window;
-
 		WindowProps* windowProps;
-		Input::WindowCallback* callback;
 
 		std::shared_ptr<Monitor> monitor;
 	};

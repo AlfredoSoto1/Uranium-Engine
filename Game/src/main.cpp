@@ -175,6 +175,204 @@
 //    return 0;
 //}
 
+
+
+
+
+
+//#include <iostream>
+//#include <thread>
+//#include <mutex>
+//#include <condition_variable>
+//#include <GLFW/glfw3.h>
+//
+//std::mutex mutex;
+//std::condition_variable cv;
+//bool renderingStopped = false;
+//
+//void renderingThread(GLFWwindow* window) {
+//    // Set the rendering thread's OpenGL context
+//    glfwMakeContextCurrent(window);
+//
+//    // Rendering loop
+//    while (!renderingStopped) {
+//        // Clear the framebuffer
+//        glClear(GL_COLOR_BUFFER_BIT);
+//
+//        // Render your objects here
+//        std::cout << "render" << std::endl;
+//        // Swap buffers
+//        glfwSwapBuffers(window);
+//
+//        // Poll for events
+//        glfwPollEvents();
+//    }
+//}
+//
+//int main() {
+//    // Initialize GLFW
+//    if (!glfwInit()) {
+//        std::cerr << "Failed to initialize GLFW" << std::endl;
+//        return 1;
+//    }
+//
+//    // Create the main OpenGL context
+//    GLFWwindow* window = glfwCreateWindow(800, 600, "Multi-threaded GLFW", nullptr, nullptr);
+//    if (!window) {
+//        std::cerr << "Failed to create GLFW window" << std::endl;
+//        glfwTerminate();
+//        return 1;
+//    }
+//
+//    // Spawn the rendering thread
+//    std::thread thread(renderingThread, window);
+//
+//    // Handle input events in the main thread
+//    while (!glfwWindowShouldClose(window)) {
+//        // Handle input events here
+//        std::cout << "main" << std::endl;
+//        glfwPollEvents();
+//    }
+//
+//    // Signal the rendering thread to stop
+//    {
+//        std::lock_guard<std::mutex> lock(mutex);
+//        renderingStopped = true;
+//    }
+//    cv.notify_all();
+//
+//    // Wait for the rendering thread to finish
+//    thread.join();
+//
+//    // Clean up and terminate GLFW
+//    glfwDestroyWindow(window);
+//    glfwTerminate();
+//
+//    return 0;
+//}
+
+//#include <iostream>
+//#include <GLFW/glfw3.h>
+//
+//void errorCallback(int error, const char* description) {
+//    std::cerr << "GLFW Error: " << description << std::endl;
+//}
+//
+//void render(GLFWwindow* window, const std::string& windowName) {
+//    glfwMakeContextCurrent(window);
+//
+//    while (!glfwWindowShouldClose(window)) {
+//        glClear(GL_COLOR_BUFFER_BIT);
+//
+//        // Render your objects here
+//
+//        glfwSwapBuffers(window);
+//        glfwPollEvents();
+//    }
+//
+//    std::cout << windowName << " rendering finished." << std::endl;
+//}
+//
+//int main() {
+//    // Set the error callback function
+//    glfwSetErrorCallback(errorCallback);
+//
+//    // Initialize GLFW
+//    if (!glfwInit()) {
+//        std::cerr << "Failed to initialize GLFW" << std::endl;
+//        return 1;
+//    }
+//
+//    // Create the first window
+//    GLFWwindow* window1 = glfwCreateWindow(640, 480, "Window 1", nullptr, nullptr);
+//    if (!window1) {
+//        std::cerr << "Failed to create GLFW window 1" << std::endl;
+//        glfwTerminate();
+//        return 1;
+//    }
+//
+//    // Create the second window
+//    GLFWwindow* window2 = glfwCreateWindow(640, 480, "Window 2", nullptr, nullptr);
+//    if (!window2) {
+//        std::cerr << "Failed to create GLFW window 2" << std::endl;
+//        glfwTerminate();
+//        return 1;
+//    }
+//
+//    // Render for the first window
+//    render(window1, "Window 1");
+//
+//    // Render for the second window
+//    render(window2, "Window 2");
+//
+//    // Clean up and terminate GLFW
+//    glfwDestroyWindow(window1);
+//    glfwDestroyWindow(window2);
+//    glfwTerminate();
+//
+//    return 0;
+//}
+
+//#include <GLFW/glfw3.h>
+//
+//int main(void)
+//{
+//    GLFWwindow* window1;
+//    GLFWwindow* window2;
+//
+//    /* Initialize the library */
+//    if (!glfwInit())
+//        return -1;
+//
+//    /* Create a windowed mode window and its OpenGL context */
+//    window1 = glfwCreateWindow(1280, 720, "Hello World", NULL, NULL);
+//    if (!window1)
+//    {
+//        glfwTerminate();
+//        return -1;
+//    }
+//
+//    /* Create a second windowed mode window and its OpenGL context */
+//    window2 = glfwCreateWindow(1280, 720, "World Hello", NULL, NULL);
+//    if (!window2)
+//    {
+//        glfwTerminate();
+//        return -1;
+//    }
+//
+//    /* Loop until the user closes the window */
+//    while (!glfwWindowShouldClose(window1) && !glfwWindowShouldClose(window2))
+//    {
+//        /* Make the window's context current */
+//        glfwMakeContextCurrent(window1);
+//        /* Render here */
+//        glClear(GL_COLOR_BUFFER_BIT);
+//        /* Swap front and back buffers */
+//        glfwSwapBuffers(window1);
+//
+//        /* Make the second window's context current */
+//        glfwMakeContextCurrent(window2);
+//        /* Render here */
+//        glClear(GL_COLOR_BUFFER_BIT);
+//        /* Swap front and back buffers */
+//        glfwSwapBuffers(window2);
+//
+//        /* Poll for and process events */
+//        glfwPollEvents();
+//    }
+//
+//    glfwTerminate();
+//    return 0;
+//}
+
+
+
+
+
+
+
+
+
 #include <iostream>
 #include <Core/Application/Application.h>
 
@@ -188,23 +386,25 @@ using namespace Uranium::Graphics::Display;
 class MyApp : public ApplicationProgram {
 public:
 
-	MyApp() {
-		std::cout << "Created program" << std::endl;
+	Window* window = nullptr;
 
-		Window window("First display", 1280, 720);
+	void init() {
+		window = new Window("First display", 1280, 720);
+		window->init();
 
-		if (!window.init())
-			return; // failed to initiate window
+		window->setRunnable();
 
-		window.run();
-
+		this->setWindow(window);
 	}
 
-	~MyApp() {
-		std::cout << "Destroyed program" << std::endl;
+	void dispose() {
+		delete window;
 	}
 };
 
 int main() {
+	/*
+	* Start program
+	*/
 	Application::start(std::make_shared<MyApp>());
 }

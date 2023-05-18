@@ -3,7 +3,7 @@
 #include "WindowCallback.h"
 #include "Graphics/Display/Window.h"
 
-using namespace Uranium::Input;
+using namespace Uranium::Input::Callbacks;
 using namespace Uranium::Graphics::Display;
 
 WindowCallback::WindowCallback(Window* window) :

@@ -1,7 +1,6 @@
 #pragma once
 
 #include <memory>
-
 #include "ApplicationProgram.h"
 
 namespace Uranium::Core::Application {
@@ -16,11 +15,11 @@ namespace Uranium::Core::Application {
 		*/
 		Application() = delete;
 		
-		Application(Application&) = delete;
-		Application(Application&&) = delete;
-		
-		Application(const Application&) = delete;
-		Application(const Application&&) = delete;
+		Application(Application&) = delete;				  // 
+		Application(Application&&) = delete;			  //  Most of the constructors have been deleted
+														  //  because we don't want any user to create an
+		Application(const Application&) = delete;		  //  instance of Application
+		Application(const Application&&) = delete;		  // 
 
 		/*
 		* Starts application with a reference
@@ -30,13 +29,20 @@ namespace Uranium::Core::Application {
 		*/
 		static void start(std::shared_ptr<ApplicationProgram> program);
 
+		static Application* get();
+
+		bool isProgramRunnning();
+		bool hasProgramInitiated();
+
 	private:
 		/*
 		* Private static members
 		*/
 
 		// Current active application reference
-		static Application* mainApplication;
+		static Application* appSingleton;
+
+		static void error_callback(int error, const char* description);
 	
 	private:
 		/*
@@ -45,14 +51,15 @@ namespace Uranium::Core::Application {
 	
 		Application(std::shared_ptr<ApplicationProgram> program);
 	
-		// Runs application
 		void run();
 
 	private:
 		/*
 		* Private members
 		*/
-		// Current active program reference
 		std::shared_ptr<ApplicationProgram> program;
+
+		bool isRunning;
+		bool hasInitiated;
 	};
 }

@@ -95,6 +95,14 @@ unsigned int WindowProps::getWindowTransparency() {
 	return transparency;
 }
 
+unsigned int WindowProps::getWidth() {
+	return width;
+}
+
+unsigned int WindowProps::getHeight() {
+	return height;
+}
+
 void WindowProps::getSize(unsigned int& width, unsigned int& height) {
 	width = this->width;
 	height = this->height;

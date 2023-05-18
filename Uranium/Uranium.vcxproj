@@ -102,7 +102,12 @@
     <ClCompile Include="src\Graphics\Display\Monitor.cpp" />
     <ClCompile Include="src\Graphics\Display\Window.cpp" />
     <ClCompile Include="src\Graphics\Display\WindowProps.cpp" />
-    <ClCompile Include="src\Input\WindowCallback.cpp" />
+    <ClCompile Include="src\Graphics\UI\Cursor.cpp" />
+    <ClCompile Include="src\Graphics\UI\CursorShape.cpp" />
+    <ClCompile Include="src\Input\Callbacks\CursorCallback.cpp" />
+    <ClCompile Include="src\Input\Callbacks\KeyboardCallback.cpp" />
+    <ClCompile Include="src\Input\Callbacks\WindowCallback.cpp" />
+    <ClCompile Include="src\Input\Callbacks\MouseCallback.cpp" />
     <ClCompile Include="src\STL_pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
@@ -112,6 +117,7 @@
   <ItemGroup>
     <ClInclude Include="src\Core\Application\Application.h" />
     <ClInclude Include="src\Core\Application\ApplicationProgram.h" />
+    <ClInclude Include="src\Core\Application\UraniumApi.h" />
     <ClInclude Include="src\Core\Math\Constants.h" />
     <ClInclude Include="src\Core\Math\mat2.h" />
     <ClInclude Include="src\Core\Math\mat3.h" />
@@ -123,7 +129,12 @@
     <ClInclude Include="src\Graphics\Display\Monitor.h" />
     <ClInclude Include="src\Graphics\Display\Window.h" />
     <ClInclude Include="src\Graphics\Display\WindowProps.h" />
-    <ClInclude Include="src\Input\WindowCallback.h" />
+    <ClInclude Include="src\Graphics\UI\Cursor.h" />
+    <ClInclude Include="src\Graphics\UI\CursorShape.h" />
+    <ClInclude Include="src\Input\Callbacks\CursorCallback.h" />
+    <ClInclude Include="src\Input\Callbacks\KeyboardCallback.h" />
+    <ClInclude Include="src\Input\Callbacks\MouseCallback.h" />
+    <ClInclude Include="src\Input\Callbacks\WindowCallback.h" />
     <ClInclude Include="src\STL_pch.h" />
     <ClInclude Include="src\Vendor\stb_image.h" />
   </ItemGroup>
