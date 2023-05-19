@@ -19,14 +19,30 @@ WindowCallback::WindowCallback(Window* window) :
 
 WindowCallback::~WindowCallback() {
 
+	// free callbacks
+	glfwSetWindowPosCallback(*EventCallback::getWindow(), nullptr);
+	glfwSetWindowSizeCallback(*EventCallback::getWindow(), nullptr);
+	glfwSetWindowCloseCallback(*EventCallback::getWindow(), nullptr);
+	glfwSetWindowFocusCallback(*EventCallback::getWindow(), nullptr);
+	glfwSetWindowIconifyCallback(*EventCallback::getWindow(), nullptr);
+	glfwSetWindowRefreshCallback(*EventCallback::getWindow(), nullptr);
+	glfwSetWindowMaximizeCallback(*EventCallback::getWindow(), nullptr);
+	glfwSetFramebufferSizeCallback(*EventCallback::getWindow(), nullptr);
 }
 
 void WindowCallback::initCallbacks() { 
+
 	auto positionCallback = [](GLFWwindow* window, int xpos, int ypos) {
-		//Window& window = Application::get().getWindow();
-		//window.getSettings().changePosition(xpos, ypos);
-		//if (window.listener != nullptr)
-		//	window.listener->windowMoved(xpos, ypos);
+
+		// obtain Application-program reference via glfw user pointer
+		ApplicationProgram* program = static_cast<ApplicationProgram*>(glfwGetWindowUserPointer(window));
+		if (program == nullptr)
+			return;
+
+		// update window props for
+		// xPosition and yPosition
+		program->getWindow()->getProperties().xPosition = xpos;
+		program->getWindow()->getProperties().yPosition = ypos;
 	};
 
 	auto sizeCallback = [](GLFWwindow* window, int width, int height) {

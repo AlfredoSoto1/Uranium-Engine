@@ -2,9 +2,15 @@
 #include <GLFW/glfw3.h>
 
 #include "MouseCallback.h"
+#include "Graphics/UI/Cursor.h"
 #include "Graphics/Display/Window.h"
+#include "Graphics/Display/WindowProps.h"
+#include "Core/Application/ApplicationProgram.h"
 
 using namespace Uranium::Input::Callbacks;
+using namespace Uranium::Core::Application;
+
+using namespace Uranium::Graphics::UI;
 using namespace Uranium::Graphics::Display;
 
 MouseCallback::MouseCallback(Window* window) :
@@ -16,27 +22,51 @@ MouseCallback::MouseCallback(Window* window) :
 
 MouseCallback::~MouseCallback() {
 	delete[] mouseButtons;
+
+	// free callbacks
+	glfwSetScrollCallback(*EventCallback::getWindow(), nullptr);
+	glfwSetCursorPosCallback(*EventCallback::getWindow(), nullptr);
+	glfwSetMouseButtonCallback(*EventCallback::getWindow(), nullptr);
 }
 
 void MouseCallback::initCallbacks() {
-	auto clickCallback = [](GLFWwindow* winPtr, int button, int action, int mods) {
-		//Mouse& mouse = Application::get().getMouse();
-		//Cursor& cursor = mouse.getCursor();
+	auto clickCallback = [](GLFWwindow* window, int button, int action, int mods) {
+		
+		// obtain Application-program reference via glfw user pointer
+		ApplicationProgram* program = static_cast<ApplicationProgram*>(glfwGetWindowUserPointer(window));
+		if (program == nullptr)
+			return;
 
-		//mouse.mouseButtons[button] = action != GLFW_RELEASE;
+		// update mouse button actions
+		program->getMouseCallback()->mouseButtons[button] = action != GLFW_RELEASE;
 	};
 
-	auto scrollCallback = [](GLFWwindow* winPtr, double xOffset, double yOffset) {
-		//Mouse& mouse = Application::get().getMouse();
+	auto scrollCallback = [](GLFWwindow* window, double xOffset, double yOffset) {
+
+		// obtain Application-program reference via glfw user pointer
+		ApplicationProgram* program = static_cast<ApplicationProgram*>(glfwGetWindowUserPointer(window));
+		if (program == nullptr)
+			return;
+
 	};
 
-	auto positionCallback = [](GLFWwindow* winPtr, double xpos, double ypos) {
-		//Window& window = Application::get().getWindow();
-		//Mouse& mouse = Application::get().getMouse();
-		//Cursor& cursor = mouse.getCursor();
+	auto positionCallback = [](GLFWwindow* window, double xpos, double ypos) {
+		
+		// obtain Application-program reference via glfw user pointer
+		ApplicationProgram* program = static_cast<ApplicationProgram*>(glfwGetWindowUserPointer(window));
+		if (program == nullptr)
+			return;
+		
+		// save window size for later use
+		unsigned int width = program->getWindow()->getProperties().getWidth();
+		unsigned int height = program->getWindow()->getProperties().getHeight();
 
-		//cursor.changePosition(xpos, ypos);
-		//cursor.changeNormPosition((xpos * 2.0) / window.getSettings().getWidth() - 1.0, -(ypos * 2.0) / window.getSettings().getHeight() + 1.0);
+		// change cursor position
+		program->getCursor()->xPosition = xpos;
+		program->getCursor()->yPosition = ypos;
+
+		// change cursor position in normal coordinates
+		program->getCursor()->setNormPosition((xpos * 2.0) / width - 1.0, -(ypos * 2.0) / height + 1.0);
 	};
 
 	// set glfw mouse callbacks

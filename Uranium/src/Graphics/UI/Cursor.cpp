@@ -76,6 +76,10 @@ bool Cursor::isMoving() {
 	return xSpeed != 0 && ySpeed != 0 && isActive;
 }
 
+bool Cursor::isInside() {
+	return isActive;
+}
+
 void Cursor::hide() {
 	glfwSetInputMode(*window, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
 }
