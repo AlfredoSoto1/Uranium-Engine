@@ -67,7 +67,7 @@ namespace Uranium::Core::Application {
 		void virtual init() = 0;
 		void virtual dispose() = 0;
 
-		void setWindow(std::shared_ptr<Window> window);
+		void push(std::shared_ptr<Window> window, std::shared_ptr<Scene> scene);
 
 	private:
 		/*
@@ -99,7 +99,9 @@ namespace Uranium::Core::Application {
 		KeyboardCallback* keyboardCallback; // 
 
 		Cursor* cursor;				 
-		std::shared_ptr<Window> window;
 		SceneMaster* sceneMaster;
+
+		std::shared_ptr<Scene> scene;
+		std::shared_ptr<Window> window;
 	};
 }

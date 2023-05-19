@@ -56,7 +56,6 @@ namespace Uranium::Scenes {
 		*/
 		volatile unsigned int frameCount;
 
-		volatile double lastTick;
 		volatile double lastFrame;
 
 		volatile double lastRefresh;

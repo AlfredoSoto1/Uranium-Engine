@@ -40,8 +40,9 @@ ApplicationProgram::~ApplicationProgram() {
 
 }
 
-void ApplicationProgram::setWindow(std::shared_ptr<Window> window) {
+void ApplicationProgram::push(std::shared_ptr<Window> window, std::shared_ptr<Scene> scene) {
 	this->window = window;
+	this->scene = scene;
 }
 
 Cursor* ApplicationProgram::getCursor() {
@@ -78,8 +79,9 @@ bool ApplicationProgram::hasWindow() {
 
 void ApplicationProgram::initMembers() {
 	
-	// Create scene master
+	// Create scene master & set the current scene
 	sceneMaster = new SceneMaster();
+	sceneMaster->setCurrentScene(scene);
 
 	// Set custom pointer to GLFW window
 	glfwSetWindowUserPointer(*window, this);

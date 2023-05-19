@@ -43,7 +43,6 @@ namespace Uranium::Graphics::Display {
 		void init();				// 
 		void close();				// main methods that controls
 		void dispose();				// the initialization and finalization of window
-		void setRunnable();			// 
 		
 		void focus();				// 
 		void restore();				// These are the basic integrated window

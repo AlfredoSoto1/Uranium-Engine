@@ -414,13 +414,9 @@ public:
 		window = std::make_shared<Window>("First display", 1280, 720);
 		window->init();
 
-		window->setRunnable();
-
-		this->setWindow(window);
-
 		scene = std::make_shared<MyScene>();
 
-		this->getSceneMaster()->setCurrentScene(scene);
+		this->push(window, scene);
 	}
 
 	void dispose() {

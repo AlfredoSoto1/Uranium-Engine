@@ -184,10 +184,6 @@ void Window::init() {
 	glViewport(0, 0, windowProps->width, windowProps->height);
 }
 
-void Window::setRunnable() {
-
-}
-
 void Window::focus() {
 
 	// throw error in case has no context
