@@ -5,7 +5,13 @@
 
 struct GLFWwindow;
 
+namespace Uranium::Input::Callbacks {
+	class WindowCallback;
+}
+
 namespace Uranium::Graphics::Display {
+
+	namespace Callbacks = Uranium::Input::Callbacks;
 
 	class Monitor;
 	class WindowProps;
@@ -21,6 +27,11 @@ namespace Uranium::Graphics::Display {
 		
 		WindowProps& getProperties();
 		std::shared_ptr<Monitor> getMonitor();
+
+	public:
+		/*
+		* public methods
+		*/
 
 		bool hasClosed();
 		bool failedOnCreation();
@@ -44,7 +55,8 @@ namespace Uranium::Graphics::Display {
 		/*
 		* Friend with other classes
 		*/
-		//friend Application::ApplicationProgram;
+		friend WindowProps;
+		friend Callbacks::WindowCallback;
 
 	private:
 		/*

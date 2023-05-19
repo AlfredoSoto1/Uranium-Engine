@@ -1,22 +1,13 @@
 #pragma once
 
-namespace Uranium::Core::Application {
-	class Application;
-}
-
-namespace Uranium::Graphics::Display {
-	class Window;
-}
+#include "EventCallback.h"
 
 namespace Uranium::Input::Callbacks {
-
-	namespace Display = Uranium::Graphics::Display;
-	namespace Application = Uranium::Core::Application;
 
 	/*
 	* Keyboard Callback
 	*/
-	class KeyboardCallback {
+	class KeyboardCallback : public EventCallback {
 	public:
 		virtual ~KeyboardCallback();
 
@@ -24,11 +15,18 @@ namespace Uranium::Input::Callbacks {
 		bool isKeyToggled(int key);
 		bool isKeyReleased(int key);
 
+	protected:
+		/*
+		* Protected methods
+		*/
+		void initCallbacks();
+		void updateCallbackEvent();
 	private:
 		/*
-		* Friends with other classes
+		* Mutual friend classes
 		*/
 		friend Application::Application;
+		friend Application::ApplicationProgram;
 
 	private:
 		/*

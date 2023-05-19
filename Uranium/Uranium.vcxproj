@@ -132,6 +132,7 @@
     <ClInclude Include="src\Graphics\UI\Cursor.h" />
     <ClInclude Include="src\Graphics\UI\CursorShape.h" />
     <ClInclude Include="src\Input\Callbacks\CursorCallback.h" />
+    <ClInclude Include="src\Input\Callbacks\EventCallback.h" />
     <ClInclude Include="src\Input\Callbacks\KeyboardCallback.h" />
     <ClInclude Include="src\Input\Callbacks\MouseCallback.h" />
     <ClInclude Include="src\Input\Callbacks\WindowCallback.h" />

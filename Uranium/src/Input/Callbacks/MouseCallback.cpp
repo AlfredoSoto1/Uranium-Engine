@@ -7,8 +7,18 @@
 using namespace Uranium::Input::Callbacks;
 using namespace Uranium::Graphics::Display;
 
-MouseCallback::MouseCallback(Window* window) {
+MouseCallback::MouseCallback(Window* window) :
+	EventCallback(window)
+{
+	// initiate callbacks
+	initCallbacks();
+}
 
+MouseCallback::~MouseCallback() {
+	delete[] mouseButtons;
+}
+
+void MouseCallback::initCallbacks() {
 	auto clickCallback = [](GLFWwindow* winPtr, int button, int action, int mods) {
 		//Mouse& mouse = Application::get().getMouse();
 		//Cursor& cursor = mouse.getCursor();
@@ -29,16 +39,21 @@ MouseCallback::MouseCallback(Window* window) {
 		//cursor.changeNormPosition((xpos * 2.0) / window.getSettings().getWidth() - 1.0, -(ypos * 2.0) / window.getSettings().getHeight() + 1.0);
 	};
 
-	glfwSetScrollCallback(*window, scrollCallback);
-	glfwSetCursorPosCallback(*window, positionCallback);
-	glfwSetMouseButtonCallback(*window, clickCallback);
+	// set glfw mouse callbacks
+	glfwSetScrollCallback(*EventCallback::getWindow(), scrollCallback);
+	glfwSetCursorPosCallback(*EventCallback::getWindow(), positionCallback);
+	glfwSetMouseButtonCallback(*EventCallback::getWindow(), clickCallback);
 
+	// create bool array containing
+	// mouse button activation flag
+	// for each button when being interacted with
 	mouseButtons = new bool[GLFW_MOUSE_BUTTON_LAST];
 }
 
-MouseCallback::~MouseCallback() {
-	delete[] mouseButtons;
+void MouseCallback::updateCallbackEvent() {
+
 }
+
 
 bool MouseCallback::isButtonDown(int button) {
 	if (button < 0)

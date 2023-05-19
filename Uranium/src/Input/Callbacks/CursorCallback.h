@@ -1,41 +1,36 @@
 #pragma once
 
-namespace Uranium::Core::Application {
-	class Application;
-}
-
-namespace Uranium::Graphics::Display {
-	class Window;
-}
+#include "EventCallback.h"
 
 namespace Uranium::Input::Callbacks {
-
-	namespace Display = Uranium::Graphics::Display;
-	namespace Application = Uranium::Core::Application;
 
 	/*
 	* Cursor Callback
 	*/
-	class CursorCallback {
+	class CursorCallback : public EventCallback {
 	public:
 		virtual ~CursorCallback();
 
+	protected:
+		/*
+		* Protected methods
+		*/
+		void initCallbacks();
+		void updateCallbackEvent();
+
 	private:
 		/*
-		* Friends with other classes
+		* Mutual friend classes
 		*/
 		friend Application::Application;
+		friend Application::ApplicationProgram;
 
 	private:
 		/*
 		* Private methods
 		*/
 		CursorCallback() = delete;
-		CursorCallback(Display::Window* _window);
+		CursorCallback(Display::Window* window);
 
-	private:
-		/*
-		* Private members
-		*/
 	};
 }

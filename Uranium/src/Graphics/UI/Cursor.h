@@ -6,9 +6,14 @@ namespace Uranium::Graphics::Display {
 	class Window;
 }
 
+namespace Uranium::Core::Application {
+	class ApplicationProgram;
+}
+
 namespace Uranium::Graphics::UI {
 	
 	namespace Display = Uranium::Graphics::Display;
+	namespace Application = Uranium::Core::Application;
 
 	class CursorShape;
 
@@ -16,14 +21,15 @@ namespace Uranium::Graphics::UI {
 	public:
 		virtual ~Cursor();
 
-		Cursor(const Cursor&) = delete;
-		Cursor(const Cursor&&) = delete;
-
 		void setPosition(double xpos, double ypos);
 		void setNormPosition(double xposN, double yposN);
 
 		void setCursorShape(std::shared_ptr<CursorShape> cursorProps);
 
+	public:
+		/*
+		* Public methods
+		*/
 		double getXPosition();
 		double getYPosition();
 
@@ -45,20 +51,22 @@ namespace Uranium::Graphics::UI {
 		/*
 		* Friends with other classes
 		*/
-		//friend class Mouse;
+		friend Application::ApplicationProgram;
 
 	private:
 		/*
 		* Private methods
 		*/
 		Cursor() = delete;
+		Cursor(const Cursor&) = delete;
+		Cursor(const Cursor&&) = delete;
+
 		Cursor(Display::Window* _window);
 
 	private:
 		/*
 		* Private members
 		*/
-
 		double xPosition;
 		double yPosition;
 

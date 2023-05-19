@@ -75,7 +75,6 @@ void Application::run() {
 		// the existance of a window context 
 		// 
 
-		program->createComponents();
 		program->createCallbacks();
 
 		// set isRunning flag to true
@@ -86,6 +85,9 @@ void Application::run() {
 
 		// set isRunning flag to false
 		isRunning = false;
+
+		program->disposeCallbacks();
+
 	}
 
 	// dispose program in GLFW

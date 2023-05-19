@@ -6,10 +6,20 @@
 using namespace Uranium::Input::Callbacks;
 using namespace Uranium::Graphics::Display;
 
-KeyboardCallback::KeyboardCallback(Window* _window) :
+KeyboardCallback::KeyboardCallback(Window* window) :
+	EventCallback(window),
 	toggled(false),
 	released(false)
 {
+	// initiate callbacks
+	initCallbacks();
+}
+
+KeyboardCallback::~KeyboardCallback() {
+	delete[] keys;
+}
+
+void KeyboardCallback::initCallbacks() {
 	auto keyCallback = [](GLFWwindow* window, int key, int scancode, int action, int mods) {
 		//Keyboard& keyboard = Application::get().getKeyboard();
 		//keyboard.keys[key] = action != GLFW_RELEASE;
@@ -19,17 +29,18 @@ KeyboardCallback::KeyboardCallback(Window* _window) :
 
 	};
 
-	glfwSetKeyCallback(*_window, keyCallback);
-	glfwSetCharCallback(*_window, charCallback);
+	glfwSetKeyCallback(*EventCallback::getWindow(), keyCallback);
+	glfwSetCharCallback(*EventCallback::getWindow(), charCallback);
 
 	keys = new bool[GLFW_KEY_LAST];
 	for (int i = 0; i < GLFW_KEY_LAST; i++)
 		keys[i] = false;
 }
 
-KeyboardCallback::~KeyboardCallback() {
-	delete[] keys;
+void KeyboardCallback::updateCallbackEvent() {
+
 }
+
 
 bool KeyboardCallback::isKeyDown(int key) {
 	return keys[key] ? true : false;

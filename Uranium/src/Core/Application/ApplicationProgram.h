@@ -26,7 +26,20 @@ namespace Uranium::Core::Application {
 
 	class ApplicationProgram {
 	public:
-		
+		ApplicationProgram();
+		virtual ~ApplicationProgram();
+
+	public:
+		/*
+		* Public methods
+		*/
+		UI::Cursor* getCursor();
+		Display::Window* getWindow();
+
+		Callbacks::WindowCallback* getWindowCallback();
+		Callbacks::CursorCallback* getCursorCallback();
+		Callbacks::MouseCallback* getMouseCallback();
+		Callbacks::KeyboardCallback* getKeyboardCallback();
 
 	protected:
 		/*
@@ -37,38 +50,21 @@ namespace Uranium::Core::Application {
 
 		void setWindow(Display::Window* window);
 
-	protected:
-		/*
-		* Protected Getters
-		*/
-		UI::Cursor* getCursor();
-		Display::Window* getWindow();
-
-		Callbacks::WindowCallback* getWindowCallback();
-		Callbacks::CursorCallback* getCursorCallback();
-		Callbacks::MouseCallback* getMouseCallback();
-		Callbacks::KeyboardCallback* getKeyboardCallback();
-
 	private:
 		/*
 		* Friend with other classes
 		*/
 		friend Application;
+		friend Display::Window;
 
 	private:
 		/*
 		* Private methods
 		*/
-		ApplicationProgram();
-		virtual ~ApplicationProgram();
-
 		bool hasWindow();
 
-		void createCallbacks();	   // 
-		void createComponents();   // Creation and disposal of
-								   // Callbacks and Components
-		void disposeCallbacks();   // inside 'this' Application-program
-		void disposeComponents();  // 
+		void createCallbacks();	
+		void disposeCallbacks();
 
 		void updateProgram();
 

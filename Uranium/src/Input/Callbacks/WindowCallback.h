@@ -1,27 +1,24 @@
 #pragma once
 
-namespace Uranium::Graphics::Display {
-	class Window;
-}
-
-namespace Uranium::Core::Application {
-	class Application;
-	class ApplicationProgram;
-}
+#include "EventCallback.h"
 
 namespace Uranium::Input::Callbacks {
-
-	namespace Display = Uranium::Graphics::Display;
-	namespace Application = Uranium::Core::Application;
 
 	/*
 	* Window Callback
 	*/
-	class WindowCallback {
+	class WindowCallback : public EventCallback {
 	public:
 		virtual ~WindowCallback();
 
 		bool hasResized();
+
+	protected:
+		/*
+		* Protected methods
+		*/
+		void initCallbacks();
+		void updateCallbackEvent();
 
 	private:
 		/*
@@ -43,8 +40,6 @@ namespace Uranium::Input::Callbacks {
 		* Private members
 		*/
 		bool has_Resized;
-
-		Display::Window* window;
 
 	};
 }

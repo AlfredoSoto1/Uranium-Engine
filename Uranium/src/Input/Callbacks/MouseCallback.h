@@ -1,39 +1,39 @@
 #pragma once
 
-namespace Uranium::Core::Application {
-	class Application;
-}
-
-namespace Uranium::Graphics::Display {
-	class Window;
-}
+#include "EventCallback.h"
 
 namespace Uranium::Input::Callbacks {
-
-	namespace Display = Uranium::Graphics::Display;
-	namespace Application = Uranium::Core::Application;
 
 	/*
 	* Mouse Callback
 	*/
-	class MouseCallback {
+	class MouseCallback : public EventCallback {
 	public:
 		virtual ~MouseCallback();
 
 		bool isButtonDown(int _button);
 		int isMouseToggled(int _button);
+	
+	protected:
+		/*
+		* Protected methods
+		*/
+		void initCallbacks();
+		void updateCallbackEvent();
 
 	private:
 		/*
-		* Friends with other classes
+		* Mutual friend classes
 		*/
 		friend Application::Application;
+		friend Application::ApplicationProgram;
+
 	private:
 		/*
 		* Private methods
 		*/
 		MouseCallback() = delete;
-		MouseCallback(Display::Window* _window);
+		MouseCallback(Display::Window* window);
 
 	private:
 		/*

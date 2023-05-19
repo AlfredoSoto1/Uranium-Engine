@@ -3,7 +3,13 @@
 #include <string>
 #include <memory>
 
+namespace Uranium::Input::Callbacks {
+	class WindowCallback;
+}
+
 namespace Uranium::Graphics::Display {
+
+	namespace Callbacks = Uranium::Input::Callbacks;
 
 	class Window;
 	class Monitor;
@@ -66,6 +72,7 @@ namespace Uranium::Graphics::Display {
 		* Mutual friend classes
 		*/
 		friend Window;
+		friend Callbacks::WindowCallback;
 
 	private:
 		/*

@@ -3,14 +3,22 @@
 #include <GLFW/glfw3.h>
 
 #include "UraniumApi.h"
-#include "ApplicationProgram.h"
+#include "ApplicationProgram.h" 
+
 #include "Graphics/Display/Window.h"
 #include "Graphics/Display/WindowProps.h"
-#include "Input/Callbacks/CursorCallback.h"
+
+#include "Graphics/UI/Cursor.h"
+
+#include "Input/Callbacks/MouseCallback.h"
 #include "Input/Callbacks/WindowCallback.h"
+#include "Input/Callbacks/CursorCallback.h"
+#include "Input/Callbacks/KeyboardCallback.h"
 
 using namespace Uranium::Core::Application;
 using namespace Uranium::Input::Callbacks;
+
+using namespace Uranium::Graphics::UI;
 using namespace Uranium::Graphics::Display;
 
 ApplicationProgram::ApplicationProgram() :
@@ -62,38 +70,41 @@ bool ApplicationProgram::hasWindow() {
 
 void ApplicationProgram::createCallbacks() {
 	
-	// Initiate window Callbacks
-	windowCallback = new WindowCallback(window);
-
-}
-
-void ApplicationProgram::createComponents() {
-
 	// set custom pointer to GLFW window
 	glfwSetWindowUserPointer(*window, this);
+	
+	// Create new cursor
+	cursor = new Cursor(window);
+
+	// Initiate window Callbacks
+	windowCallback = new WindowCallback(window);
+	
+	// Initate mouse & keyboard Callbacks
+	mouseCallback = new MouseCallback(window);
+	keyboardCallback = new KeyboardCallback(window);
+
+	// Initiate cursor Callback
+	cursorCallback = new CursorCallback(window);
 }
 
 void ApplicationProgram::disposeCallbacks() {
+
+	delete cursor;
+
 	delete windowCallback;
 	delete cursorCallback;
 	delete mouseCallback;
 	delete keyboardCallback;
 }
 
-void ApplicationProgram::disposeComponents() {
-	delete cursor;
-	delete window;
-}
-
 void ApplicationProgram::updateProgram() {
 	while (!window->hasClosed()) {
 		// update
 		//appProgram->update();
+
 		// reset viewport
-		if (windowCallback->hasResized()) {
-			print_status("resized");
+		if (windowCallback->hasResized())
 			glViewport(0, 0, window->getProperties().getWidth(), window->getProperties().getHeight());
-		}
 
 		// draw
 		//appProgram->draw();
@@ -104,18 +115,17 @@ void ApplicationProgram::updateProgram() {
 		glfwSwapBuffers(*window);
 
 		// post draw
-		windowCallback->has_Resized = false;
 		//appProgram->afterDraw();
-
+		
+		// 
+		// update all callbacks
+		//
+		windowCallback->updateCallbackEvent();
+		cursorCallback->updateCallbackEvent();
+		mouseCallback->updateCallbackEvent();
+		keyboardCallback->updateCallbackEvent();
+		
 		// poll events
 		glfwPollEvents();
-
-		//mouseCallback->update();
-		//keyboardCallback->update();
 	}
-	// closes the application
-	//appProgram->dispose();
-
-	// disposes everything after application has ended
-	window->dispose();
 }

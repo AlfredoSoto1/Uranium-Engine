@@ -1,15 +1,17 @@
-#include "Window.h"
-
 #define GLEW_STATIC
 
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 
+#include "Window.h"
 #include "Monitor.h"
 #include "WindowProps.h"
 
 #include "Core/Application/UraniumApi.h"
 #include "Core/Application/Application.h"
+#include "Core/Application/ApplicationProgram.h"
+
+#include "Input/Callbacks/WindowCallback.h"
 
 using namespace Uranium::Core::Application;
 using namespace Uranium::Graphics::Display;
@@ -267,11 +269,21 @@ void Window::fullscreen(unsigned int width, unsigned int height) {
 		glfwSetWindowMonitor(window, activeMonitor->operator GLFWmonitor * (), 0, 0, width, height, 0);//have to put monitor scale
 	}
 	else {
+		// Return window to its regular state
 		glfwSetWindowMonitor(window, 0, xpos, ypos, windowProps->width, windowProps->height, 0);
 	}
 
-	glfwGetWindowUserPointer();
-	callback->has_Resized = true;
+	// 
+	// get application program reference
+	// through glfw user pointer
+	// 
+	ApplicationProgram* program = static_cast<ApplicationProgram*>(glfwGetWindowUserPointer(window));
+
+	if (program == nullptr)
+		return;
+
+	// update has_Resized flag from window callback
+	program->windowCallback->has_Resized = true;
 }
 
 void Window::centerWindow() {

@@ -398,6 +398,9 @@ public:
 	}
 
 	void dispose() {
+
+		window->dispose();
+
 		delete window;
 	}
 };
