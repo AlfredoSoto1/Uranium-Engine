@@ -9,6 +9,14 @@ namespace Uranium::Input::Callbacks {
 	*/
 	class KeyboardCallback : public EventCallback {
 	public:
+		/*
+		* Custom alias
+		*/
+		using Window = Uranium::Graphics::Display::Window;
+		using Application = Uranium::Core::Application::Application;
+		using ApplicationProgram = Uranium::Core::Application::ApplicationProgram;
+
+	public:
 		virtual ~KeyboardCallback();
 
 		bool isKeyDown(int key);
@@ -25,15 +33,18 @@ namespace Uranium::Input::Callbacks {
 		/*
 		* Mutual friend classes
 		*/
-		friend Application::Application;
-		friend Application::ApplicationProgram;
+		friend Application;
+		friend ApplicationProgram;
 
 	private:
 		/*
 		* Private methods
 		*/
 		KeyboardCallback() = delete;
-		KeyboardCallback(Display::Window* _window);
+		KeyboardCallback(const KeyboardCallback&) = delete;
+		KeyboardCallback(const KeyboardCallback&&) = delete;
+		
+		KeyboardCallback(std::shared_ptr<Window> window);
 
 	private:
 		/*

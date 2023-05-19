@@ -9,6 +9,14 @@ namespace Uranium::Input::Callbacks {
 	*/
 	class CursorCallback : public EventCallback {
 	public:
+		/*
+		* custom alias
+		*/
+		using Window = Uranium::Graphics::Display::Window;
+		using Application = Uranium::Core::Application::Application;
+		using ApplicationProgram = Uranium::Core::Application::ApplicationProgram;
+
+	public:
 		virtual ~CursorCallback();
 
 	protected:
@@ -22,15 +30,18 @@ namespace Uranium::Input::Callbacks {
 		/*
 		* Mutual friend classes
 		*/
-		friend Application::Application;
-		friend Application::ApplicationProgram;
+		friend Application;
+		friend ApplicationProgram;
 
 	private:
 		/*
 		* Private methods
 		*/
 		CursorCallback() = delete;
-		CursorCallback(Display::Window* window);
+		CursorCallback(const CursorCallback&) = delete;
+		CursorCallback(const CursorCallback&&) = delete;
+
+		CursorCallback(std::shared_ptr<Window> window);
 
 	};
 }

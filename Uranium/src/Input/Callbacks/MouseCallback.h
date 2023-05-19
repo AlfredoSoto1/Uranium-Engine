@@ -9,6 +9,14 @@ namespace Uranium::Input::Callbacks {
 	*/
 	class MouseCallback : public EventCallback {
 	public:
+		/*
+		* custom alias
+		*/
+		using Window = Uranium::Graphics::Display::Window;
+		using Application = Uranium::Core::Application::Application;
+		using ApplicationProgram = Uranium::Core::Application::ApplicationProgram;
+
+	public:
 		virtual ~MouseCallback();
 
 		bool isButtonDown(int _button);
@@ -25,15 +33,18 @@ namespace Uranium::Input::Callbacks {
 		/*
 		* Mutual friend classes
 		*/
-		friend Application::Application;
-		friend Application::ApplicationProgram;
+		friend Application;
+		friend ApplicationProgram;
 
 	private:
 		/*
 		* Private methods
 		*/
 		MouseCallback() = delete;
-		MouseCallback(Display::Window* window);
+		MouseCallback(const MouseCallback&) = delete;
+		MouseCallback(const MouseCallback&&) = delete;
+		
+		MouseCallback(std::shared_ptr<Window> window);
 
 	private:
 		/*

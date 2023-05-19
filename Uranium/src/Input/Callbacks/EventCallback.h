@@ -1,5 +1,7 @@
 #pragma once
 
+#include <memory>
+
 namespace Uranium::Graphics::Display {
 	class Window;
 }
@@ -11,15 +13,20 @@ namespace Uranium::Core::Application {
 
 namespace Uranium::Input::Callbacks {
 
-	namespace Display = Uranium::Graphics::Display;
-	namespace Application = Uranium::Core::Application;
-
 	/*
 	* Cursor Callback abstract class
 	*/
 	class EventCallback {
 	public:
-		EventCallback(Display::Window* window) : window(window) {}
+		/*
+		* custom alias
+		*/
+		using Window = Uranium::Graphics::Display::Window;
+		using Application = Uranium::Core::Application::Application;
+		using ApplicationProgram = Uranium::Core::Application::ApplicationProgram;
+
+	public:
+		EventCallback(std::shared_ptr<Window> window) : window(window) {}
 
 	protected:
 		/*
@@ -28,7 +35,7 @@ namespace Uranium::Input::Callbacks {
 		void virtual initCallbacks() = 0;
 		void virtual updateCallbackEvent() = 0;
 
-		Display::Window* getWindow() { 
+		inline std::shared_ptr<Window> getWindow() {
 			return window; 
 		}
 
@@ -36,14 +43,14 @@ namespace Uranium::Input::Callbacks {
 		/*
 		* Friends with other classes
 		*/
-		friend Application::Application;
-		friend Application::ApplicationProgram;
+		friend Application;
+		friend ApplicationProgram;
 
 	private:
 		/*
 		* Private members
 		*/
-		Display::Window* window;
+		std::shared_ptr<Window> window;
 
 	};
 }

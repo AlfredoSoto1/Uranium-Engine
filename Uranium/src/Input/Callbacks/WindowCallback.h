@@ -9,6 +9,14 @@ namespace Uranium::Input::Callbacks {
 	*/
 	class WindowCallback : public EventCallback {
 	public:
+		/*
+		* custom alias
+		*/
+		using Window = Uranium::Graphics::Display::Window;
+		using Application = Uranium::Core::Application::Application;
+		using ApplicationProgram = Uranium::Core::Application::ApplicationProgram;
+
+	public:
 		virtual ~WindowCallback();
 
 		bool hasResized();
@@ -24,16 +32,19 @@ namespace Uranium::Input::Callbacks {
 		/*
 		* Mutual friend classes
 		*/
-		friend Display::Window;
-		friend Application::Application;
-		friend Application::ApplicationProgram;
+		friend Window;
+		friend Application;
+		friend ApplicationProgram;
 	
 	private:
 		/*
 		* Private methods
 		*/
 		WindowCallback() = delete;
-		WindowCallback(Display::Window* window);
+		WindowCallback(const WindowCallback&) = delete;
+		WindowCallback(const WindowCallback&&) = delete;
+
+		WindowCallback(std::shared_ptr<Window> window);
 
 	private:
 		/*

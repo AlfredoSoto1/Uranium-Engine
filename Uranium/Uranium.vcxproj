@@ -108,6 +108,8 @@
     <ClCompile Include="src\Input\Callbacks\KeyboardCallback.cpp" />
     <ClCompile Include="src\Input\Callbacks\WindowCallback.cpp" />
     <ClCompile Include="src\Input\Callbacks\MouseCallback.cpp" />
+    <ClCompile Include="src\Scenes\Scene.cpp" />
+    <ClCompile Include="src\Scenes\SceneMaster.cpp" />
     <ClCompile Include="src\STL_pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
@@ -136,6 +138,8 @@
     <ClInclude Include="src\Input\Callbacks\KeyboardCallback.h" />
     <ClInclude Include="src\Input\Callbacks\MouseCallback.h" />
     <ClInclude Include="src\Input\Callbacks\WindowCallback.h" />
+    <ClInclude Include="src\Scenes\Scene.h" />
+    <ClInclude Include="src\Scenes\SceneMaster.h" />
     <ClInclude Include="src\STL_pch.h" />
     <ClInclude Include="src\Vendor\stb_image.h" />
   </ItemGroup>

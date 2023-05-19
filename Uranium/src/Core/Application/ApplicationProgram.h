@@ -1,5 +1,7 @@
 #pragma once
 
+#include <memory>
+
 namespace Uranium::Graphics::Display {
 	class Window;
 }
@@ -10,21 +12,36 @@ namespace Uranium::Graphics::UI {
 }
 
 namespace Uranium::Input::Callbacks {
-	class WindowCallback;	   // 
-	class MouseCallback;	   // Program Callbacks (interfaces)
-	class KeyboardCallback;	   // 
-	class CursorCallback;	   // 
+	class WindowCallback;	
+	class MouseCallback;	
+	class KeyboardCallback;	
+	class CursorCallback;	
+}
+
+namespace Uranium::Scenes {
+	class Scene;
+	class SceneMaster;
 }
 
 namespace Uranium::Core::Application {
 
-	namespace UI = Uranium::Graphics::UI;				// 
-	namespace Display = Uranium::Graphics::Display;		// Namespace declarations
-	namespace Callbacks = Uranium::Input::Callbacks;	// 
-
 	class Application;
 
 	class ApplicationProgram {
+	public:
+		/*
+		* custom alias
+		*/
+		using Scene				= Uranium::Scenes::Scene;
+		using SceneMaster		= Uranium::Scenes::SceneMaster;
+		using Cursor			= Uranium::Graphics::UI::Cursor;
+		using CursorShape		= Uranium::Graphics::UI::CursorShape;
+		using Window			= Uranium::Graphics::Display::Window;
+		using WindowCallback	= Uranium::Input::Callbacks::WindowCallback;
+		using MouseCallback		= Uranium::Input::Callbacks::MouseCallback;
+		using KeyboardCallback	= Uranium::Input::Callbacks::KeyboardCallback;
+		using CursorCallback	= Uranium::Input::Callbacks::CursorCallback;
+
 	public:
 		ApplicationProgram();
 		virtual ~ApplicationProgram();
@@ -33,13 +50,15 @@ namespace Uranium::Core::Application {
 		/*
 		* Public methods
 		*/
-		UI::Cursor* getCursor();
-		Display::Window* getWindow();
+		Cursor* getCursor();
+		std::shared_ptr<Window> getWindow();
+		
+		SceneMaster* getSceneMaster();
 
-		Callbacks::WindowCallback* getWindowCallback();
-		Callbacks::CursorCallback* getCursorCallback();
-		Callbacks::MouseCallback* getMouseCallback();
-		Callbacks::KeyboardCallback* getKeyboardCallback();
+		WindowCallback* getWindowCallback();
+		CursorCallback* getCursorCallback();
+		MouseCallback* getMouseCallback();
+		KeyboardCallback* getKeyboardCallback();
 
 	protected:
 		/*
@@ -48,14 +67,14 @@ namespace Uranium::Core::Application {
 		void virtual init() = 0;
 		void virtual dispose() = 0;
 
-		void setWindow(Display::Window* window);
+		void setWindow(std::shared_ptr<Window> window);
 
 	private:
 		/*
 		* Friend with other classes
 		*/
+		friend Window;
 		friend Application;
-		friend Display::Window;
 
 	private:
 		/*
@@ -63,21 +82,24 @@ namespace Uranium::Core::Application {
 		*/
 		bool hasWindow();
 
-		void createCallbacks();	
-		void disposeCallbacks();
+		void initMembers();	
+		void disposeMembers();
 
 		void updateProgram();
+
+		void pollEvents();
 
 	private:
 		/*
 		* Private members
 		*/
-		Callbacks::WindowCallback* windowCallback;	   // 
-		Callbacks::CursorCallback* cursorCallback;	   // Primitive callbacks for this
-		Callbacks::MouseCallback* mouseCallback;	   // Application-program
-		Callbacks::KeyboardCallback* keyboardCallback; // 
+		WindowCallback* windowCallback;	   // 
+		CursorCallback* cursorCallback;	   // Primitive callbacks for this
+		MouseCallback* mouseCallback;	   // Application-program
+		KeyboardCallback* keyboardCallback; // 
 
-		UI::Cursor* cursor;				 
-		Display::Window* window;		 
+		Cursor* cursor;				 
+		std::shared_ptr<Window> window;
+		SceneMaster* sceneMaster;
 	};
 }

@@ -12,7 +12,7 @@ using namespace Uranium::Core::Application;
 using namespace Uranium::Graphics::UI;
 using namespace Uranium::Graphics::Display;
 
-CursorCallback::CursorCallback(Window* window) :
+CursorCallback::CursorCallback(std::shared_ptr<Window> window) :
 	EventCallback(window)
 {
 	// initiate callbacks

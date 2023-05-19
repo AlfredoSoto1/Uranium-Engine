@@ -11,12 +11,16 @@ namespace Uranium::Input::Callbacks {
 
 namespace Uranium::Graphics::Display {
 
-	namespace Callbacks = Uranium::Input::Callbacks;
-
 	class Monitor;
 	class WindowProps;
 
 	class Window {
+	public:
+		/*
+		* Custom alias
+		*/
+		using WindowCallback = Uranium::Input::Callbacks::WindowCallback;
+
 	public:
 		Window(const std::string& title, unsigned int width, unsigned int height);
 		virtual ~Window();
@@ -56,7 +60,7 @@ namespace Uranium::Graphics::Display {
 		* Friend with other classes
 		*/
 		friend WindowProps;
-		friend Callbacks::WindowCallback;
+		friend WindowCallback;
 
 	private:
 		/*

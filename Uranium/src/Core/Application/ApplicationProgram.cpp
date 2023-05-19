@@ -5,15 +5,18 @@
 #include "UraniumApi.h"
 #include "ApplicationProgram.h" 
 
+#include "Graphics/UI/Cursor.h"
 #include "Graphics/Display/Window.h"
 #include "Graphics/Display/WindowProps.h"
 
-#include "Graphics/UI/Cursor.h"
+#include "Scenes/SceneMaster.h"
 
 #include "Input/Callbacks/MouseCallback.h"
 #include "Input/Callbacks/WindowCallback.h"
 #include "Input/Callbacks/CursorCallback.h"
 #include "Input/Callbacks/KeyboardCallback.h"
+
+using namespace Uranium::Scenes;
 
 using namespace Uranium::Core::Application;
 using namespace Uranium::Input::Callbacks;
@@ -22,12 +25,13 @@ using namespace Uranium::Graphics::UI;
 using namespace Uranium::Graphics::Display;
 
 ApplicationProgram::ApplicationProgram() :
-	cursor(nullptr),			 // 
-	window(nullptr),			 // 
-	windowCallback(nullptr),	 // Initializes all private members to null
-	cursorCallback(nullptr),	 // 
-	mouseCallback(nullptr),		 // 
-	keyboardCallback(nullptr)	 // 
+	cursor(nullptr),		
+	window(nullptr),		
+	sceneMaster(nullptr),		
+	windowCallback(nullptr),
+	cursorCallback(nullptr),
+	mouseCallback(nullptr),	
+	keyboardCallback(nullptr)
 {
 
 }
@@ -36,16 +40,20 @@ ApplicationProgram::~ApplicationProgram() {
 
 }
 
-void ApplicationProgram::setWindow(Window* window) {
+void ApplicationProgram::setWindow(std::shared_ptr<Window> window) {
 	this->window = window;
 }
 
-UI::Cursor* ApplicationProgram::getCursor() {
+Cursor* ApplicationProgram::getCursor() {
 	return cursor;
 }
 
-Window* ApplicationProgram::getWindow() {
+std::shared_ptr<Window> ApplicationProgram::getWindow() {
 	return window;
+}
+
+SceneMaster* ApplicationProgram::getSceneMaster() {
+	return sceneMaster;
 }
 
 WindowCallback* ApplicationProgram::getWindowCallback() {
@@ -68,9 +76,12 @@ bool ApplicationProgram::hasWindow() {
 	return window != nullptr;
 }
 
-void ApplicationProgram::createCallbacks() {
+void ApplicationProgram::initMembers() {
 	
-	// set custom pointer to GLFW window
+	// Create scene master
+	sceneMaster = new SceneMaster();
+
+	// Set custom pointer to GLFW window
 	glfwSetWindowUserPointer(*window, this);
 	
 	// Create new cursor
@@ -87,7 +98,9 @@ void ApplicationProgram::createCallbacks() {
 	cursorCallback = new CursorCallback(window);
 }
 
-void ApplicationProgram::disposeCallbacks() {
+void ApplicationProgram::disposeMembers() {
+
+	delete sceneMaster;
 
 	delete cursor;
 
@@ -97,35 +110,42 @@ void ApplicationProgram::disposeCallbacks() {
 	delete keyboardCallback;
 }
 
+void ApplicationProgram::pollEvents() {
+	
+	// update all callbacks
+	windowCallback->updateCallbackEvent();
+	cursorCallback->updateCallbackEvent();
+	mouseCallback->updateCallbackEvent();
+	keyboardCallback->updateCallbackEvent();
+
+	// poll events
+	glfwPollEvents();
+}
+
 void ApplicationProgram::updateProgram() {
 	while (!window->hasClosed()) {
-		// update
-		//appProgram->update();
+		// update scene master
+		sceneMaster->update();
 
 		// reset viewport
 		if (windowCallback->hasResized())
 			glViewport(0, 0, window->getProperties().getWidth(), window->getProperties().getHeight());
 
-		// draw
-		//appProgram->draw();
+		// This will render the current scene linked
+		// to the scene master. Any update from scene
+		// to transition to another scene, will be 
+		// handled in the update() of the scene
+		sceneMaster->render();
 
 		// post processing
-
+		
 		// swap buffers
 		glfwSwapBuffers(*window);
 
-		// post draw
-		//appProgram->afterDraw();
-		
-		// 
-		// update all callbacks
-		//
-		windowCallback->updateCallbackEvent();
-		cursorCallback->updateCallbackEvent();
-		mouseCallback->updateCallbackEvent();
-		keyboardCallback->updateCallbackEvent();
+		// update scene master after all has rendered
+		sceneMaster->postUpdate();
 		
 		// poll events
-		glfwPollEvents();
+		pollEvents();
 	}
 }

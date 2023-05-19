@@ -75,7 +75,7 @@ void Application::run() {
 		// the existance of a window context 
 		// 
 
-		program->createCallbacks();
+		program->initMembers();
 
 		// set isRunning flag to true
 		isRunning = true;
@@ -86,7 +86,7 @@ void Application::run() {
 		// set isRunning flag to false
 		isRunning = false;
 
-		program->disposeCallbacks();
+		program->disposeMembers();
 
 	}
 

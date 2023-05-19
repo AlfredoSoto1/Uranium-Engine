@@ -9,7 +9,7 @@ using namespace Uranium::Input::Callbacks;
 using namespace Uranium::Graphics::Display;
 using namespace Uranium::Core::Application;
 
-WindowCallback::WindowCallback(Window* window) :
+WindowCallback::WindowCallback(std::shared_ptr<Window> window) :
 	EventCallback(window),
 	has_Resized(false)
 {

@@ -377,31 +377,54 @@
 #include <Core/Application/Application.h>
 
 #include <Graphics/Display/Window.h>
-#include <Graphics/Display/WindowProps.h>
-#include <Graphics/Display/Monitor.h>
 
+#include <Scenes/Scene.h>
+#include <Scenes/SceneMaster.h>
+
+using namespace Uranium::Scenes;
 using namespace Uranium::Core::Application;
 using namespace Uranium::Graphics::Display;
+
+class MyScene : public Scene {
+public:
+	void init() {
+
+	}
+
+	void update() {
+
+	}
+
+	void render() {
+
+	}
+
+	void dispose() {
+
+	}
+};
 
 class MyApp : public ApplicationProgram {
 public:
 
-	Window* window = nullptr;
+	std::shared_ptr<Window> window;
+	std::shared_ptr<MyScene> scene;
 
 	void init() {
-		window = new Window("First display", 1280, 720);
+		window = std::make_shared<Window>("First display", 1280, 720);
 		window->init();
 
 		window->setRunnable();
 
 		this->setWindow(window);
+
+		scene = std::make_shared<MyScene>();
+
+		this->getSceneMaster()->setCurrentScene(scene);
 	}
 
 	void dispose() {
-
 		window->dispose();
-
-		delete window;
 	}
 };
 

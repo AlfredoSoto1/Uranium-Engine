@@ -7,7 +7,7 @@
 using namespace Uranium::Graphics::UI;
 using namespace Uranium::Graphics::Display;
 
-Cursor::Cursor(Window* window) :
+Cursor::Cursor(std::shared_ptr<Window> window) :
 	xNorm(0.0),
 	yNorm(0.0),
 

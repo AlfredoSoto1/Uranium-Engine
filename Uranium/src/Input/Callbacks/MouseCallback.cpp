@@ -13,7 +13,7 @@ using namespace Uranium::Core::Application;
 using namespace Uranium::Graphics::UI;
 using namespace Uranium::Graphics::Display;
 
-MouseCallback::MouseCallback(Window* window) :
+MouseCallback::MouseCallback(std::shared_ptr<Window> window) :
 	EventCallback(window)
 {
 	// initiate callbacks

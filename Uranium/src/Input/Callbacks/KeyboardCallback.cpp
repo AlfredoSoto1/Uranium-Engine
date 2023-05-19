@@ -8,7 +8,7 @@ using namespace Uranium::Input::Callbacks;
 using namespace Uranium::Core::Application;
 using namespace Uranium::Graphics::Display;
 
-KeyboardCallback::KeyboardCallback(Window* window) :
+KeyboardCallback::KeyboardCallback(std::shared_ptr<Window> window) :
 	EventCallback(window),
 	toggled(false),
 	released(false)

@@ -17,13 +17,18 @@ namespace Uranium::Input::Callbacks {
 
 namespace Uranium::Graphics::UI {
 	
-	namespace Display = Uranium::Graphics::Display;
-	namespace Callbacks = Uranium::Input::Callbacks;
-	namespace Application = Uranium::Core::Application;
-
 	class CursorShape;
 
 	class Cursor {
+	public:
+		/*
+		* Custom alias
+		*/
+		using Window				= Uranium::Graphics::Display::Window;
+		using ApplicationProgram	= Uranium::Core::Application::ApplicationProgram;
+		using MouseCallback			= Uranium::Input::Callbacks::MouseCallback;
+		using CursorCallback		= Uranium::Input::Callbacks::CursorCallback;
+
 	public:
 		virtual ~Cursor();
 
@@ -56,9 +61,9 @@ namespace Uranium::Graphics::UI {
 		/*
 		* Friends with other classes
 		*/
-		friend Callbacks::MouseCallback;
-		friend Callbacks::CursorCallback;
-		friend Application::ApplicationProgram;
+		friend MouseCallback;
+		friend CursorCallback;
+		friend ApplicationProgram;
 
 	private:
 		/*
@@ -68,7 +73,7 @@ namespace Uranium::Graphics::UI {
 		Cursor(const Cursor&) = delete;
 		Cursor(const Cursor&&) = delete;
 
-		Cursor(Display::Window* _window);
+		Cursor(std::shared_ptr<Window> _window);
 
 		void setNormPosition(double xposN, double yposN);
 
@@ -90,7 +95,7 @@ namespace Uranium::Graphics::UI {
 
 		bool isActive;
 
-		Display::Window* window;
+		std::shared_ptr<Window> window;
 
 		std::shared_ptr<CursorShape> cursorShape;
 

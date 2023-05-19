@@ -9,12 +9,16 @@ namespace Uranium::Input::Callbacks {
 
 namespace Uranium::Graphics::Display {
 
-	namespace Callbacks = Uranium::Input::Callbacks;
-
 	class Window;
 	class Monitor;
 
 	class WindowProps {
+	public:
+		/*
+		* custom alias
+		*/
+		using WindowCallback = Uranium::Input::Callbacks::WindowCallback;
+
 	public:
 		/*
 		* Minimun and maximum default dimensions
@@ -72,7 +76,7 @@ namespace Uranium::Graphics::Display {
 		* Mutual friend classes
 		*/
 		friend Window;
-		friend Callbacks::WindowCallback;
+		friend WindowCallback;
 
 	private:
 		/*
