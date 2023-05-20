@@ -158,13 +158,22 @@
     <ClInclude Include="src\Scenes\SceneMaster.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Core\Util\Lists\ArrayList.h">
+    <ClInclude Include="src\Core\DataStructures\ArrayList.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Core\Util\Lists\ArrayList.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Core\Util\Lists\List.h">
+    <ClInclude Include="src\Core\DataStructures\List.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Core\DataStructures\Graph.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Core\DataStructures\Container.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Core\DataStructures\SparseGraph.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

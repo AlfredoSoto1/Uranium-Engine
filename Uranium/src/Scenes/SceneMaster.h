@@ -24,9 +24,7 @@ namespace Uranium::Scenes {
 		/*
 		* public methods
 		*/
-		volatile double getTimeInstance();
-		
-		std::shared_ptr<Scene> getCurrentScene();
+		const std::shared_ptr<Scene>& getCurrentScene();
 
 		void setCurrentScene(std::shared_ptr<Scene> scene);
 
@@ -46,21 +44,27 @@ namespace Uranium::Scenes {
 		
 		void render();
 		void update();
-		void postUpdate();
 
-		void sleepScene(const unsigned int targetTick, const unsigned int triggerTarget, volatile double* lastTick);
+		void handleSceneLoading();
+
+		void renderInTime();
+		void renderOutTime();
+
+		void updateInTime();
+		void updateOutTime();
 
 	private:
 		/*
 		* private members
 		*/
 		volatile unsigned int frameCount;
+		volatile unsigned int updateCount;
 
 		volatile double lastFrame;
+		volatile double lastUpdate;
 
-		volatile double lastRefresh;
-		volatile double timeDifference;
-		volatile double lastTimeDifference;
+		volatile double renderTimer;
+		volatile double updateTimer;
 
 		std::shared_ptr<Scene> currentScene;
 

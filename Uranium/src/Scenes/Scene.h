@@ -2,6 +2,7 @@
 
 #include <memory>
 #include <string>
+#include <vector>
 
 namespace Uranium::Scenes {
 
@@ -12,7 +13,9 @@ namespace Uranium::Scenes {
 		/*
 		* Public static declarations
 		*/
+		static constexpr unsigned int DEFAULT_60 = 60;
 		static constexpr unsigned int UNLIMITED_FPS = 0;
+		static constexpr unsigned int UNLIMITED_UPS = 0;
 
 	public:
 		Scene();
@@ -23,18 +26,23 @@ namespace Uranium::Scenes {
 		* Public methods
 		*/
 		bool isPaused();
+		bool isLoaded();
 
 		std::string getName();
-		std::shared_ptr<Scene> getNext();
+		
+		const std::vector<std::shared_ptr<Scene>>& getLinkedScenes();
 
 		void setName(const std::string& name);
-		void setNext(std::shared_ptr<Scene> scene);
+		void linkScene(const std::shared_ptr<Scene>& scene);
 
-		void setGameTick(unsigned int gameTick);
+		void setTargetUpdate(unsigned int targetUpdate);
 		void setTargetFramerate(unsigned int targetFramerate);
 
-		unsigned int getGameTick();
+		unsigned int getTargetUpdates();
 		unsigned int getTargetFramerate();
+
+		double getFrameTime();
+		double getUpdateTime();
 
 	protected:
 		/*
@@ -48,10 +56,10 @@ namespace Uranium::Scenes {
 		virtual void load() = 0;
 		virtual void unload() = 0;
 
-		virtual void reset();
-
 		void pause();
 		void resume();
+
+		void changeScene(const std::shared_ptr<Scene>& scene);
 	
 	private:
 		/*
@@ -68,14 +76,17 @@ namespace Uranium::Scenes {
 		/*
 		* Private members
 		*/
-		unsigned int gameTick;
 		unsigned int targetFrames;
+		unsigned int targetUpdates;
 
 		bool is_paused;
+		bool is_loaded;
 
 		std::string sceneName;
 
 		std::shared_ptr<Scene> nextScene;
+
+		std::vector<std::shared_ptr<Scene>> linkedScenes;
 
 	};
 }

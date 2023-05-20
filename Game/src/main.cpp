@@ -367,6 +367,115 @@
 
 
 
+//#include <GLFW/glfw3.h>
+//#include <iostream>
+//
+//const int RENDER_FPS = 5;
+//const int UPDATE_FPS = 2;
+//
+//void renderMethod() {
+//    // Your rendering logic here
+//    //std::cout << "rendering"<< std::endl;
+//}
+//
+//void updateMethod() {
+//    // Your update logic here
+//    std::cout << "updating"<< std::endl;
+//}
+//
+//int main() {
+//    // Initialize GLFW and create a window
+//    if (!glfwInit()) {
+//        // Handle initialization failure
+//        return -1;
+//    }
+//
+//    GLFWwindow* window = glfwCreateWindow(800, 600, "Custom FPS Example", nullptr, nullptr);
+//    if (!window) {
+//        // Handle window creation failure
+//        glfwTerminate();
+//        return -1;
+//    }
+//
+//    glfwMakeContextCurrent(window);
+//
+//    // Set the swap interval to control the render frame rate
+//    glfwSwapInterval(0);
+//
+//    // Set up timing
+//    double renderFrameTime = 1.0 / RENDER_FPS;
+//    double updateFrameTime = 1.0 / UPDATE_FPS;
+//    double previousRenderTime = glfwGetTime();
+//    double previousUpdateTime = glfwGetTime();
+//
+//    double renderTimer = 0.0;
+//    double updateTimer = 0.0;
+//
+//    int frames = 0;
+//    int updates = 0;
+//
+//    // Main loop
+//    while (!glfwWindowShouldClose(window)) {
+//        // Process events
+//        glfwPollEvents();
+//
+//        // Calculate elapsed time
+//        double currentFrameTime = glfwGetTime();
+//        double elapsedFrameTime = currentFrameTime - previousRenderTime;
+//        previousRenderTime = currentFrameTime;
+//
+//        // Update render timer
+//        renderTimer += elapsedFrameTime;
+//
+//        // Check if it's time to render
+//        if (renderTimer >= renderFrameTime) {
+//            // Perform rendering logic
+//            renderMethod();
+//
+//            // Reset render timer
+//            renderTimer = 0.0;
+//
+//            ++frames;
+//
+//            if (frames == RENDER_FPS) {
+//                std::cout << "FPS: " << frames << std::endl;
+//                frames = 0;
+//            }
+//        }
+//
+//        // Calculate elapsed time
+//        elapsedFrameTime = currentFrameTime - previousUpdateTime;
+//        previousUpdateTime = currentFrameTime;
+//
+//        // Update update timer
+//        updateTimer += elapsedFrameTime;
+//
+//        // Check if it's time to update
+//        if (updateTimer >= updateFrameTime) {
+//            // Perform update logic
+//            updateMethod();
+//
+//            // Reset update timer
+//            updateTimer = 0.0;
+//
+//
+//            ++updates;
+//
+//            if (updates == UPDATE_FPS) {
+//                std::cout << "UPS: " << updates  << std::endl;
+//                updates = 0;
+//            }
+//        }
+//
+//        // Swap buffers
+//        glfwSwapBuffers(window);
+//    }
+//
+//    // Cleanup
+//    glfwTerminate();
+//
+//    return 0;
+//}
 
 
 
@@ -386,6 +495,36 @@ using namespace Uranium::Core::Application;
 using namespace Uranium::Graphics::Display;
 
 class MyScene : public Scene {
+public:
+	void init() {
+
+	}
+
+	void update() {
+
+		//const std::vector<std::shared_ptr<Scene>>& linkedScenes = this->getLinkedScenes();
+
+		//this->changeScene(linkedScenes[0]);
+	}
+
+	void render() {
+
+	}
+
+	void dispose() {
+
+	}
+
+	void load() {
+
+	}
+
+	void unload() {
+
+	}
+};
+
+class OtherScene : public Scene {
 public:
 	void init() {
 
@@ -417,18 +556,21 @@ public:
 
 	std::shared_ptr<Window> window;
 	std::shared_ptr<MyScene> scene1;
-	std::shared_ptr<MyScene> scene2;
+	std::shared_ptr<OtherScene> scene2;
 
 	void init() {
 		window = std::make_shared<Window>("First display", 1280, 720);
 		window->init();
 
 		scene1 = std::make_shared<MyScene>();
-		scene2 = std::make_shared<MyScene>();
+		scene2 = std::make_shared<OtherScene>();
 
 		// share references mutually
-		scene1->setNext(scene2);
-		scene2->setNext(scene1);
+		scene1->linkScene(scene2);
+		scene2->linkScene(scene1);
+
+		scene1->setTargetUpdate(30);
+		scene1->setTargetFramerate(144);
 
 		this->push(window, scene1);
 	}
@@ -437,6 +579,7 @@ public:
 		window->dispose();
 	}
 };
+
 
 int main() {
 	/*

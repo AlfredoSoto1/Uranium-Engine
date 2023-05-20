@@ -120,6 +120,8 @@
     <ClInclude Include="src\Core\Application\Application.h" />
     <ClInclude Include="src\Core\Application\ApplicationProgram.h" />
     <ClInclude Include="src\Core\Application\UraniumApi.h" />
+    <ClInclude Include="src\Core\DataStructures\Container.h" />
+    <ClInclude Include="src\Core\DataStructures\SparseGraph.h" />
     <ClInclude Include="src\Core\Math\Constants.h" />
     <ClInclude Include="src\Core\Math\mat2.h" />
     <ClInclude Include="src\Core\Math\mat3.h" />
@@ -128,9 +130,9 @@
     <ClInclude Include="src\Core\Math\vec2.h" />
     <ClInclude Include="src\Core\Math\vec3.h" />
     <ClInclude Include="src\Core\Math\vec4.h" />
-    <ClInclude Include="src\Core\Util\Lists\ArrayList.h" />
-    <ClInclude Include="src\Core\Util\Lists\ArrayList.h" />
-    <ClInclude Include="src\Core\Util\Lists\List.h" />
+    <ClInclude Include="src\Core\DataStructures\ArrayList.h" />
+    <ClInclude Include="src\Core\DataStructures\Graph.h" />
+    <ClInclude Include="src\Core\DataStructures\List.h" />
     <ClInclude Include="src\Graphics\Display\Monitor.h" />
     <ClInclude Include="src\Graphics\Display\Window.h" />
     <ClInclude Include="src\Graphics\Display\WindowProps.h" />

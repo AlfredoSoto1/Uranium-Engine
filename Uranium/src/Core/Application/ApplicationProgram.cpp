@@ -144,9 +144,6 @@ void ApplicationProgram::updateProgram() {
 		// swap buffers
 		glfwSwapBuffers(*window);
 
-		// update scene master after all has rendered
-		sceneMaster->postUpdate();
-		
 		// poll events
 		pollEvents();
 	}

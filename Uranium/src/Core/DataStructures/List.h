@@ -1,21 +1,11 @@
 #pragma once
 
-namespace Uranium::Core::Util::Lists {
+#include "Container.h"
 
-	template<class Element> class List {
+namespace Uranium::Core::DataStructures {
+
+	template<class Element> class List : public Container {
 	public:
-		/**
-		* Returns the size of the List.
-		* @return (unsgined int) size of the list
-		*/
-		virtual inline unsigned int size() = 0;
-
-		/**
-		 * Returns whether the List is empty of not.
-		 * True if empty, false otherwise.
-		 * @return (boolean) whether the list is empty
-		 */
-		virtual inline bool isEmpty() = 0;
 
 		/**
 		 * Adds a copy of the element to the end of the List
@@ -69,11 +59,6 @@ namespace Uranium::Core::Util::Lists {
 		 * @return (boolean) whether obj is present or not. True if present, false otherwise
 		 */
 		virtual bool contains(const Element& obj) = 0;
-
-		/**
-		 * Empties the List.
-		 */
-		virtual void clear() = 0;
 
 		/**
 		 * Removes every instance of element obj.

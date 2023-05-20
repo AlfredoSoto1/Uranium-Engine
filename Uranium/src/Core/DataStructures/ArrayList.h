@@ -5,7 +5,7 @@
 #include <cstring>
 #include <stdexcept>
 
-namespace Uranium::Core::Util::Lists {
+namespace Uranium::Core::DataStructures {
 
 	constexpr unsigned int INITIAL_CAPACITY = 10;
 

@@ -7,13 +7,13 @@
 
 using namespace Uranium::Scenes;
 
-SceneMaster::SceneMaster()  :
+SceneMaster::SceneMaster() :
 	frameCount(0),
-
+	updateCount(0),
 	lastFrame(0),
-	lastRefresh(0),
-	timeDifference(0),
-	lastTimeDifference(0)
+	lastUpdate(0),
+	renderTimer(0),
+	updateTimer(0)
 {
 
 }
@@ -22,36 +22,51 @@ SceneMaster::~SceneMaster() {
 
 }
 
-std::shared_ptr<Scene> SceneMaster::getCurrentScene() {
+const std::shared_ptr<Scene>& SceneMaster::getCurrentScene() {
 	return currentScene;
-}
-
-volatile double SceneMaster::getTimeInstance() {
-	return lastTimeDifference;
 }
 
 void SceneMaster::setCurrentScene(std::shared_ptr<Scene> scene) {
 	this->currentScene = scene;
 }
 
-void SceneMaster::sleepScene(const unsigned int targetTick, const unsigned int triggerTarget, volatile double* lastTick) {
+void SceneMaster::renderOutTime() {
+	// perform render logic instantly
+	currentScene->render();
+	// increase udpate count
+	frameCount++;
+	// display framerate
+	if (glfwGetTime() * 1000.0 > lastFrame + 1000.0) {
+		print_status("FPS: " << frameCount);
+		frameCount = 0;
+		// set last time refreshed to ~new time
+		lastFrame = glfwGetTime() * 1000.0;
+	}
+}
 
-	// if no scene is linked, 
-	// skip any process
-	if (currentScene == nullptr)
-		return;
+void SceneMaster::renderInTime() {
+	// calculate elapse time
+	double currentFrame = glfwGetTime();
+	double elapsedTime = currentFrame - lastFrame;
+	lastFrame = currentFrame;
 
-	//Current thread sleeps here to get to targeted FPS
-	if (targetTick == triggerTarget)
-		return;
+	// update render timer
+	renderTimer += elapsedTime;
 
-	volatile double timeFraction = 1.0 / targetTick;
-
-	// sleep thread
-	while (glfwGetTime() < *lastTick + timeFraction);
-
-	// increase tick by time fraction
-	*lastTick += timeFraction;
+	// check if it's time to render
+	if (renderTimer >= currentScene->getFrameTime()) {
+		// perform rendering logic in time
+		currentScene->render();
+		// reset rendering timer
+		renderTimer = 0.0;
+		// increase frame count
+		++frameCount;
+		// display framerate
+		if (frameCount == currentScene->getTargetFramerate()) {
+			print_status("FPS : " << frameCount);
+			frameCount = 0;
+		}
+	}
 }
 
 void SceneMaster::render() {
@@ -61,7 +76,86 @@ void SceneMaster::render() {
 	if (currentScene == nullptr)
 		return;
 	
-	currentScene->render();
+	// check if the target framerate
+	// must be done instantly
+	if (currentScene->getTargetFramerate() == 0) {
+		renderOutTime();
+	}
+	else {
+		renderInTime();
+	}
+}
+
+void SceneMaster::handleSceneLoading() {
+
+	// check if it needs to change to next scene
+	if (currentScene->nextScene != nullptr) {
+		// copy next scene ref
+		std::shared_ptr<Scene> next = currentScene->nextScene;
+		// reset the pointer from current
+		// of next
+		currentScene->nextScene = nullptr;
+		// unload the scene content
+		currentScene->unload();
+		// update flag
+		currentScene->is_loaded = false;
+
+		// change scene
+		currentScene = next;
+	}
+
+	// check if it needs to load the scene
+	if (!currentScene->is_loaded) {
+		// load new current scene
+		currentScene->load();
+		// update flag
+		currentScene->is_loaded = true;
+	}
+}
+
+void SceneMaster::updateInTime() {
+	// calculate elapse time
+	double currentUpdate = glfwGetTime();
+	double elapsedTime = currentUpdate - lastUpdate;
+	lastUpdate = currentUpdate;
+
+	// update udpate timer
+	updateTimer += elapsedTime;
+
+	// check if it's time to update
+	if (updateTimer >= currentScene->getUpdateTime()) {
+
+		// perform update logic in time
+		currentScene->update();
+
+		// reset udpate timer
+		updateTimer = 0.0;
+
+		// increase udpate count
+		++updateCount;
+
+		// display updates
+		if (updateCount == currentScene->getTargetUpdates()) {
+			print_status("UPS : " << updateCount);
+			updateCount = 0;
+		}
+	}
+}
+
+void SceneMaster::updateOutTime() {
+	// perform update logic instantly
+	currentScene->update();
+
+	// increase udpate count
+	updateCount++;
+
+	// display updates
+	if (glfwGetTime() * 1000.0 > lastUpdate + 1000.0) {
+		print_status("UPS: " << updateCount);
+		updateCount = 0;
+		// set last time refreshed to ~new time
+		lastUpdate = glfwGetTime() * 1000.0;
+	}
 }
 
 void SceneMaster::update() {
@@ -71,29 +165,16 @@ void SceneMaster::update() {
 	if (currentScene == nullptr)
 		return;
 
-	currentScene->update();
+	// handle scene loading
+	// when changing is requested
+	handleSceneLoading();
 
-}
-
-void SceneMaster::postUpdate() {
-
-	double currentTime = glfwGetTime();
-
-	// increase frame count
-	frameCount++;
-
-	if (currentTime * 1000.0 > lastRefresh + 1000.0) {
-		
-		// display FPS in console
-		print_status("FPS: " << frameCount << ", " << currentTime);
-		
-		// reset frame count to 0
-		frameCount = 0;
-
-		// set last time refreshed to ~new time
-		lastRefresh = glfwGetTime() * 1000.0;
+	// check if the target updates
+	// must be done instantly
+	if (currentScene->getTargetUpdates() == 0) {
+		updateOutTime();
 	}
-
-	timeDifference = (currentTime - lastTimeDifference);
-	lastTimeDifference = currentTime;
+	else {
+		updateInTime();
+	}
 }
