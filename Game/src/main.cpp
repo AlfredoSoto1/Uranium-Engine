@@ -402,21 +402,35 @@ public:
 	void dispose() {
 
 	}
+
+	void load() {
+
+	}
+
+	void unload() {
+
+	}
 };
 
 class MyApp : public ApplicationProgram {
 public:
 
 	std::shared_ptr<Window> window;
-	std::shared_ptr<MyScene> scene;
+	std::shared_ptr<MyScene> scene1;
+	std::shared_ptr<MyScene> scene2;
 
 	void init() {
 		window = std::make_shared<Window>("First display", 1280, 720);
 		window->init();
 
-		scene = std::make_shared<MyScene>();
+		scene1 = std::make_shared<MyScene>();
+		scene2 = std::make_shared<MyScene>();
 
-		this->push(window, scene);
+		// share references mutually
+		scene1->setNext(scene2);
+		scene2->setNext(scene1);
+
+		this->push(window, scene1);
 	}
 
 	void dispose() {

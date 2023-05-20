@@ -128,6 +128,9 @@
     <ClInclude Include="src\Core\Math\vec2.h" />
     <ClInclude Include="src\Core\Math\vec3.h" />
     <ClInclude Include="src\Core\Math\vec4.h" />
+    <ClInclude Include="src\Core\Util\Lists\ArrayList.h" />
+    <ClInclude Include="src\Core\Util\Lists\ArrayList.h" />
+    <ClInclude Include="src\Core\Util\Lists\List.h" />
     <ClInclude Include="src\Graphics\Display\Monitor.h" />
     <ClInclude Include="src\Graphics\Display\Window.h" />
     <ClInclude Include="src\Graphics\Display\WindowProps.h" />

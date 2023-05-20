@@ -1,7 +1,6 @@
 #pragma once
 
 #include <memory>
-#include <vector>
 #include <string>
 
 namespace Uranium::Scenes {
@@ -26,9 +25,10 @@ namespace Uranium::Scenes {
 		bool isPaused();
 
 		std::string getName();
+		std::shared_ptr<Scene> getNext();
 
 		void setName(const std::string& name);
-		void linkScene(std::shared_ptr<Scene> scene);
+		void setNext(std::shared_ptr<Scene> scene);
 
 		void setGameTick(unsigned int gameTick);
 		void setTargetFramerate(unsigned int targetFramerate);
@@ -44,6 +44,9 @@ namespace Uranium::Scenes {
 		virtual void update() = 0;
 		virtual void render() = 0;
 		virtual void dispose() = 0;
+
+		virtual void load() = 0;
+		virtual void unload() = 0;
 
 		virtual void reset();
 
@@ -72,7 +75,7 @@ namespace Uranium::Scenes {
 
 		std::string sceneName;
 
-		std::vector<std::shared_ptr<Scene>> scenes;
+		std::shared_ptr<Scene> nextScene;
 
 	};
 }

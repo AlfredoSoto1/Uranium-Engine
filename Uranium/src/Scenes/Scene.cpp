@@ -15,8 +15,6 @@ Scene::Scene() :
 
 Scene::~Scene() {
 	
-	// clear all scene references
-	scenes.clear();
 }
 
 bool Scene::isPaused() {
@@ -27,12 +25,16 @@ std::string Scene::getName() {
 	return sceneName;
 }
 
+std::shared_ptr<Scene> Scene::getNext() {
+	return nextScene;
+}
+
 void Scene::setName(const std::string& name) {
 	this->sceneName = name;
 }
 
-void Scene::linkScene(std::shared_ptr<Scene> scene) {
-	scenes.push_back(scene);
+void Scene::setNext(std::shared_ptr<Scene> scene) {
+	nextScene = scene;
 }
 
 void Scene::setGameTick(unsigned int gameTick) {
