@@ -121,7 +121,14 @@
     <ClInclude Include="src\Core\Application\ApplicationProgram.h" />
     <ClInclude Include="src\Core\Application\UraniumApi.h" />
     <ClInclude Include="src\Core\DataStructures\Container.h" />
+    <ClInclude Include="src\Core\DataStructures\DenseGraph.h" />
+    <ClInclude Include="src\Core\DataStructures\Entry.h" />
+    <ClInclude Include="src\Core\DataStructures\interfaces\Map.h" />
+    <ClInclude Include="src\Core\DataStructures\interfaces\Queue.h" />
+    <ClInclude Include="src\Core\DataStructures\interfaces\Set.h" />
+    <ClInclude Include="src\Core\DataStructures\interfaces\Vector.h" />
     <ClInclude Include="src\Core\DataStructures\SparseGraph.h" />
+    <ClInclude Include="src\Core\DataStructures\WeightedGraph.h" />
     <ClInclude Include="src\Core\Math\Constants.h" />
     <ClInclude Include="src\Core\Math\mat2.h" />
     <ClInclude Include="src\Core\Math\mat3.h" />

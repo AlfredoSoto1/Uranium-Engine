@@ -21,11 +21,5 @@ namespace Uranium::Core::DataStructures {
 		*/
 		virtual List<Element> breadthFirstSearch(const Element& obj) = 0;
 
-		/*
-		* Finds the shortes path from vertex to
-		* vertex inside graph
-		* @return shortest path as an edge
-		*/
-		virtual void findShortPath(const Element& start, const Element& dest) = 0;
 	};
 }

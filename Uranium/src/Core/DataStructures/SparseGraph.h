@@ -5,7 +5,7 @@
 
 namespace Uranium::Core::DataStructures {
 
-	template<class Element> class SparseGraph : public Graph {
+	template<class Element> class SparseGraph : public Graph<Element> {
 	public:
 		explicit SparseGraph();
 		~SparseGraph();
