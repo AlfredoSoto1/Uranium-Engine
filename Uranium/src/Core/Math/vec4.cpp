@@ -1,6 +1,7 @@
 #include "vec4.h"
 #include "vec2.h"
 #include "vec3.h"
+#include <stdexcept>
 
 using namespace Uranium::Core::Math;
 
@@ -26,6 +27,8 @@ vec4::vec4(float xyzw)
 }
 
 float& vec4::operator [] (unsigned int index) {
+	if (index >= 4)
+		throw std::out_of_range("Index out bounds! vec4 - index >= 4");
 	return *((float*)this + index);
 }
 

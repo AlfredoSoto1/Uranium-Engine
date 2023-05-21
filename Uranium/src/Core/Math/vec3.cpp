@@ -1,5 +1,6 @@
 #include "vec3.h"
 #include "vec2.h"
+#include <stdexcept>
 
 using namespace Uranium::Core::Math;
 
@@ -21,6 +22,8 @@ vec3::vec3(const vec2& vector, float z)
 }
 
 float& vec3::operator [] (unsigned int index) {
+	if (index >= 3)
+		throw std::out_of_range("Index out bounds! vec3 - index >= 3");
 	return *((float*)this + index);
 }
 

@@ -500,17 +500,6 @@ public:
 
 	}
 
-	void update() {
-
-		//const std::vector<std::shared_ptr<Scene>>& linkedScenes = this->getLinkedScenes();
-
-		//this->changeScene(linkedScenes[0]);
-	}
-
-	void render() {
-
-	}
-
 	void dispose() {
 
 	}
@@ -522,31 +511,12 @@ public:
 	void unload() {
 
 	}
-};
-
-class OtherScene : public Scene {
-public:
-	void init() {
-
-	}
 
 	void update() {
 
 	}
 
 	void render() {
-
-	}
-
-	void dispose() {
-
-	}
-
-	void load() {
-
-	}
-
-	void unload() {
 
 	}
 };
@@ -556,18 +526,15 @@ public:
 
 	std::shared_ptr<Window> window;
 	std::shared_ptr<MyScene> scene1;
-	std::shared_ptr<OtherScene> scene2;
 
 	void init() {
 		window = std::make_shared<Window>("First display", 1280, 720);
 		window->init();
 
 		scene1 = std::make_shared<MyScene>();
-		scene2 = std::make_shared<OtherScene>();
 
 		// share references mutually
-		scene1->linkScene(scene2);
-		scene2->linkScene(scene1);
+		//scene1->linkScene(scene2);
 
 		scene1->setTargetUpdate(30);
 		scene1->setTargetFramerate(144);

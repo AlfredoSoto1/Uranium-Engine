@@ -1,4 +1,5 @@
 #include "vec2.h"
+#include <stdexcept>
 
 using namespace Uranium::Core::Math;
 
@@ -18,6 +19,8 @@ vec2::vec2(const vec2& vector)
 }
 
 float& vec2::operator [] (unsigned int index) {
+	if (index >= 2)
+		throw std::out_of_range("Index out bounds! vec2 - index >= 2");
 	return *((float*)this + index);
 }
 
