@@ -44,7 +44,7 @@ namespace Uranium::Core::DataStructures {
 		 * @return (boolean) Always true since the position has to be valied (exist) to be removed.
 		 * @throws an exception if the index is not valid
 		 */
-		virtual bool remove(int index) = 0;
+		virtual bool remove(unsigned int index) = 0;
 
 		/**
 		 * Removes the first instance of the element obj.

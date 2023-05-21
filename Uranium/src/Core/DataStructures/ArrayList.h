@@ -11,7 +11,7 @@ namespace Uranium::Core::DataStructures {
 
 	template<class Element> class ArrayList : public List<Element> {
 	public:
-		explicit ArrayList();
+		ArrayList();
 		ArrayList(unsigned int initialCapacity);
 		~ArrayList();
 
@@ -27,7 +27,7 @@ namespace Uranium::Core::DataStructures {
 
 		Element set(int index, const Element& obj);
 
-		bool remove(int index);
+		bool remove(unsigned int index);
 
 		bool remove(const Element& obj);
 
@@ -161,13 +161,12 @@ namespace Uranium::Core::DataStructures {
 		return oldValue;
 	}
 
-	ARRAY_LIST(bool)::remove(int index) {
-
+	ARRAY_LIST(bool)::remove(unsigned int index) {
 		// Check bounds
 		if (index < 0 || index >= arraySize)
 			throw std::range_error("Index is out of bounds!");
 		// Shift values to the left
-		for (int i = index; i < arraySize - 1; i++)
+		for (unsigned int i = index; i < arraySize - 1; i++)
 			elements[i] = std::move(elements[i + 1]);
 		// Decrease size
 		arraySize--;

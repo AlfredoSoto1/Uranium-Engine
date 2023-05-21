@@ -547,6 +547,10 @@ public:
 	}
 };
 
+#include <Core/DataStructures/Graph.h>
+#include <Core/DataStructures/SparseGraph.h>
+
+using namespace Uranium::Core::DataStructures;
 
 int main() {
 	/*

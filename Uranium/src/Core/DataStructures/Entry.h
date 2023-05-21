@@ -16,6 +16,9 @@ namespace Uranium::Core::DataStructures {
 		*/
 		Entry(const Key&& key, const Value&& value);
 		
+		// default constructor
+		Entry();
+		
 		// default destructor
 		~Entry();
 
@@ -63,6 +66,11 @@ namespace Uranium::Core::DataStructures {
 
 	}
 
+	ENTRY()::Entry()
+	{
+
+	}
+
 	ENTRY()::~Entry() {
 
 	}
@@ -84,7 +92,7 @@ namespace Uranium::Core::DataStructures {
 	}
 
 	ENTRY(int)::equals(const Entry<Key, Value>& other) {
-		return memcmp(this, &other, sizeof(Entry<Key, Value>) == 0;
+		return memcmp(this, &other, sizeof(Entry<Key, Value>));
 	}
 
 }

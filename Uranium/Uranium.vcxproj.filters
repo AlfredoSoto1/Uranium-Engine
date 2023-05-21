@@ -182,16 +182,22 @@
     <ClInclude Include="src\Core\DataStructures\Entry.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Core\DataStructures\interfaces\Set.h">
+    <ClInclude Include="src\Core\DataStructures\Set.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Core\DataStructures\interfaces\Map.h">
+    <ClInclude Include="src\Core\DataStructures\Map.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Core\DataStructures\interfaces\Vector.h">
+    <ClInclude Include="src\Core\DataStructures\Vector.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Core\DataStructures\interfaces\Queue.h">
+    <ClInclude Include="src\Core\DataStructures\Queue.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Core\DataStructures\GraphWeight.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Core\DataStructures\WeightedSparseGraph.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
