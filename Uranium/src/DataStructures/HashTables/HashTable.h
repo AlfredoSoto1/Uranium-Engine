@@ -1,58 +1,56 @@
 #pragma once
 
 #include <optional>
-#include <functional>
 
 #include "HashCode.h"
 #include "DataStructures/Containers/Container.h"
-#include "DataStructures/Containers/Comparable.h"
 
 namespace Uranium::DataStructures::HashTables {
 
 	template<class Element> class HashTable : public Containers::Container<Element> {
 	public:
-
+		
 		/*
-		* Returns the hashcode of the given 
-		* parameter element
+		* returns an optional contaning the Hashcode
+		* of an avaliable bucket inside the table.
+		* It returns an empty optional if theres not
+		* an available bucket for the element parameter
+		* this could be because the table is full or has a duplicate
 		*/
-		virtual HashCode hashOf(const Element& obj) = 0;
-
+		virtual std::optional<HashCode> availableHash(char* activeBuckets, unsigned int capacity, const Element& obj) = 0;
+		
 		/*
-		* It puts the given parameter
-		* (Element - obj) inside the hash table
+		* returns an optional containing the Hashcode
+		* of the element inside the table if found.
+		* It returns an empty optional if the element was
+		* not found in table
 		*/
-		virtual void put(HashCode hashCode, const Element& obj) = 0;
+		virtual std::optional<HashCode> searchHash(char* activeBuckets, unsigned int capacity, const Element& obj) = 0;
 
 		/*
-		* Returns an optional containing the possible element
-		* inside the table that can be found with the target
-		* parameter: hashcode
+		* It puts an element in the table with
+		* its corresponding position using the hashFunction
+		* It will not add duplicate elements to the table 
+		* to avoid confusion inside the table
 		*/
-		virtual std::optional<Element> get(HashCode hashCode) = 0;
+		virtual void put(const Element& obj) = 0;
 
 		/*
-		* Returns an optional containing the possible element
-		* inside the table that can be found with the target
-		* It uses a lambda function to compare the element if
-		* it matches the one from the hashCode given
+		* It will return the address of the element
+		* inside the table if it exists. If it could not
+		* found the element, it will return instead nullptr
 		*/
-		virtual std::optional<Element> get(HashCode hashCode, const std::function<bool(const Element&)>& testElement) = 0;
+		virtual Element* get(const Element& obj) = 0;
 
 		/*
-		* It removes the element as an optional inside the table
-		* that matches the hashcode provided. It uses a reference
-		* of a lambda function to compare the element found using
-		* the hashcode. If the elements are not the same once compared
-		* then it will use quadratic probing to search
-		* for the element in the table. If the element is not found, then
-		* returns an empty optional.
+		* Returns a boolean (true) - if the element was removed
+		* (false) - if the element could not be removed
 		*/
-		virtual std::optional<Element> remove(HashCode hashCode, const std::function<bool(const Element&)>& testElement) = 0;
+		virtual bool remove(const Element& obj) = 0;
 
 		/*
-		* This re-hashes the entire table
-		* when it needs to resize
+		* This rehashes the entire table when it needs
+		* more space to fit new data
 		*/
 		virtual void reHash(unsigned int newCapacity) = 0;
 	};

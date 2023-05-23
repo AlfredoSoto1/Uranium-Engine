@@ -553,32 +553,68 @@ public:
 	}
 };
 
+#include <DataStructures/Graphs/MeshGraph.h>
+#include <DataStructures/Containers/Comparable.h>
 #include <DataStructures/HashTables/HashTableOpenAddress.h>
 
+using namespace Uranium::DataStructures::Graphs;
 using namespace Uranium::DataStructures::HashTables;
 using namespace Uranium::DataStructures::Containers;
 
 int main() {
 
-	auto hashFunction = [](const unsigned int& num) {
-		return ((num * 321) % 3);
+	//auto hashFunction = [](const unsigned int& num) {
+	//	return ((num * 321) % 3);
+	//};
+
+	//auto elementComp = [](const unsigned int& num1, const unsigned int& num2) {
+	//	return (int)(num1 - num2);
+	//};
+
+	//HashTableOpenAddress<unsigned int> table = HashTableOpenAddress<unsigned int>(5, 0.75, hashFunction, elementComp);
+
+	//table.put(34);
+	//table.put(25);
+	//table.put(78);
+	//table.put(100);
+	//table.put(21);
+
+	//std::cout << "====getters====" << std::endl;
+	//
+	//unsigned int* address = table.get(34);
+
+	//if (address != nullptr)
+	//	std::cout << address << " " << *address << std::endl;
+	//else
+	//	std::cout << address << "nullptr" << std::endl;
+
+
+	//address = table.get(78);
+
+	//if (address != nullptr)
+	//	std::cout << address << " " << *address << std::endl;
+	//else
+	//	std::cout << address << " nullptr" << std::endl;
+
+
+	//address = table.get(5);
+
+	//if (address != nullptr)
+	//	std::cout << address << " " << *address << std::endl;
+	//else
+	//	std::cout << address << " nullptr" << std::endl;
+
+	//std::cout << "====remove====" << std::endl;
+
+	//table.remove(100);
+	//table.remove(5);
+
+
+	struct Vertex {
+		float x, y, z;
 	};
 
-	HashTableOpenAddress<unsigned int> table = HashTableOpenAddress<unsigned int>(5, 0.75, hashFunction);
-
-	table.put(table.hashOf(45), 45);
-	table.put(table.hashOf(76), 76);
-	table.put(table.hashOf(17), 17);
-	table.put(table.hashOf(18), 18);
-	table.put(table.hashOf(39), 39);
-
-	std::optional<unsigned int> val = table.remove(table.hashOf(18), [](const unsigned int& obj) {
-		return obj == 18;
-		});
-
-	val = table.remove(table.hashOf(18), [](const unsigned int& obj) {
-		return obj == 18;
-		});
+	MeshGraph<Vertex> vertices = MeshGraph<Vertex>();
 
 	std::cout << "ended" << std::endl;
 

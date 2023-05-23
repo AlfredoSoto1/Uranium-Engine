@@ -6,7 +6,8 @@ namespace Uranium::DataStructures::HashTables {
 
 	template<class Element> class HashTableOpenAddress : public HashTable<Element> {
 	public:
-		HashTableOpenAddress(unsigned int initialCapacity, double loadfactor, HashCode(*function)(const Element&));
+		HashTableOpenAddress(unsigned int initialCapacity, double loadfactor,
+			HashCode(*hashCodeFunction)(const Element&), int(*comparator)(const Element&, const Element&));
 		virtual ~HashTableOpenAddress();
 
 		inline unsigned int size();
@@ -15,23 +16,17 @@ namespace Uranium::DataStructures::HashTables {
 
 		void clear();
 
-		HashCode hashOf(const Element& obj);
+		std::optional<HashCode> availableHash(char* activeBuckets, unsigned int capacity, const Element& obj);
 
-		void put(HashCode hashCode, const Element& obj);
+		std::optional<HashCode> searchHash(char* activeBuckets, unsigned int capacity, const Element& obj);
 
-		std::optional<Element> get(HashCode hashCode);
+		void put(const Element& obj);
 
-		std::optional<Element> get(HashCode hashCode, const std::function<bool(const Element&)>& testElement);
+		Element* get(const Element& obj);
 
-		std::optional<Element> remove(HashCode hashCode, const std::function<bool(const Element&)>& testElement);
+		bool remove(const Element& obj);
 
 		void reHash(unsigned int newCapacity);
-
-	private:
-		/*
-		* private members
-		*/
-		void quadraticProbing(char* elInitArray, Element* tableArray, unsigned int capacity, HashCode hashCode, const Element& obj);
 
 	private:
 		/*
@@ -41,10 +36,11 @@ namespace Uranium::DataStructures::HashTables {
 		constexpr static char USED_MEMORY = 1;
 		constexpr static char USING_MEMORY = 2;
 
-		char* elInit;
+		char* activeBucket;
 		Element* table;
 
-		HashCode(*function)(const Element&);
+		HashCode(*hashCodeFunction)(const Element&);
+		int(*comparator)(const Element&, const Element&);
 
 		unsigned int capacity;
 		unsigned int tableSize;
@@ -55,22 +51,24 @@ namespace Uranium::DataStructures::HashTables {
 
 #define HASH_OP(returnType) template<class Element> returnType HashTableOpenAddress<Element>
 
-	HASH_OP()::HashTableOpenAddress(unsigned int initialCapacity, double loadfactor, HashCode(*function)(const Element&)) :
+	HASH_OP()::HashTableOpenAddress(unsigned int initialCapacity, double loadfactor,
+		HashCode(*hashCodeFunction)(const Element&), int(*comparator)(const Element&, const Element&)) :
 		tableSize(0),
 		capacity(initialCapacity),
 		initialCapacity(initialCapacity),
 
 		loadfactor(loadfactor),
-		function(function)
+		comparator(comparator),
+		hashCodeFunction(hashCodeFunction)
 	{
-		elInit = new char[initialCapacity](FREE_MEMORY);
+		activeBucket = new char[initialCapacity](FREE_MEMORY);
 		table = new Element[initialCapacity];
 	}
 
 	HASH_OP()::~HashTableOpenAddress() {
 		clear();
 		delete[] table;
-		delete[] elInit;
+		delete[] activeBucket;
 	}
 
 	HASH_OP(inline unsigned int)::size() {
@@ -84,21 +82,90 @@ namespace Uranium::DataStructures::HashTables {
 	HASH_OP(void)::clear() {
 		// delete old data
 		delete[] table;
-		delete[] elInit;
+		delete[] activeBucket;
 		// reset capacity to initial
 		capacity = initialCapacity;
 		// re-create table with initial capacity
-		elInit = new char[capacity](FREE_MEMORY);
+		activeBucket = new char[capacity](FREE_MEMORY);
 		table = new Element[capacity];
 		// reset size to zero
 		tableSize = 0;
 	}
 
-	HASH_OP(HashCode)::hashOf(const Element& obj) {
-		return function(obj);
+	HASH_OP(std::optional<HashCode>)::availableHash(char* activeBuckets, unsigned int capacity, const Element& obj) {
+
+		// generate a hashCode with function
+		HashCode hashCode = hashCodeFunction(obj);
+
+		// if active bucket is available
+		// return its hashCode
+		if (activeBuckets[hashCode] == FREE_MEMORY || activeBuckets[hashCode] == USED_MEMORY)
+			return hashCode;
+
+		// do quadratic probing to search for
+		// free buckets that include free memory or used
+		for (HashCode i = 0; i < capacity; i++) {
+			// generate new hashCode for quadratic probing
+			HashCode quadraticProbIndex = (hashCode + i * i) % capacity;
+			// check if its a free bucket or used
+			// and return its hashCode address
+			if (activeBuckets[quadraticProbIndex] == FREE_MEMORY || activeBuckets[quadraticProbIndex] == USED_MEMORY)
+				return quadraticProbIndex;
+
+			// if we try to put the same exact element
+			// in the table, it will return an empty optional
+			// since elements have to be unique so they generate
+			// a unique hashCode and avoid confusion in the program
+			if (comparator(obj, table[quadraticProbIndex]) == 0)
+				return {};
+		}
+		// return empty optional
+		// if no hashCode could be found for given element
+		// in this case, HashTable should reHash
+		return {};
 	}
 
-	HASH_OP(void)::put(HashCode hashCode, const Element& obj) {
+	HASH_OP(std::optional<HashCode>)::searchHash(char* activeBuckets, unsigned int capacity, const Element& obj) {
+
+		// generate a hashCode with function
+		HashCode hashCode = hashCodeFunction(obj);
+
+		// if generated hashCode points to
+		// an empty bucket, return empty optional
+		// since there is no need to search further
+		if (activeBuckets[hashCode] == FREE_MEMORY)
+			return {};
+
+		// do quadratic probing to search for
+		// the target Element parameter
+		for (HashCode i = 0; i < capacity; i++) {
+			// generate new hashCode for quadratic probing
+			HashCode quadraticProbIndex = (hashCode + i * i) % capacity;
+
+			// if current bucket points to empty block of memory,
+			// return empty optional, since we probe until it wasn't found
+			if (activeBuckets[quadraticProbIndex] == FREE_MEMORY)
+				return {};
+
+			// Check if bucket from table is not the same from 
+			// target Element. If they are not the same, continue searching
+			// also if the bucket points to used memory, continue searching aswell
+			if (activeBuckets[quadraticProbIndex] == USED_MEMORY)
+				continue;
+			if (comparator(obj, table[quadraticProbIndex]) != 0)
+				continue;
+
+			// return hashCode for the 
+			// found element in table
+			return quadraticProbIndex;
+		}
+		// return empty optional
+		// if no hashCode could be found for given element
+		// in this case, HashTable should reHash
+		return {};
+	}
+
+	HASH_OP(void)::put(const Element& obj) {
 
 		// increase table size
 		tableSize++;
@@ -107,117 +174,86 @@ namespace Uranium::DataStructures::HashTables {
 		if ((tableSize / (double)capacity) >= loadfactor)
 			reHash(capacity * 2);
 
-		// do probing to put elements in table
-		quadraticProbing(elInit, table, capacity, hashCode, obj);
+		// obtain hashCode address after reHash condition
+		std::optional<HashCode> availableAddress = availableHash(activeBucket, capacity, obj);
+
+		if(!availableAddress.has_value())
+			return; // element is duplicated
+
+		// put element
+		table[availableAddress.value()] = std::move(obj);
+		// set flag to USING_MEMORY
+		// since we initialized this block of memory
+		activeBucket[availableAddress.value()] = USING_MEMORY;
 	}
 
-	HASH_OP(std::optional<Element>)::get(HashCode hashCode) {
-		if(elInit[hashCode] == USING_MEMORY)
-			return table[hashCode];
-		return {};
+	HASH_OP(Element*)::get(const Element& obj) {
+
+		// look for hashCode in table of element
+		std::optional<HashCode> hashCode = searchHash(activeBucket, capacity, obj);
+
+		// element not in table
+		// return nullptr
+		if (!hashCode.has_value())
+			return nullptr;
+
+		// return the address of element in table
+		return &table[hashCode.value()];
 	}
 
-	HASH_OP(std::optional<Element>)::get(HashCode hashCode, const std::function<bool(const Element&)>& testElement) {
-		// if hashcode points to
-		// an invalid memory, return empty optional
-		if (elInit[hashCode] == FREE_MEMORY)
-			return {};
-
-		for (HashCode i = 0; i < capacity; i++) {
-			// generate index with quadratic probing
-			HashCode quadraticProbIndex = (hashCode + i * i) % capacity;
-			// if hashcode points to an invalid memory,
-			// finish the probing, since element is not
-			// in the table
-			if (elInit[quadraticProbIndex] == FREE_MEMORY)
-				return {};
-
-			// compare; If they are not equal, continue
-			// the quadratic probing
-			if (!testElement(table[quadraticProbIndex]) || elInit[quadraticProbIndex] == USED_MEMORY)
-				continue;
-
-			return table[quadraticProbIndex];
-		}
-		// return by default and empty optional
-		// this happens when we traversed the entire table
-		// and there was no element found
-		return {};
-	}
-
-	HASH_OP(std::optional<Element>)::remove(HashCode hashCode, const std::function<bool(const Element&)>& testElement) {
+	HASH_OP(bool)::remove(const Element& obj) {
 		
-		// if hashcode points to
-		// an invalid memory, return empty optional
-		if (elInit[hashCode] == FREE_MEMORY)
-			return {};
+		// look for hashCode in table of element
+		std::optional<HashCode> hashCode = searchHash(activeBucket, capacity, obj);
 
-		for (HashCode i = 0; i < capacity; i++) {
-			// generate index with quadratic probing
-			HashCode quadraticProbIndex = (hashCode + i * i) % capacity;
-			// if hashcode points to an invalid memory,
-			// finish the probing, since element is not
-			// in the table
-			if (elInit[quadraticProbIndex] == FREE_MEMORY)
-				return {};
+		// element not in table
+		// return nullptr
+		if (!hashCode.has_value())
+			return false;
 
-			// compare; If they are not equal, continue
-			// the quadratic probing
-			if (!testElement(table[quadraticProbIndex]) || elInit[quadraticProbIndex] == USED_MEMORY)
-				continue;
+		// Check if element is active in bucket
+		// if not return empty optional since its not in table
+		if (activeBucket[hashCode.value()] != USING_MEMORY)
+			return false;
 
-			// unlink table content
-			elInit[quadraticProbIndex] = USED_MEMORY;
-			
-			return table[quadraticProbIndex];
-		}
-		// return by default and empty optional
-		// this happens when we traversed the entire table
-		// and there was no element found
-		return {};
+		// turn USED_MEMORY flag on for this bucket
+		activeBucket[hashCode.value()] = USED_MEMORY;
+
+		// return the address of element in table
+		return true;
 	}
 
 	HASH_OP(void)::reHash(unsigned int newCapacity) {
 		Element* newTable = new Element[newCapacity];
-		char* elInitTemp = new char[newCapacity](FREE_MEMORY);
+		char* activeBucketTemp = new char[newCapacity](FREE_MEMORY);
 
 		// transfer all elements to new table
 		for (HashCode i = 0; i < capacity; i++) {
 			// skip if bucket is not being used
-			if (elInit[i] != USING_MEMORY)
+			if (activeBucket[i] != USING_MEMORY)
 				continue;
-			// generate new hashCode for element
-			HashCode newCode = hashOf(table[i]);
-			
-			// do the probing to put
-			// element to new table
-			quadraticProbing(elInitTemp, newTable, newCapacity, newCode, table[i]);
+
+			// obtain hashCode address
+			std::optional<HashCode> availableAddress = availableHash(activeBucketTemp, newCapacity, table[i]);
+
+			if (!availableAddress.has_value())
+				break; // throw error
+
+			// put element
+			newTable[availableAddress.value()] = std::move(table[i]);
+			// set flag to USING_MEMORY
+			// since we initialized this block of memory
+			activeBucketTemp[availableAddress.value()] = USING_MEMORY;
 		}
 		// free old memory
 		delete[] table;
-		delete[] elInit;
+		delete[] activeBucket;
 
 		// re-define memory with new array
 		table = newTable;
-		elInit = elInitTemp;
+		activeBucket = activeBucketTemp;
 
 		// reset capacity
 		capacity = newCapacity;
-	}
-
-	HASH_OP(void)::quadraticProbing(char* elInitArray, Element* tableArray, unsigned int capacity, HashCode hashCode, const Element& obj) {
-		for (HashCode i = 0; i < capacity; i++) {
-			// generate index with quadratic probing
-			HashCode quadraticProbIndex = (hashCode + i * i) % capacity;
-			if (elInitArray[quadraticProbIndex] == USING_MEMORY)
-				continue;
-			// put element
-			tableArray[quadraticProbIndex] = std::move(obj);
-			// set flag to USING_MEMORY
-			// since we initialized this block of memory
-			elInitArray[quadraticProbIndex] = USING_MEMORY;
-			// exit loop
-			break;
-		}
 	}
 }

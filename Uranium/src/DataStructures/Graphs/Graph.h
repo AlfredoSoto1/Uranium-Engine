@@ -7,7 +7,7 @@
 
 namespace Uranium::DataStructures::Graphs {
 	
-	template<class Element> class Graph : public Containers::Container {
+	template<class Element> class Graph : public Containers::Container<Element> {
 	public:
 		/*
 		* custom alias
