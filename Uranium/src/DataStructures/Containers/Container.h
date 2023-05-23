@@ -1,8 +1,8 @@
 #pragma once
 
-namespace Uranium::Core::DataStructures {
+namespace Uranium::DataStructures::Containers {
 
-	class Container {
+	template<class Element> class Container {
 	public:
 		/*
 		* Returns the size of the Container.
@@ -21,5 +21,6 @@ namespace Uranium::Core::DataStructures {
 		 * Empties the container.
 		 */
 		virtual void clear() = 0;
+
 	};
 }

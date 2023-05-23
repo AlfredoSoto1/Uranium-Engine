@@ -81,6 +81,9 @@
     <ClCompile Include="src\Scenes\SceneMaster.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\Graphics\Meshes\Model.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\STL_pch.h">
@@ -158,46 +161,49 @@
     <ClInclude Include="src\Scenes\SceneMaster.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Core\DataStructures\ArrayList.h">
+    <ClInclude Include="src\DataStructures\Lists\ArrayList.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Core\DataStructures\List.h">
+    <ClInclude Include="src\DataStructures\Lists\List.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Core\DataStructures\Graph.h">
+    <ClInclude Include="src\DataStructures\Graphs\Graph.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Core\DataStructures\Container.h">
+    <ClInclude Include="src\DataStructures\Containers\Container.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Core\DataStructures\SparseGraph.h">
+    <ClInclude Include="src\DataStructures\Graphs\SparseGraph.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Core\DataStructures\DenseGraph.h">
+    <ClInclude Include="src\DataStructures\Graphs\WeightedGraph.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Core\DataStructures\WeightedGraph.h">
+    <ClInclude Include="src\DataStructures\Containers\Entry.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Core\DataStructures\Entry.h">
+    <ClInclude Include="src\DataStructures\Containers\GraphWeight.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Core\DataStructures\Set.h">
+    <ClInclude Include="src\DataStructures\Graphs\WeightedSparseGraph.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Core\DataStructures\Map.h">
+    <ClInclude Include="src\Graphics\Meshes\Model.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Core\DataStructures\Vector.h">
+    <ClInclude Include="src\DataStructures\Graphs\MeshGraph.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Core\DataStructures\Queue.h">
+    <ClInclude Include="src\DataStructures\HashTables\HashTable.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Core\DataStructures\GraphWeight.h">
+    <ClInclude Include="src\DataStructures\HashTables\HashCode.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Core\DataStructures\WeightedSparseGraph.h">
+    <ClInclude Include="src\DataStructures\HashTables\HashTableOpenAddress.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\DataStructures\Containers\Comparable.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -490,6 +490,8 @@
 #include <Scenes/Scene.h>
 #include <Scenes/SceneMaster.h>
 
+#include <DataStructures/Graphs/MeshGraph.h>
+
 using namespace Uranium::Scenes;
 using namespace Uranium::Core::Application;
 using namespace Uranium::Graphics::Display;
@@ -505,6 +507,10 @@ public:
 	}
 
 	void load() {
+
+		struct Vertex {
+			float x, y, z;
+		};
 
 	}
 
@@ -547,14 +553,37 @@ public:
 	}
 };
 
-#include <Core/DataStructures/Graph.h>
-#include <Core/DataStructures/SparseGraph.h>
+#include <DataStructures/HashTables/HashTableOpenAddress.h>
 
-using namespace Uranium::Core::DataStructures;
+using namespace Uranium::DataStructures::HashTables;
+using namespace Uranium::DataStructures::Containers;
 
 int main() {
+
+	auto hashFunction = [](const unsigned int& num) {
+		return ((num * 321) % 3);
+	};
+
+	HashTableOpenAddress<unsigned int> table = HashTableOpenAddress<unsigned int>(5, 0.75, hashFunction);
+
+	table.put(table.hashOf(45), 45);
+	table.put(table.hashOf(76), 76);
+	table.put(table.hashOf(17), 17);
+	table.put(table.hashOf(18), 18);
+	table.put(table.hashOf(39), 39);
+
+	std::optional<unsigned int> val = table.remove(table.hashOf(18), [](const unsigned int& obj) {
+		return obj == 18;
+		});
+
+	val = table.remove(table.hashOf(18), [](const unsigned int& obj) {
+		return obj == 18;
+		});
+
+	std::cout << "ended" << std::endl;
+
 	/*
 	* Start program
 	*/
-	Application::start(std::make_shared<MyApp>());
+	//Application::start(std::make_shared<MyApp>());
 }

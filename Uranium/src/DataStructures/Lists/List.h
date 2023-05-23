@@ -1,10 +1,10 @@
 #pragma once
 
-#include "Container.h"
+#include "DataStructures/Containers/Container.h"
 
-namespace Uranium::Core::DataStructures {
+namespace Uranium::DataStructures::Lists {
 
-	template<class Element> class List : public Container {
+	template<class Element> class List : public Containers::Container<Element> {
 	public:
 
 		/**
@@ -44,7 +44,7 @@ namespace Uranium::Core::DataStructures {
 		 * @return (boolean) Always true since the position has to be valied (exist) to be removed.
 		 * @throws an exception if the index is not valid
 		 */
-		virtual bool remove(unsigned int index) = 0;
+		virtual void removeIndex(unsigned int index) = 0;
 
 		/**
 		 * Removes the first instance of the element obj.
@@ -54,18 +54,17 @@ namespace Uranium::Core::DataStructures {
 		virtual bool remove(const Element& obj) = 0;
 
 		/**
-		 * Checks whether the value obj is present in the List
-		 * @param obj - the value we want to verify its existance
-		 * @return (boolean) whether obj is present or not. True if present, false otherwise
-		 */
-		virtual bool contains(const Element& obj) = 0;
-
-		/**
 		 * Removes every instance of element obj.
 		 * @param obj - the value we want to remove
 		 * @return (unsigned int) number of entries that were removed.
 		 */
 		virtual unsigned int removeAll(const Element& obj) = 0;
+
+		/*
+		* Returns a boolean (true) - if element is found inside
+		* the container, (false) - otherwise
+		*/
+		virtual bool contains(const Element& obj) = 0;
 
 		/**
 		 * Returns the position where an instance of obj first appears.

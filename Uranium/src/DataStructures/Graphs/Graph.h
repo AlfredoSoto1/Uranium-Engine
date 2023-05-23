@@ -1,14 +1,19 @@
 #pragma once
 
-#include "List.h"
-#include "Container.h"
+#include "DataStructures/Lists/List.h"
+#include "DataStructures/Containers/Container.h"
 
 #include <memory>
 
-namespace Uranium::Core::DataStructures {
-
-	template<class Element> class Graph : public Container {
+namespace Uranium::DataStructures::Graphs {
+	
+	template<class Element> class Graph : public Containers::Container {
 	public:
+		/*
+		* custom alias
+		*/
+		template<class Element> using List = Lists::List<Element>;
+
 		/*
 		* Returns a list in the order of which it 
 		* traversed the graph.

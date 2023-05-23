@@ -5,7 +5,7 @@
 #include <cstring>
 #include <stdexcept>
 
-namespace Uranium::Core::DataStructures {
+namespace Uranium::DataStructures::Lists {
 
 	constexpr unsigned int INITIAL_CAPACITY = 10;
 
@@ -27,7 +27,7 @@ namespace Uranium::Core::DataStructures {
 
 		Element set(int index, const Element& obj);
 
-		bool remove(unsigned int index);
+		void removeIndex(unsigned int index);
 
 		bool remove(const Element& obj);
 
@@ -161,7 +161,7 @@ namespace Uranium::Core::DataStructures {
 		return oldValue;
 	}
 
-	ARRAY_LIST(bool)::remove(unsigned int index) {
+	ARRAY_LIST(void)::removeIndex(unsigned int index) {
 		// Check bounds
 		if (index < 0 || index >= arraySize)
 			throw std::range_error("Index is out of bounds!");
@@ -170,14 +170,15 @@ namespace Uranium::Core::DataStructures {
 			elements[i] = std::move(elements[i + 1]);
 		// Decrease size
 		arraySize--;
-		return true;
 	}
 
 	ARRAY_LIST(bool)::remove(const Element& obj) {
 		// Find the FIRST instance of the obj in the array to remove it
 		for (int i = 0; i < arraySize; i++) {
-			if (memcmp(&elements[i], &obj, sizeof(Element)) == 0)
-				return this->remove(i);
+			if (memcmp(&elements[i], &obj, sizeof(Element)) == 0) {
+				removeIndex(i);
+				return true;
+			}
 		}
 		// Did not find obj to remove
 		return false;

@@ -1,6 +1,6 @@
 #pragma once
 
-namespace Uranium::Core::DataStructures {
+namespace Uranium::DataStructures::Containers {
 
 	template<class Weight, class Vertex> class GraphWeight {
 	public:

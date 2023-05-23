@@ -2,7 +2,7 @@
 
 #include <cstring>
 
-namespace Uranium::Core::DataStructures {
+namespace Uranium::DataStructures::Containers {
 
 	template<class Key, class Value> class Entry {
 	public:
