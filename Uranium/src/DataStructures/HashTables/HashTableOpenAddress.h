@@ -1,13 +1,15 @@
 #pragma once
 
 #include "HashTable.h"
+#include <functional>
 
 namespace Uranium::DataStructures::HashTables {
 
 	template<class Element> class HashTableOpenAddress : public HashTable<Element> {
 	public:
 		HashTableOpenAddress(unsigned int initialCapacity, double loadfactor,
-			HashCode(*hashCodeFunction)(const Element&), int(*comparator)(const Element&, const Element&));
+			const std::function<HashCode(const Element&)>&,
+			int(*comparator)(const Element&, const Element&));
 		virtual ~HashTableOpenAddress();
 
 		inline unsigned int size();
@@ -39,8 +41,9 @@ namespace Uranium::DataStructures::HashTables {
 		char* activeBucket;
 		Element* table;
 
-		HashCode(*hashCodeFunction)(const Element&);
 		int(*comparator)(const Element&, const Element&);
+
+		std::function<HashCode(const Element&)> hashCodeFunction;
 
 		unsigned int capacity;
 		unsigned int tableSize;
@@ -52,7 +55,7 @@ namespace Uranium::DataStructures::HashTables {
 #define HASH_OP(returnType) template<class Element> returnType HashTableOpenAddress<Element>
 
 	HASH_OP()::HashTableOpenAddress(unsigned int initialCapacity, double loadfactor,
-		HashCode(*hashCodeFunction)(const Element&), int(*comparator)(const Element&, const Element&)) :
+		const std::function<HashCode(const Element&)>& hashCodeFunction, int(*comparator)(const Element&, const Element&)) :
 		tableSize(0),
 		capacity(initialCapacity),
 		initialCapacity(initialCapacity),
@@ -116,8 +119,8 @@ namespace Uranium::DataStructures::HashTables {
 			// in the table, it will return an empty optional
 			// since elements have to be unique so they generate
 			// a unique hashCode and avoid confusion in the program
-			if (comparator(obj, table[quadraticProbIndex]) == 0)
-				return {};
+			//if (comparator(obj, table[quadraticProbIndex]) == 0)
+			//	return {};
 		}
 		// return empty optional
 		// if no hashCode could be found for given element
@@ -219,6 +222,8 @@ namespace Uranium::DataStructures::HashTables {
 		// turn USED_MEMORY flag on for this bucket
 		activeBucket[hashCode.value()] = USED_MEMORY;
 
+		// reduce size
+		tableSize--;
 		// return the address of element in table
 		return true;
 	}

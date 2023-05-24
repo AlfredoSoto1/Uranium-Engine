@@ -142,6 +142,10 @@
     <ClInclude Include="src\DataStructures\Lists\ArrayList.h" />
     <ClInclude Include="src\DataStructures\Graphs\Graph.h" />
     <ClInclude Include="src\DataStructures\Lists\List.h" />
+    <ClInclude Include="src\DataStructures\Trees\BSTArray.h" />
+    <ClInclude Include="src\DataStructures\Trees\BinarySearchTree.h" />
+    <ClInclude Include="src\DataStructures\Trees\Tree.h" />
+    <ClInclude Include="src\DataStructures\Containers\TreeNode.h" />
     <ClInclude Include="src\Graphics\Display\Monitor.h" />
     <ClInclude Include="src\Graphics\Display\Window.h" />
     <ClInclude Include="src\Graphics\Display\WindowProps.h" />

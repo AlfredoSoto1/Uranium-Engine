@@ -15,7 +15,7 @@ namespace Uranium::DataStructures::HashTables {
 		* of an avaliable bucket inside the table.
 		* It returns an empty optional if theres not
 		* an available bucket for the element parameter
-		* this could be because the table is full or has a duplicate
+		* this could be because the table is full (temp~>) or has a duplicate
 		*/
 		virtual std::optional<HashCode> availableHash(char* activeBuckets, unsigned int capacity, const Element& obj) = 0;
 		

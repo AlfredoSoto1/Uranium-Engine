@@ -41,6 +41,7 @@ namespace Uranium::DataStructures::Graphs {
 
 	MESH_GRAPH()::MeshGraph() 
 	{
+
 	}
 
 	MESH_GRAPH()::~MeshGraph() {

@@ -206,5 +206,17 @@
     <ClInclude Include="src\DataStructures\Containers\Comparable.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\DataStructures\Trees\Tree.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\DataStructures\Containers\TreeNode.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\DataStructures\Trees\BSTArray.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\DataStructures\Trees\BinarySearchTree.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

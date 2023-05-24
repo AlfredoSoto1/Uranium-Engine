@@ -557,9 +557,15 @@ public:
 #include <DataStructures/Containers/Comparable.h>
 #include <DataStructures/HashTables/HashTableOpenAddress.h>
 
+#include <DataStructures/Trees/BSTArray.h>
+
+#include <Core/Math/vec3.h>
+
+using namespace Uranium::Core::Math;
 using namespace Uranium::DataStructures::Graphs;
 using namespace Uranium::DataStructures::HashTables;
 using namespace Uranium::DataStructures::Containers;
+using namespace Uranium::DataStructures::Trees;
 
 int main() {
 
@@ -610,11 +616,38 @@ int main() {
 	//table.remove(5);
 
 
-	struct Vertex {
-		float x, y, z;
-	};
+	//struct Vertex {
+	//	vec3 position;
+	//};
 
-	MeshGraph<Vertex> vertices = MeshGraph<Vertex>();
+	////MeshGraph<Vertex> vertices = MeshGraph<Vertex>();
+
+	//unsigned int indexCount = 0;
+
+	//auto hashFunction = [&indexCount](const Vertex& num) {
+	//	return indexCount++;
+	//};
+
+	//auto elementComp = [](const Vertex& num1, const Vertex& num2) {
+	//	return 1; // allways different
+	//};
+
+	//HashTableOpenAddress<Vertex> vertices = HashTableOpenAddress<Vertex>(5, 0.75, hashFunction, elementComp);
+
+	BSTArray<char> searchTree = BSTArray<char>();
+
+	searchTree.add('A');
+	searchTree.add('B');
+	searchTree.add('C');
+	searchTree.add('D');
+	searchTree.add('E');
+	searchTree.add('F');
+	searchTree.add('G');
+
+	searchTree.add('D');
+
+	searchTree.complete();
+
 
 	std::cout << "ended" << std::endl;
 
