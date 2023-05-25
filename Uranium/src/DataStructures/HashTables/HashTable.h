@@ -33,7 +33,7 @@ namespace Uranium::DataStructures::HashTables {
 		* It will not add duplicate elements to the table 
 		* to avoid confusion inside the table
 		*/
-		virtual void put(const Element& obj) = 0;
+		virtual bool put(const Element& obj) = 0;
 
 		/*
 		* It will return the address of the element

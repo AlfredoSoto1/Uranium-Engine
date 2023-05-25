@@ -21,5 +21,6 @@ namespace Uranium::DataStructures::Trees {
 		/*
 		*/
 		virtual void complete() = 0;
+
 	};
 }

@@ -9,7 +9,7 @@ namespace Uranium::DataStructures::HashTables {
 	public:
 		HashTableOpenAddress(unsigned int initialCapacity, double loadfactor,
 			const std::function<HashCode(const Element&)>&,
-			int(*comparator)(const Element&, const Element&));
+			const std::function<int(const Element&, const Element&)>&);
 		virtual ~HashTableOpenAddress();
 
 		inline unsigned int size();
@@ -22,7 +22,7 @@ namespace Uranium::DataStructures::HashTables {
 
 		std::optional<HashCode> searchHash(char* activeBuckets, unsigned int capacity, const Element& obj);
 
-		void put(const Element& obj);
+		bool put(const Element& obj);
 
 		Element* get(const Element& obj);
 
@@ -41,7 +41,7 @@ namespace Uranium::DataStructures::HashTables {
 		char* activeBucket;
 		Element* table;
 
-		int(*comparator)(const Element&, const Element&);
+		std::function<int(const Element&, const Element&)> comparator;
 
 		std::function<HashCode(const Element&)> hashCodeFunction;
 
@@ -55,7 +55,7 @@ namespace Uranium::DataStructures::HashTables {
 #define HASH_OP(returnType) template<class Element> returnType HashTableOpenAddress<Element>
 
 	HASH_OP()::HashTableOpenAddress(unsigned int initialCapacity, double loadfactor,
-		const std::function<HashCode(const Element&)>& hashCodeFunction, int(*comparator)(const Element&, const Element&)) :
+		const std::function<HashCode(const Element&)>& hashCodeFunction, const std::function<int(const Element&, const Element&)>& comparator) :
 		tableSize(0),
 		capacity(initialCapacity),
 		initialCapacity(initialCapacity),
@@ -98,7 +98,7 @@ namespace Uranium::DataStructures::HashTables {
 	HASH_OP(std::optional<HashCode>)::availableHash(char* activeBuckets, unsigned int capacity, const Element& obj) {
 
 		// generate a hashCode with function
-		HashCode hashCode = hashCodeFunction(obj);
+		HashCode hashCode = hashCodeFunction(obj) % capacity;
 
 		// if active bucket is available
 		// return its hashCode
@@ -119,8 +119,8 @@ namespace Uranium::DataStructures::HashTables {
 			// in the table, it will return an empty optional
 			// since elements have to be unique so they generate
 			// a unique hashCode and avoid confusion in the program
-			//if (comparator(obj, table[quadraticProbIndex]) == 0)
-			//	return {};
+			if (comparator(obj, table[quadraticProbIndex]) == 0)
+				return {};
 		}
 		// return empty optional
 		// if no hashCode could be found for given element
@@ -131,7 +131,7 @@ namespace Uranium::DataStructures::HashTables {
 	HASH_OP(std::optional<HashCode>)::searchHash(char* activeBuckets, unsigned int capacity, const Element& obj) {
 
 		// generate a hashCode with function
-		HashCode hashCode = hashCodeFunction(obj);
+		HashCode hashCode = hashCodeFunction(obj) % capacity;
 
 		// if generated hashCode points to
 		// an empty bucket, return empty optional
@@ -168,7 +168,7 @@ namespace Uranium::DataStructures::HashTables {
 		return {};
 	}
 
-	HASH_OP(void)::put(const Element& obj) {
+	HASH_OP(bool)::put(const Element& obj) {
 
 		// increase table size
 		tableSize++;
@@ -181,13 +181,15 @@ namespace Uranium::DataStructures::HashTables {
 		std::optional<HashCode> availableAddress = availableHash(activeBucket, capacity, obj);
 
 		if(!availableAddress.has_value())
-			return; // element is duplicated
+			return false; // element is duplicated
 
 		// put element
 		table[availableAddress.value()] = std::move(obj);
 		// set flag to USING_MEMORY
 		// since we initialized this block of memory
 		activeBucket[availableAddress.value()] = USING_MEMORY;
+
+		return true;
 	}
 
 	HASH_OP(Element*)::get(const Element& obj) {

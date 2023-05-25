@@ -557,7 +557,9 @@ public:
 #include <DataStructures/Containers/Comparable.h>
 #include <DataStructures/HashTables/HashTableOpenAddress.h>
 
-#include <DataStructures/Trees/BSTArray.h>
+//#include <DataStructures/Trees/BSTArray.h>
+//#include <DataStructures/Trees/HeapSetArray.h>
+#include <DataStructures/Sets/HashSet.h>
 
 #include <Core/Math/vec3.h>
 
@@ -565,7 +567,7 @@ using namespace Uranium::Core::Math;
 using namespace Uranium::DataStructures::Graphs;
 using namespace Uranium::DataStructures::HashTables;
 using namespace Uranium::DataStructures::Containers;
-using namespace Uranium::DataStructures::Trees;
+using namespace Uranium::DataStructures::Sets;
 
 int main() {
 
@@ -634,19 +636,9 @@ int main() {
 
 	//HashTableOpenAddress<Vertex> vertices = HashTableOpenAddress<Vertex>(5, 0.75, hashFunction, elementComp);
 
-	BSTArray<char> searchTree = BSTArray<char>();
-
-	searchTree.add('A');
-	searchTree.add('B');
-	searchTree.add('C');
-	searchTree.add('D');
-	searchTree.add('E');
-	searchTree.add('F');
-	searchTree.add('G');
-
-	searchTree.add('D');
-
-	searchTree.complete();
+	HashSet<unsigned int> set = HashSet<unsigned int>(5, 0.75, [](const unsigned int& e1, const unsigned int& e2) {
+		return e1 - e2;
+	});
 
 
 	std::cout << "ended" << std::endl;
