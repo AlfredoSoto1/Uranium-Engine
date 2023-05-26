@@ -1,7 +1,8 @@
 #pragma once
 
-#include "HashTable.h"
 #include <functional>
+
+#include "HashTable.h"
 
 namespace Uranium::DataStructures::HashTables {
 
@@ -11,6 +12,10 @@ namespace Uranium::DataStructures::HashTables {
 			const std::function<HashCode(const Element&)>&,
 			const std::function<int(const Element&, const Element&)>&);
 		virtual ~HashTableOpenAddress();
+
+		const Element* asArray();
+
+		unsigned int actualCapacity();
 
 		inline unsigned int size();
 
@@ -25,6 +30,8 @@ namespace Uranium::DataStructures::HashTables {
 		bool put(const Element& obj);
 
 		Element* get(const Element& obj);
+
+		HashCode search(const Element& obj);
 
 		bool remove(const Element& obj);
 
@@ -72,6 +79,14 @@ namespace Uranium::DataStructures::HashTables {
 		clear();
 		delete[] table;
 		delete[] activeBucket;
+	}
+
+	HASH_OP(const Element*)::asArray() {
+		return table;
+	}
+
+	HASH_OP(unsigned int)::actualCapacity() {
+		return capacity;
 	}
 
 	HASH_OP(inline unsigned int)::size() {
@@ -204,6 +219,20 @@ namespace Uranium::DataStructures::HashTables {
 
 		// return the address of element in table
 		return &table[hashCode.value()];
+	}
+
+	HASH_OP(HashCode)::search(const Element& obj) {
+
+		// look for hashCode in table of element
+		std::optional<HashCode> hashCode = searchHash(activeBucket, capacity, obj);
+
+		// element not in table
+		// return nullptr
+		if (!hashCode.has_value())
+			throw std::invalid_argument("Target Element is not in table");
+
+		// return hashCode of element in table
+		return hashCode.value();
 	}
 
 	HASH_OP(bool)::remove(const Element& obj) {

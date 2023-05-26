@@ -560,6 +560,7 @@ public:
 //#include <DataStructures/Trees/BSTArray.h>
 //#include <DataStructures/Trees/HeapSetArray.h>
 #include <DataStructures/Sets/HashSet.h>
+#include <DataStructures/Lists/ArrayList.h>
 
 #include <Core/Math/vec3.h>
 
@@ -568,78 +569,31 @@ using namespace Uranium::DataStructures::Graphs;
 using namespace Uranium::DataStructures::HashTables;
 using namespace Uranium::DataStructures::Containers;
 using namespace Uranium::DataStructures::Sets;
+using namespace Uranium::DataStructures::Lists;
 
 int main() {
 
-	//auto hashFunction = [](const unsigned int& num) {
-	//	return ((num * 321) % 3);
-	//};
+	struct Vertex {
+		vec3 position;
+	};
 
-	//auto elementComp = [](const unsigned int& num1, const unsigned int& num2) {
-	//	return (int)(num1 - num2);
-	//};
-
-	//HashTableOpenAddress<unsigned int> table = HashTableOpenAddress<unsigned int>(5, 0.75, hashFunction, elementComp);
-
-	//table.put(34);
-	//table.put(25);
-	//table.put(78);
-	//table.put(100);
-	//table.put(21);
-
-	//std::cout << "====getters====" << std::endl;
-	//
-	//unsigned int* address = table.get(34);
-
-	//if (address != nullptr)
-	//	std::cout << address << " " << *address << std::endl;
-	//else
-	//	std::cout << address << "nullptr" << std::endl;
-
-
-	//address = table.get(78);
-
-	//if (address != nullptr)
-	//	std::cout << address << " " << *address << std::endl;
-	//else
-	//	std::cout << address << " nullptr" << std::endl;
-
-
-	//address = table.get(5);
-
-	//if (address != nullptr)
-	//	std::cout << address << " " << *address << std::endl;
-	//else
-	//	std::cout << address << " nullptr" << std::endl;
-
-	//std::cout << "====remove====" << std::endl;
-
-	//table.remove(100);
-	//table.remove(5);
-
-
-	//struct Vertex {
-	//	vec3 position;
-	//};
-
-	////MeshGraph<Vertex> vertices = MeshGraph<Vertex>();
-
-	//unsigned int indexCount = 0;
-
-	//auto hashFunction = [&indexCount](const Vertex& num) {
-	//	return indexCount++;
-	//};
-
-	//auto elementComp = [](const Vertex& num1, const Vertex& num2) {
-	//	return 1; // allways different
-	//};
-
-	//HashTableOpenAddress<Vertex> vertices = HashTableOpenAddress<Vertex>(5, 0.75, hashFunction, elementComp);
-
-	HashSet<unsigned int> set = HashSet<unsigned int>(5, 0.75, [](const unsigned int& e1, const unsigned int& e2) {
-		return e1 - e2;
+	MeshGraph<Vertex> mesh = MeshGraph<Vertex>(10, [](auto vertex) {
+		return (unsigned int)0;
+	},
+	[](auto vert1, auto vert2) {
+		return 0;
 	});
 
+	// adding 3 vertices to the mesh
+	GraphAddress address1 = mesh.add({vec3(1.0, 0.0, 0.0)});
+	GraphAddress address2 = mesh.add({vec3(0.0, 1.0, 0.0)});
+	GraphAddress address3 = mesh.add({vec3(0.0, 0.0, 2.0)});
+
+	mesh.addIndex(address1);
+	mesh.addIndex(address2);
+	mesh.addIndex(address3);
+
+	
 
 	std::cout << "ended" << std::endl;
 

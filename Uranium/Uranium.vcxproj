@@ -121,10 +121,12 @@
     <ClInclude Include="src\Core\Application\Application.h" />
     <ClInclude Include="src\Core\Application\ApplicationProgram.h" />
     <ClInclude Include="src\Core\Application\UraniumApi.h" />
+    <ClInclude Include="src\DataStructures\Containers\ArrayVariant.h" />
     <ClInclude Include="src\DataStructures\Containers\Comparable.h" />
-    <ClInclude Include="src\DataStructures\Containers\GraphWeight.h" />
+    <ClInclude Include="src\DataStructures\Containers\GraphEdge.h" />
     <ClInclude Include="src\DataStructures\Containers\Container.h" />
     <ClInclude Include="src\DataStructures\Containers\Entry.h" />
+    <ClInclude Include="src\DataStructures\Containers\GraphAddress.h" />
     <ClInclude Include="src\DataStructures\Graphs\SparseGraph.h" />
     <ClInclude Include="src\DataStructures\Graphs\WeightedGraph.h" />
     <ClInclude Include="src\DataStructures\Graphs\WeightedSparseGraph.h" />
@@ -142,6 +144,8 @@
     <ClInclude Include="src\DataStructures\Lists\ArrayList.h" />
     <ClInclude Include="src\DataStructures\Graphs\Graph.h" />
     <ClInclude Include="src\DataStructures\Lists\List.h" />
+    <ClInclude Include="src\DataStructures\Maps\HashMap.h" />
+    <ClInclude Include="src\DataStructures\Maps\Map.h" />
     <ClInclude Include="src\DataStructures\Queues\Queue.h" />
     <ClInclude Include="src\DataStructures\Sets\HashSet.h" />
     <ClInclude Include="src\DataStructures\Trees\BSTArray.h" />

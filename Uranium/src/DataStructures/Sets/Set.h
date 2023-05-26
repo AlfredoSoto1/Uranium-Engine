@@ -1,5 +1,6 @@
 #pragma once
 
+#include "DataStructures/HashTables/HashCode.h"
 #include "DataStructures/Containers/Container.h"
 
 namespace Uranium::DataStructures::Sets {
@@ -22,5 +23,12 @@ namespace Uranium::DataStructures::Sets {
 		* element is in the set
 		*/
 		virtual bool contains(const Element& obj) = 0;
+
+		/*
+		* It will return the HashCode of the element
+		* inside the table if it exists. If such element
+		* is not in table, it will throw an exception
+		*/
+		virtual HashTables::HashCode search(const Element& obj) = 0;
 	};
 }

@@ -7,7 +7,9 @@ namespace Uranium::DataStructures::Sets {
 
 	template<class Element> class HashSet : public Set<Element> {
 	public:
-		HashSet(unsigned int initialCapacity, double loadFactor, const std::function<int(const Element&, const Element&)>& compare);
+		HashSet(unsigned int initialCapacity, double loadFactor, 
+			const std::function<HashTables::HashCode(const Element&)>& hashFunction, 
+			const std::function<int(const Element&, const Element&)>& compare);
 		virtual ~HashSet();
 
 		inline unsigned int size();
@@ -22,52 +24,55 @@ namespace Uranium::DataStructures::Sets {
 
 		bool contains(const Element& obj);
 
+		HashTables::HashCode search(const Element& obj);
+
 	private:
 		/*
 		* private members
 		*/
-		HashTables::HashTableOpenAddress<Element>* vertices;
+		HashTables::HashTableOpenAddress<Element>* hashTable;
 
 	};
 
 #define HASH_SET(returnType) template<class Element> returnType HashSet<Element>
 
-	HASH_SET()::HashSet(unsigned int initialCapacity, double loadFactor, const std::function<int(const Element&, const Element&)>& compare) {
-		
-		std::hash<Element> elementHasher;
-		auto hashFunction = [elementHasher](const Element& obj) {
-			return elementHasher(obj);
-		};
-
-		vertices = new HashTables::HashTableOpenAddress<Element>(initialCapacity, loadFactor, hashFunction, compare);
+	HASH_SET()::HashSet(unsigned int initialCapacity, double loadFactor, 
+		const std::function<HashTables::HashCode(const Element&)>& hashFunction,
+		const std::function<int(const Element&, const Element&)>& compare) 
+	{
+		hashTable = new HashTables::HashTableOpenAddress<Element>(initialCapacity, loadFactor, hashFunction, compare);
 	}
 
 	HASH_SET()::~HashSet() {
-		delete vertices;
+		delete hashTable;
 	}
 
 	HASH_SET(inline unsigned int)::size() {
-		return vertices->size();
+		return hashTable->size();
 	}
 
 	HASH_SET(inline bool)::isEmpty() {
-		return vertices->isEmpty();
+		return hashTable->isEmpty();
 	}
 
 	HASH_SET(void)::clear() {
-		vertices->clear();
+		hashTable->clear();
 	}
 
 	HASH_SET(bool)::put(const Element& obj) {
-		return vertices->put(obj);
+		return hashTable->put(obj);
 	}
 
 	HASH_SET(bool)::remove(const Element& obj) {
-		return vertices->remove(obj);
+		return hashTable->remove(obj);
 	}
 
 	HASH_SET(bool)::contains(const Element& obj) {
-		return vertices->get(obj) != nullptr;
+		return hashTable->get(obj) != nullptr;
+	}
+
+	HASH_SET(HashTables::HashCode)::search(const Element& obj) {
+		return hashTable->search(obj);
 	}
 
 }

@@ -22,5 +22,12 @@ namespace Uranium::DataStructures::Containers {
 		 */
 		virtual void clear() = 0;
 
+		/*
+		* Turns current container data to an array and
+		* returns it with its proper size
+		* FIXME - unfinished
+		*/
+		//virtual void toArray(Element* outArray, unsigned int* arraySize) = 0;
+
 	};
 }

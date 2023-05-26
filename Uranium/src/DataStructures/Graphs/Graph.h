@@ -1,46 +1,82 @@
 #pragma once
 
+#include <memory>
+#include <functional>
+
 #include "DataStructures/Lists/List.h"
 #include "DataStructures/Containers/Container.h"
-
-#include <memory>
+#include "DataStructures/Containers/GraphAddress.h"
 
 namespace Uranium::DataStructures::Graphs {
 	
 	template<class Element> class Graph : public Containers::Container<Element> {
 	public:
 		/*
-		* custom alias
+		* Custom alias
 		*/
-		template<class Element> using List = Lists::List<Element>;
+		template<class Element>
+		using List = Lists::List<Element>;
+		using GraphAddress = Containers::GraphAddress;
 
 		/*
-		* Returns a list in the order of which it 
-		* traversed the graph.
-		* @return (List<Element>) list of elements
+		* Adds an element to the graph and
+		* returns a Graph Address that contains the
+		* location of where the Element was stored in memory
 		*/
-		virtual List<Element>* depthFirstSearch(const Element& obj) = 0;
+		virtual GraphAddress add(const Element& obj) = 0;
+
+		/*
+		* Returns the address of the element inside the
+		* graph
+		*/
+		virtual GraphAddress addressOf(const Element& obj) = 0;
+
+		/*
+		* Returns a reference to the element inside
+		* graph that is at target address. Nullptr will
+		* be returned if element is not existant in the provided address
+		*/
+		virtual Element* elementAt(const GraphAddress& address) = 0;
+
+		/*
+		* Adds a new address to reference a neighbor for element
+		*/
+		virtual void addNeighbor(const GraphAddress& elementAddress, const GraphAddress& address) = 0;
+
+		/*
+		* Returns a weak pointer that contains a list of
+		* Graph Addresses from target element. If element is
+		* not present in graph or has no neighbors, pointer will
+		* be null or list will just be empty respectively
+		*/
+		virtual std::weak_ptr<List<GraphAddress>> getNeighbors(const GraphAddress& address) = 0;
+
+		/*
+		* Traverses the graph starting from an element
+		* No traversal will be made if element is not connected
+		* to any other element or is not present in graph
+		*/
+		virtual void depthFirstSearch(const Element & start, const std::function<void(const Element&)>& inTraversal) = 0;
 	
 		/*
-		* Returns a list in the order of which it
-		* traversed the graph.
-		* @return (List<Element>) list of elements
+		* Traverses the graph starting from an element
+		* No traversal will be made if element is not connected
+		* to any other element or is not present in graph
 		*/
-		virtual List<Element>* breadthFirstSearch(const Element& obj) = 0;
+		virtual void breadthFirstSearch(const Element& start, const std::function<void(const Element&)>& inTraversal) = 0;
 
 		/*
-		* adds an element to the graph
-		* and a pointer that dictates who 
-		* is the neighbor of this Element in
-		* the graph
+		* Traverses the graph starting from an address
+		* No traversal will be made if element is not connected
+		* to any other element or is not present in graph
 		*/
-		virtual void add(const Element& obj, std::shared_ptr<List<Element*>> adjList) = 0;
+		virtual void depthFirstSearch(const GraphAddress& address, const std::function<void(const GraphAddress&)>& inTraversal) = 0;
 
 		/*
-		* @return a weak_ptr containing the adjacent
-		* list of the pointers to which 'obj' points
-		* to, refered as 'neighbors'
+		* Traverses the graph starting from an address
+		* No traversal will be made if element is not connected
+		* to any other element or is not present in graph
 		*/
-		virtual std::weak_ptr<List<Element*>> getNeighbors(const Element& obj) = 0;
+		virtual void breadthFirstSearch(const GraphAddress& address, const std::function<void(const GraphAddress&)>& inTraversal) = 0;
 	};
 }

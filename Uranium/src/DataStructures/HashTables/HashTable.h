@@ -4,10 +4,11 @@
 
 #include "HashCode.h"
 #include "DataStructures/Containers/Container.h"
+#include "DataStructures/Containers/ArrayVariant.h"
 
 namespace Uranium::DataStructures::HashTables {
 
-	template<class Element> class HashTable : public Containers::Container<Element> {
+	template<class Element> class HashTable : public Containers::Container<Element>, public Containers::ArrayVariant<Element> {
 	public:
 		
 		/*
@@ -41,6 +42,13 @@ namespace Uranium::DataStructures::HashTables {
 		* found the element, it will return instead nullptr
 		*/
 		virtual Element* get(const Element& obj) = 0;
+
+		/*
+		* It will return the HashCode of the element
+		* inside the table if it exists. If such element
+		* is not in table, it will throw an exception
+		*/
+		virtual HashCode search(const Element& obj) = 0;
 
 		/*
 		* Returns a boolean (true) - if the element was removed

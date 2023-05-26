@@ -1,6 +1,7 @@
 #pragma once
 	
 #include "List.h"
+#include "DataStructures/Containers/ArrayVariant.h"
 
 #include <cstring>
 #include <stdexcept>
@@ -9,11 +10,15 @@ namespace Uranium::DataStructures::Lists {
 
 	constexpr unsigned int INITIAL_CAPACITY = 10;
 
-	template<class Element> class ArrayList : public List<Element> {
+	template<class Element> class ArrayList : public List<Element> , public Containers::ArrayVariant<Element> {
 	public:
 		ArrayList();
 		ArrayList(unsigned int initialCapacity);
 		~ArrayList();
+
+		const Element* asArray();
+
+		unsigned int actualCapacity();
 
 		inline unsigned int size();
 		
@@ -25,7 +30,7 @@ namespace Uranium::DataStructures::Lists {
 
 		Element& get(unsigned int index);
 
-		Element set(int index, const Element& obj);
+		Element set(unsigned int index, const Element& obj);
 
 		void removeIndex(unsigned int index);
 
@@ -101,6 +106,14 @@ namespace Uranium::DataStructures::Lists {
 		capacity = newCapacity;
 	}
 
+	ARRAY_LIST(const Element*)::asArray() {
+		return elements;
+	}
+
+	ARRAY_LIST(unsigned int)::actualCapacity() {
+		return capacity;
+	}
+
 	ARRAY_LIST(inline unsigned int)::size() {
 		return arraySize;
 	}
@@ -148,7 +161,7 @@ namespace Uranium::DataStructures::Lists {
 		return elements[index];
 	}
 
-	ARRAY_LIST(Element)::set(int index, const Element& obj) {
+	ARRAY_LIST(Element)::set(unsigned int index, const Element& obj) {
 
 		// Check bounds
 		if (index < 0 || index >= arraySize)
@@ -174,7 +187,7 @@ namespace Uranium::DataStructures::Lists {
 
 	ARRAY_LIST(bool)::remove(const Element& obj) {
 		// Find the FIRST instance of the obj in the array to remove it
-		for (int i = 0; i < arraySize; i++) {
+		for (unsigned int i = 0; i < arraySize; i++) {
 			if (memcmp(&elements[i], &obj, sizeof(Element)) == 0) {
 				removeIndex(i);
 				return true;
@@ -186,7 +199,7 @@ namespace Uranium::DataStructures::Lists {
 
 	ARRAY_LIST(bool)::contains(const Element& obj) {
 		// Search the array for obj
-		for (int i = 0; i < arraySize; i++) {
+		for (unsigned int i = 0; i < arraySize; i++) {
 			// if found we are done
 			if (memcmp(&elements[i], &obj, sizeof(Element)) == 0)
 				return true;

@@ -36,7 +36,7 @@ namespace Uranium::DataStructures::Lists {
 		 * @throws an exception if the index is not valid
 		 * @return (Element) before replacing with new element
 		 */
-		virtual Element set(int index, const Element& obj) = 0;
+		virtual Element set(unsigned int index, const Element& obj) = 0;
 
 		/**
 		 * Removes the element at position index
