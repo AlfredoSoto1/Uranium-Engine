@@ -9,23 +9,18 @@ namespace Uranium::DataStructures::Lists {
 
 		/**
 		 * Adds a copy of the element to the end of the List
-		 * @param obj - The element to add to the List
 		 */
 		virtual void add(const Element& obj) = 0;
 
 		/**
 		 * Adds a copy of the element to the position given by index.
-		 * @param index - position we want to add the element to.
-		 * @param obj - the element we wish to add
-		 * @throws an exception if the index is not valid
+		 * It will throw an exception if the index is not valid
 		 */
 		virtual void add(unsigned int index, const Element& obj) = 0;
 
 		/**
 		 * Returns the value at the given position
-		 * @param index - position of the value we want
-		 * @throws an exception if the index is not valid
-		 * @return (Element) value at position index
+		 * It will throw an exception if the index is not valid
 		 */
 		virtual Element& get(unsigned int index) = 0;
 

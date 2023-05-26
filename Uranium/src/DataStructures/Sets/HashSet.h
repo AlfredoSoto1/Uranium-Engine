@@ -24,7 +24,7 @@ namespace Uranium::DataStructures::Sets {
 
 		bool contains(const Element& obj);
 
-		HashTables::HashCode search(const Element& obj);
+		//HashTables::HashCode search(const Element& obj);
 
 	private:
 		/*
@@ -60,19 +60,30 @@ namespace Uranium::DataStructures::Sets {
 	}
 
 	HASH_SET(bool)::put(const Element& obj) {
-		return hashTable->put(obj);
+		// put element in table		
+		std::optional<HashTables::HashCode> hashCodeAddress = hashTable->put(obj);
+		// return true if element could be placed in table
+		return hashCodeAddress.has_value();
 	}
 
 	HASH_SET(bool)::remove(const Element& obj) {
-		return hashTable->remove(obj);
+		// obtain hash Address of element
+		std::optional<HashTables::HashCode> hashCodeAddress = hashTable->hashOf(obj);
+
+		// return true if element could be removed - false otherwise
+		if(hashCodeAddress.has_value())
+			return hashTable->remove(hashCodeAddress.value());
+		return false;
 	}
 
 	HASH_SET(bool)::contains(const Element& obj) {
-		return hashTable->get(obj) != nullptr;
+		std::optional<HashTables::HashCode> hashCodeAddress = hashTable->hashOf(obj);
+		// if it has a value, then exists in table
+		return hashCodeAddress.has_value();
 	}
 
-	HASH_SET(HashTables::HashCode)::search(const Element& obj) {
-		return hashTable->search(obj);
-	}
+	//HASH_SET(HashTables::HashCode)::search(const Element& obj) {
+	//	return hashTable->search(obj);
+	//}
 
 }

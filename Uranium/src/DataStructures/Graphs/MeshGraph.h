@@ -2,6 +2,7 @@
 
 #include "Graph.h"
 #include "DataStructures/Sets/HashSet.h"
+#include "DataStructures/Maps/HashMap.h"
 #include "DataStructures/Lists/ArrayList.h"
 
 #include <stack>
@@ -97,14 +98,14 @@ namespace Uranium::DataStructures::Graphs {
 		// standard hasher from STD
 		std::hash<unsigned int> indexHashder;
 
-		Sets::HashSet<Vertex>* vertexSet;
 		Sets::HashSet<Triangle>* triangleSet;
+		Maps::HashMap<Vertex, int>* vertexMap;
 
 		Lists::ArrayList<Vertex>* vertices;
 		Lists::ArrayList<unsigned int>* triangleIndices;
 
 		std::stack<GraphAddress> groupIndices;
-
+		
 	};
 
 #define MESH_GRAPH(returnType) template<class Vertex> returnType MeshGraph<Vertex>
@@ -130,8 +131,8 @@ namespace Uranium::DataStructures::Graphs {
 		// triangle set that will ensure that no indices are repeated
 		triangleSet = new Sets::HashSet<Triangle>(initialVertexCapacity, 0.75, hashFunction, triangleComparator);
 
-		// vertex set that will check if vertices repeat
-		vertexSet = new Sets::HashSet<Vertex>(initialVertexCapacity, 0.75, vertexHashFunction, vertexComparator);
+		// vertex map that will check if vertices repeat
+		vertexMap = new Maps::HashMap<Vertex, int>(initialVertexCapacity, 0.75, vertexHashFunction, vertexComparator);
 
 		// actual lists that will contain the mesh data
 		// that OpenGl can understand when passing them to the buffers
@@ -145,7 +146,7 @@ namespace Uranium::DataStructures::Graphs {
 		this->clear();
 		// delete all data
 		delete vertices;
-		delete vertexSet;
+		delete vertexMap;
 		delete triangleSet;
 		delete triangleIndices;
 	}
@@ -159,28 +160,27 @@ namespace Uranium::DataStructures::Graphs {
 	}
 
 	MESH_GRAPH(inline unsigned int)::size() {
-		return 0;
+		return vertices->size();
 	}
 
 	MESH_GRAPH(inline bool)::isEmpty() {
-		return false;
+		return vertices->isEmpty();
 	}
 
 	MESH_GRAPH(void)::clear() {
 		vertices->clear();
-		vertexSet->clear();
+		vertexMap->clear();
 		triangleSet->clear();
 		triangleIndices->clear();
 	}
 
 	MESH_GRAPH(Containers::GraphAddress)::add(const Vertex& obj) {
 
-		bool isUnique = vertexSet->put(obj);
+		std::optional<int> vertexLocation = vertexMap->put(obj, indexCounter);
 
-		if (!isUnique) {
-			HashTables::HashCode locationInSet = vertexSet->search(obj);
-
-
+		// not unique
+		if (vertexLocation.has_value()) {
+			return vertexLocation.value();
 		}
 		else {
 			// add vertex to list

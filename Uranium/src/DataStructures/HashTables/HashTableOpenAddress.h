@@ -27,15 +27,15 @@ namespace Uranium::DataStructures::HashTables {
 
 		std::optional<HashCode> searchHash(char* activeBuckets, unsigned int capacity, const Element& obj);
 
-		bool put(const Element& obj);
-
-		Element* get(const Element& obj);
-
-		HashCode search(const Element& obj);
-
-		bool remove(const Element& obj);
-
 		void reHash(unsigned int newCapacity);
+
+		std::optional<HashCode> put(const Element& obj);
+
+		std::optional<HashCode> hashOf(const Element& obj);
+
+		Element* get(const HashCode& hashCodeAddress);
+
+		bool remove(const HashCode& hashCodeAddress);
 
 	private:
 		/*
@@ -183,7 +183,7 @@ namespace Uranium::DataStructures::HashTables {
 		return {};
 	}
 
-	HASH_OP(bool)::put(const Element& obj) {
+	HASH_OP(std::optional<HashCode>)::put(const Element& obj) {
 
 		// increase table size
 		tableSize++;
@@ -195,8 +195,10 @@ namespace Uranium::DataStructures::HashTables {
 		// obtain hashCode address after reHash condition
 		std::optional<HashCode> availableAddress = availableHash(activeBucket, capacity, obj);
 
-		if(!availableAddress.has_value())
-			return false; // element is duplicated
+		if (!availableAddress.has_value()) {
+			tableSize--;
+			return {}; // element is duplicated
+		}
 
 		// put element
 		table[availableAddress.value()] = std::move(obj);
@@ -204,54 +206,47 @@ namespace Uranium::DataStructures::HashTables {
 		// since we initialized this block of memory
 		activeBucket[availableAddress.value()] = USING_MEMORY;
 
-		return true;
+		// return the hashCode address of the element inside the table
+		return availableAddress;
 	}
 
-	HASH_OP(Element*)::get(const Element& obj) {
+	HASH_OP(std::optional<HashCode>)::hashOf(const Element& obj) {
+		// return the optional of the hashcode of the element
+		// in the table. An empty optional will be returned
+		// if element was not found in table
+		return searchHash(activeBucket, capacity, obj);
+	}
 
-		// look for hashCode in table of element
-		std::optional<HashCode> hashCode = searchHash(activeBucket, capacity, obj);
-
-		// element not in table
-		// return nullptr
-		if (!hashCode.has_value())
+	HASH_OP(Element*)::get(const HashCode& hashCodeAddress) {
+		
+		// if hashCode is greater than the capacity
+		// it will return nullptr since its out of bounds
+		if (hashCodeAddress >= capacity)
 			return nullptr;
 
-		// return the address of element in table
-		return &table[hashCode.value()];
+		// if block of memory in hashTable is not active
+		// return nullptr
+		if (activeBucket[hashCodeAddress] != USING_MEMORY)
+			return nullptr;
+
+		// finally return the address of 
+		// the element in table
+		return &table[hashCodeAddress];
 	}
 
-	HASH_OP(HashCode)::search(const Element& obj) {
-
-		// look for hashCode in table of element
-		std::optional<HashCode> hashCode = searchHash(activeBucket, capacity, obj);
-
-		// element not in table
-		// return nullptr
-		if (!hashCode.has_value())
-			throw std::invalid_argument("Target Element is not in table");
-
-		// return hashCode of element in table
-		return hashCode.value();
-	}
-
-	HASH_OP(bool)::remove(const Element& obj) {
-		
-		// look for hashCode in table of element
-		std::optional<HashCode> hashCode = searchHash(activeBucket, capacity, obj);
-
-		// element not in table
-		// return nullptr
-		if (!hashCode.has_value())
+	HASH_OP(bool)::remove(const HashCode& hashCodeAddress) {
+		// if hashCode is greater than the capacity
+		// it will return false since its out of bounds
+		if (hashCodeAddress >= capacity)
 			return false;
 
-		// Check if element is active in bucket
-		// if not return empty optional since its not in table
-		if (activeBucket[hashCode.value()] != USING_MEMORY)
+		// if block of memory in hashTable is not active
+		// return false since it could not be deleted
+		if (activeBucket[hashCodeAddress] != USING_MEMORY)
 			return false;
 
 		// turn USED_MEMORY flag on for this bucket
-		activeBucket[hashCode.value()] = USED_MEMORY;
+		activeBucket[hashCodeAddress] = USED_MEMORY;
 
 		// reduce size
 		tableSize--;

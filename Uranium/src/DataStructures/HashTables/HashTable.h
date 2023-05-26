@@ -29,37 +29,36 @@ namespace Uranium::DataStructures::HashTables {
 		virtual std::optional<HashCode> searchHash(char* activeBuckets, unsigned int capacity, const Element& obj) = 0;
 
 		/*
+		* This rehashes the entire table when it needs
+		* more space to fit new data
+		*/
+		virtual void reHash(unsigned int newCapacity) = 0;
+
+		/*
 		* It puts an element in the table with
 		* its corresponding position using the hashFunction
 		* It will not add duplicate elements to the table 
 		* to avoid confusion inside the table
 		*/
-		virtual bool put(const Element& obj) = 0;
+		virtual std::optional<HashCode> put(const Element& obj) = 0;
 
 		/*
-		* It will return the address of the element
-		* inside the table if it exists. If it could not
-		* found the element, it will return instead nullptr
+		* Returns the hash code address of 
+		* the element in the table
 		*/
-		virtual Element* get(const Element& obj) = 0;
+		virtual std::optional<HashCode> hashOf(const Element& obj) = 0;
 
 		/*
-		* It will return the HashCode of the element
-		* inside the table if it exists. If such element
-		* is not in table, it will throw an exception
+		* Returns the element's address inside the table
+		* from the target hashCode address parameter. If
+		* element is not in table, it will return nullptr
 		*/
-		virtual HashCode search(const Element& obj) = 0;
+		virtual Element* get(const HashCode& hashCodeAddress) = 0;
 
 		/*
 		* Returns a boolean (true) - if the element was removed
 		* (false) - if the element could not be removed
 		*/
-		virtual bool remove(const Element& obj) = 0;
-
-		/*
-		* This rehashes the entire table when it needs
-		* more space to fit new data
-		*/
-		virtual void reHash(unsigned int newCapacity) = 0;
+		virtual bool remove(const HashCode& hashCodeAddress) = 0;
 	};
 }

@@ -559,6 +559,7 @@ public:
 
 //#include <DataStructures/Trees/BSTArray.h>
 //#include <DataStructures/Trees/HeapSetArray.h>
+#include <DataStructures/Maps/HashMap.h>
 #include <DataStructures/Sets/HashSet.h>
 #include <DataStructures/Lists/ArrayList.h>
 
@@ -569,6 +570,7 @@ using namespace Uranium::DataStructures::Graphs;
 using namespace Uranium::DataStructures::HashTables;
 using namespace Uranium::DataStructures::Containers;
 using namespace Uranium::DataStructures::Sets;
+using namespace Uranium::DataStructures::Maps;
 using namespace Uranium::DataStructures::Lists;
 
 int main() {
@@ -577,28 +579,48 @@ int main() {
 		vec3 position;
 	};
 
-	MeshGraph<Vertex> mesh = MeshGraph<Vertex>(10, [](auto vertex) {
-		return (unsigned int)0;
-	},
-	[](auto vert1, auto vert2) {
-		return 0;
-	});
+	//std::hash<float> floatHasher;
 
-	// adding 3 vertices to the mesh
-	GraphAddress address1 = mesh.add({vec3(1.0, 0.0, 0.0)});
-	GraphAddress address2 = mesh.add({vec3(0.0, 1.0, 0.0)});
-	GraphAddress address3 = mesh.add({vec3(0.0, 0.0, 2.0)});
+	//MeshGraph<Vertex> mesh = MeshGraph<Vertex>(10, [&floatHasher](auto vertex) {
+	//	return (unsigned int)(floatHasher(vertex.position.x) + floatHasher(vertex.position.y) + floatHasher(vertex.position.z));
+	//},
+	//[](auto vert1, auto vert2) {
+	//	if(vert1.position == vert2.position)
+	//		return 0; // equal
+	//	return 1; // different
+	//});
 
-	mesh.addIndex(address1);
-	mesh.addIndex(address2);
-	mesh.addIndex(address3);
+	//// adding 3 vertices to the mesh
+	//GraphAddress address1 = mesh.add({vec3(1.0, 0.0, 0.0)});
+	//GraphAddress address2 = mesh.add({vec3(0.0, 2.0, 0.0)});
+	//GraphAddress address3 = mesh.add({vec3(0.0, 0.0, 3.0)});
 
-	
+	//mesh.addIndex(address1);
+	//mesh.addIndex(address2);
+	//mesh.addIndex(address3);
 
-	std::cout << "ended" << std::endl;
+	//std::hash<float> floatHasher;
+
+	//HashMap<Vertex, int> map = HashMap<Vertex, int>(5, 0.75, [&floatHasher](auto vertex) {
+	//	return (unsigned int)(floatHasher(vertex.position.x) + floatHasher(vertex.position.y) + floatHasher(vertex.position.z));
+	//},
+	//[](auto vert1, auto vert2) {
+	//	if (vert1.position == vert2.position)
+	//		return 0; // equal
+	//	return 1; // different
+	//});
+
+	//map.put({ vec3(0.0, 0.0, 0.0) }, 1);
+	//map.put({ vec3(0.0, 0.0, 0.0) }, 1);
+	//map.put({ vec3(1.0, 0.0, 0.0) }, 1);
+	//map.put({ vec3(0.0, 1.0, 0.0) }, 1);
+	//map.put({ vec3(0.0, 0.0, 1.0) }, 1);
+
+	//std::cout << "ended" << std::endl;
+
 
 	/*
 	* Start program
 	*/
-	//Application::start(std::make_shared<MyApp>());
+	Application::start(std::make_shared<MyApp>());
 }

@@ -28,15 +28,13 @@ namespace Uranium::DataStructures::Maps {
 
 		void clear();
 
-		bool put(const Key& key, const Value& val);
+		std::optional<Value> put(const Key& key, const Value& val);
 
-		Value& get(const Key& key);
+		Value* get(const Key& key);
 
-		Value remove(const Key& key);
+		std::optional<Value> remove(const Key& key);
 
 		bool contains(const Key& obj);
-
-		HashCode search(const Key& obj);
 
 	private:
 		/*
@@ -93,50 +91,79 @@ namespace Uranium::DataStructures::Maps {
 		hashTable->clear();
 	}
 
-	HASH_MAP(bool)::put(const Key& key, const Value& val) {
+	HASH_MAP(std::optional<Value>)::put(const Key& key, const Value& val) {
 
 		Bucket bucket = {key, 0};
+
 		// put in the table a bucket with and a reference of zero
-		bool isUnique = hashTable->put(bucket);
+
+		std::optional<HashTables::HashCode> address = hashTable->put(bucket);
 
 		// check if the added bucket is unique
-		if (isUnique) {
+		if (address.has_value()) {
 			// if its unique, add the value to
 			// the values list and get the bucket
 			// to update its reference to the location of
 			// the value in the Values list
 			values->add(val);
 
-			Bucket* bucket = hashTable->get(bucket);
+			// get address of element in table
+			Bucket* fromTable = hashTable->get(address.value());
+			
+			// link address to location of list of values
+			fromTable->valueLocation = values->size() - 1;
 
-			bucket->valueLocation = values->size() - 1;
+			return {};
 		}
 		else {
 			// if element is not unique
 			// loock for the location in memory of it and
 			// update the value from the Values list from the bucket
-			Bucket* bucket = hashTable->get(bucket);
+			std::optional<HashTables::HashCode> address = hashTable->hashOf(bucket);
 
-			values->set(bucket->valueLocation, val);
+			Bucket* fromTable = hashTable->get(address.value());
+
+			return values->set(fromTable->valueLocation, val);
 		}
-
-		// added successfully
-		return true;
 	}
 
-	HASH_MAP(Value&):: get(const Key& key) {
-		
+	HASH_MAP(Value*):: get(const Key& key) {
+		Bucket bucket = { key, 0 };
+
+		// put in the table a bucket with and a reference of zero
+		std::optional<HashTables::HashCode> address = hashTable->hashOf(bucket);
+
+		if (address.has_value()) {
+			Bucket* fromTable = hashTable->get(address.value());
+
+			return &values->get(fromTable->valueLocation);
+		}
+		return nullptr;
 	}
 
-	HASH_MAP(Value)::remove(const Key& key) {
-		
+	HASH_MAP(std::optional<Value>)::remove(const Key& key) {
+		Bucket bucket = { key, 0 };
+
+		// put in the table a bucket with and a reference of zero
+		std::optional<HashTables::HashCode> address = hashTable->hashOf(bucket);
+
+		if (address.has_value()) {
+			Bucket* fromTable = hashTable->get(address.value());
+
+			Value valueOut = values->get(fromTable->valueLocation);
+
+			values->remove(fromTable->valueLocation);
+			hashTable->remove(address.value());
+			
+			return valueOut;
+		}
+		return {};
 	}
 
-	HASH_MAP(bool)::contains(const Key& obj) {
-		return hashTable->get(key) != nullptr;
-	}
-
-	HASH_MAP(HashTables::HashCode)::search(const Key& obj) {
-		return hashTable->search(obj);
+	HASH_MAP(bool)::contains(const Key& key) {
+		Bucket bucket = { key, 0 };
+		std::optional<HashTables::HashCode> hashCodeAddress = hashTable->hashOf(bucket);
+		// if it has a value, then exists in table
+		return hashCodeAddress.has_value();
 	}
 }
