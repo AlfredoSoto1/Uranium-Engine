@@ -105,6 +105,7 @@
     <ClCompile Include="src\Graphics\Display\Window.cpp" />
     <ClCompile Include="src\Graphics\Display\WindowProps.cpp" />
     <ClCompile Include="src\Graphics\Meshes\Model.cpp" />
+    <ClCompile Include="src\Graphics\Shaders\Shader.cpp" />
     <ClCompile Include="src\Graphics\UI\Cursor.cpp" />
     <ClCompile Include="src\Graphics\UI\CursorShape.cpp" />
     <ClCompile Include="src\Input\Callbacks\CursorCallback.cpp" />
@@ -164,6 +165,9 @@
     <ClInclude Include="src\Graphics\Display\WindowProps.h" />
     <ClInclude Include="src\DataStructures\Graphs\MeshGraph.h" />
     <ClInclude Include="src\Graphics\Meshes\Model.h" />
+    <ClInclude Include="src\Graphics\Renderer\Renderer.h" />
+    <ClInclude Include="src\Graphics\Shaders\Shader.h" />
+    <ClInclude Include="src\Graphics\Shaders\ShaderProgram.h" />
     <ClInclude Include="src\Graphics\UI\Cursor.h" />
     <ClInclude Include="src\Graphics\UI\CursorShape.h" />
     <ClInclude Include="src\Input\Callbacks\CursorCallback.h" />
@@ -171,6 +175,8 @@
     <ClInclude Include="src\Input\Callbacks\KeyboardCallback.h" />
     <ClInclude Include="src\Input\Callbacks\MouseCallback.h" />
     <ClInclude Include="src\Input\Callbacks\WindowCallback.h" />
+    <ClInclude Include="src\Scenes\Cameras\Camera.h" />
+    <ClInclude Include="src\Scenes\Cameras\FPCamera.h" />
     <ClInclude Include="src\Scenes\Scene.h" />
     <ClInclude Include="src\Scenes\SceneMaster.h" />
     <ClInclude Include="src\STL_pch.h" />
