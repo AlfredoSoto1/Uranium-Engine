@@ -38,7 +38,23 @@ VertexBuffer::VertexBuffer(const Model& model, unsigned int accessFormat, unsign
 	vertCount(vertexCount),
 	accessFormat(accessFormat)
 {
-	
+	// bind model vao
+	model.bind();
+
+	// create a new buffer
+	glGenBuffers(1, &vbo);
+
+	// bind the vbo
+	glBindBuffer(GL_ARRAY_BUFFER, vbo);
+
+	// tell opengl how large the buffer should be
+	glBufferData(GL_ARRAY_BUFFER, vertexCount * vertexSize, data, accessFormat);
+
+	// unbinds the vbo
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+	// pass a copy of 'this' buffer
+	model.vbos.push_back(*this);
 }
 
 VertexBuffer::VertexBuffer(const VertexBuffer& copy) :
@@ -48,10 +64,18 @@ VertexBuffer::VertexBuffer(const VertexBuffer& copy) :
 	vertCount(copy.vertCount),
 	accessFormat(copy.accessFormat)
 {
-	
+	// copy the attributes to the new buffer
+	attributes.assign(copy.attributes.begin(), copy.attributes.end());
 }
 
 VertexBuffer& VertexBuffer::operator=(const VertexBuffer& copyFrom) {
+	vbo = copyFrom.vbo;
+	vertSize = copyFrom.vertSize;
+	vertCount = copyFrom.vertCount;
+	accessFormat = copyFrom.accessFormat;
+
+	// copy the attributes to the new buffer
+	attributes.assign(copyFrom.attributes.begin(), copyFrom.attributes.end());
 	return *this;
 }
 
@@ -63,6 +87,18 @@ void VertexBuffer::bind() const {
 void VertexBuffer::unbind() const {
 	// unbind buffer to zero
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
+}
+
+void VertexBuffer::enableAttribs() const {
+	// enable all attributes with given location
+	for (VertexAttribute& attribute : attributes)
+		glEnableVertexAttribArray(attribute.location);
+}
+
+void VertexBuffer::disableAttribs() const {
+	// disable all attributes with given location
+	for (VertexAttribute& attribute : attributes)
+		glDisableVertexAttribArray(attribute.location);
 }
 
 void VertexBuffer::dispose() const {
@@ -105,6 +141,9 @@ void VertexBuffer::setLayout(const VertexAttribute& layout) {
 	// set the attribute to single vertex
 	glVertexAttribPointer(layout.location, layout.componentCount, layout.readType, layout.typeNormalization, attribSize, (const void*)offset);
 
+	// add the attribute to list
+	attributes.push_back(layout);
+
 	// unbind vbo
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
@@ -123,6 +162,9 @@ void VertexBuffer::setLayout(const VertexAttribute&& layout) {
 	// set the attribute to single vertex
 	glVertexAttribPointer(layout.location, layout.componentCount, layout.readType, layout.typeNormalization, attribSize, (const void*)offset);
 
+	// add the attribute to list
+	attributes.emplace_back(layout);
+
 	// unbind vbo
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
@@ -132,10 +174,6 @@ void VertexBuffer::getVertices(void* outDataCopy) const {
 
 	// bind the vbo
 	glBindBuffer(GL_ARRAY_BUFFER, vbo);
-
-	// Get the size of the buffer
-	//GLint bufferSize;
-	//glGetBufferParameteriv(GL_ARRAY_BUFFER, GL_BUFFER_SIZE, &bufferSize);
 
 	// Retrieve the buffer data
 	glGetBufferSubData(GL_ARRAY_BUFFER, 0, vertCount * vertSize, outDataCopy);
@@ -149,10 +187,6 @@ void VertexBuffer::getVertex(unsigned int index, void* outDataCopy) const {
 
 	// bind the vbo
 	glBindBuffer(GL_ARRAY_BUFFER, vbo);
-
-	// Get the size of the buffer
-	//GLint bufferSize;
-	//glGetBufferParameteriv(GL_ARRAY_BUFFER, GL_BUFFER_SIZE, &bufferSize);
 
 	// Retrieve the buffer data
 	glGetBufferSubData(GL_ARRAY_BUFFER, index * vertSize, vertCount * vertSize, outDataCopy);

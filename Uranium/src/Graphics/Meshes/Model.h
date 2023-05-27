@@ -1,6 +1,5 @@
 #pragma once
 
-#include <memory>
 #include <vector>
 
 #include "Graphics/Buffers/VertexBuffer.h"
@@ -18,22 +17,34 @@ namespace Uranium::Graphics::Meshes {
 
 	public:
 		/*
+		* Constructs a model and assigns a proper vao
+		* for any bound buffer that this model will use
+		* to be rendered
 		*/
 		Model();
 		
 		/*
+		* deletes all data from vao, including all
+		* the buffers linked to it
 		*/
 		virtual ~Model();
 		
 		/*
+		* binds the vao
 		*/
 		void bind() const;
 		
 		/*
+		* unbinds the vao
 		*/
 		void unbind() const;
 
 		/*
+		* It binds the vao
+		* and the proper index buffers and
+		* enables the attributes before rendering
+		* it also has an unbind method that unbinds all
+		* these actions done by the bindToRender()
 		*/
 		void bindToRender() const;
 		void unbindToRender() const;
@@ -44,10 +55,13 @@ namespace Uranium::Graphics::Meshes {
 		*/
 
 		/*
+		* Returns the vao Id
 		*/
 		operator unsigned int();
 
 		/*
+		* selects the index buffer to 
+		* be used to render the vertex buffer from
 		*/
 		void selectIndexBuffer(unsigned int iboSelected);
 

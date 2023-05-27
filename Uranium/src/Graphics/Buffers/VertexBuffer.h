@@ -1,5 +1,7 @@
 #pragma once
 
+#include <vector>
+
 namespace Uranium::Graphics::Meshes {
 	class Model;
 }
@@ -134,6 +136,16 @@ namespace Uranium::Graphics::Buffers {
 		/*
 		* friends with other classes
 		*/
+		friend Model;
+		/*
+		* Enables the attributes from this buffer
+		*/
+		void enableAttribs() const;
+
+		/*
+		* Disables the attributes from this buffer
+		*/
+		void disableAttribs() const;
 
 	private:
 		/*
@@ -151,6 +163,8 @@ namespace Uranium::Graphics::Buffers {
 		unsigned int accessFormat;
 		unsigned int vertCount;
 		unsigned int vertSize;
+
+		mutable std::vector<VertexAttribute> attributes;
 		
 	};
 

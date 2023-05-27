@@ -105,6 +105,12 @@ namespace Uranium::Graphics::Buffers {
 
 	private:
 		/*
+		* friend with other classes
+		*/
+		friend Model;
+
+	private:
+		/*
 		* private members
 		*/
 		const Model& model;
