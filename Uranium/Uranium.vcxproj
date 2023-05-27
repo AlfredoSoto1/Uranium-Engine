@@ -99,6 +99,8 @@
     <ClCompile Include="src\Core\Math\vec2.cpp" />
     <ClCompile Include="src\Core\Math\vec3.cpp" />
     <ClCompile Include="src\Core\Math\vec4.cpp" />
+    <ClCompile Include="src\Graphics\Buffers\IndexBuffer.cpp" />
+    <ClCompile Include="src\Graphics\Buffers\VertexBuffer.cpp" />
     <ClCompile Include="src\Graphics\Display\Monitor.cpp" />
     <ClCompile Include="src\Graphics\Display\Window.cpp" />
     <ClCompile Include="src\Graphics\Display\WindowProps.cpp" />
@@ -155,6 +157,8 @@
     <ClInclude Include="src\DataStructures\Trees\Tree.h" />
     <ClInclude Include="src\DataStructures\Containers\TreeNode.h" />
     <ClInclude Include="src\DataStructures\Trees\HeapSetArray.h" />
+    <ClInclude Include="src\Graphics\Buffers\IndexBuffer.h" />
+    <ClInclude Include="src\Graphics\Buffers\VertexBuffer.h" />
     <ClInclude Include="src\Graphics\Display\Monitor.h" />
     <ClInclude Include="src\Graphics\Display\Window.h" />
     <ClInclude Include="src\Graphics\Display\WindowProps.h" />

@@ -479,8 +479,8 @@
 
 
 
-
-
+#define GLEW_STATIC
+#include <GL/glew.h>
 
 #include <iostream>
 #include <Core/Application/Application.h>
@@ -492,9 +492,15 @@
 
 #include <DataStructures/Graphs/MeshGraph.h>
 
+#include "Graphics/Meshes/Model.h"
+#include "Graphics/Buffers/VertexBuffer.h"
+#include "Graphics/Buffers/IndexBuffer.h"
+
 using namespace Uranium::Scenes;
 using namespace Uranium::Core::Application;
 using namespace Uranium::Graphics::Display;
+using namespace Uranium::Graphics::Buffers;
+using namespace Uranium::Graphics::Meshes;
 
 class MyScene : public Scene {
 public:
@@ -511,6 +517,26 @@ public:
 		struct Vertex {
 			float x, y, z;
 		};
+
+		Model model = Model();
+
+		IndexBuffer ibo= IndexBuffer(model, GL_STATIC_DRAW, 3);
+		Vertex vertices[] = {
+			{0.0, 0.0, 0.0},
+			{0.0, 0.0, 0.0},
+			{0.0, 0.0, 0.0}
+		};
+
+		VertexBuffer vbo = VertexBuffer(model, GL_STATIC_DRAW, 2, sizeof(Vertex), vertices);
+
+		VertexBuffer::VertexAttribute attrib;
+		attrib.location = 0;         
+		attrib.componentCount = 3;   
+		attrib.readType = GL_FLOAT;         
+		attrib.typeNormalization = GL_FALSE;
+		attrib.attribIndex = 0;     
+
+		vbo.setLayout(attrib);
 
 	}
 
