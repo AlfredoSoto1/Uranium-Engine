@@ -484,6 +484,7 @@
 
 #include <iostream>
 #include <Core/Application/Application.h>
+#include <Core/Math/vec2.h>
 
 #include <Graphics/Display/Window.h>
 
@@ -496,11 +497,17 @@
 #include "Graphics/Buffers/VertexBuffer.h"
 #include "Graphics/Buffers/IndexBuffer.h"
 
+#include "Graphics/Shaders/Uniform.h"
+#include "Graphics/Shaders/Shader.h"
+#include "Graphics/Shaders/ShaderProgram.h"
+
 using namespace Uranium::Scenes;
 using namespace Uranium::Core::Application;
+using namespace Uranium::Core::Math;
 using namespace Uranium::Graphics::Display;
 using namespace Uranium::Graphics::Buffers;
 using namespace Uranium::Graphics::Meshes;
+using namespace Uranium::Graphics::Shaders;
 
 class MyScene : public Scene {
 public:
@@ -514,29 +521,12 @@ public:
 
 	void load() {
 
-		struct Vertex {
-			float x, y, z;
-		};
+		
+		Uniform<vec2> var = Uniform<vec2>();
 
-		Model model = Model();
+		ShaderProgram program = ShaderProgram();
+		
 
-		IndexBuffer ibo= IndexBuffer(model, GL_STATIC_DRAW, 3);
-		Vertex vertices[] = {
-			{0.0, 0.0, 0.0},
-			{0.0, 0.0, 0.0},
-			{0.0, 0.0, 0.0}
-		};
-
-		VertexBuffer vbo = VertexBuffer(model, GL_STATIC_DRAW, 2, sizeof(Vertex), vertices);
-
-		VertexBuffer::VertexAttribute attrib;
-		attrib.location = 0;         
-		attrib.componentCount = 3;   
-		attrib.readType = GL_FLOAT;         
-		attrib.typeNormalization = GL_FALSE;
-		attrib.attribIndex = 0;     
-
-		vbo.setLayout(attrib);
 
 	}
 
