@@ -1,131 +1,3 @@
-//#include <iostream>
-//#include <thread>
-//#include <GLFW/glfw3.h>
-//
-//class OpenGLApplication {
-//public:
-//    OpenGLApplication(int width, int height, const char* title) :
-//        m_width(width),
-//        m_height(height),
-//        m_title(title),
-//        m_window(nullptr),
-//        m_shouldClose(false)
-//    {}
-//
-//    bool init() {
-//        // Initialize GLFW
-//        if (!glfwInit()) {
-//            std::cerr << "Failed to initialize GLFW\n";
-//            return false;
-//        }
-//
-//        // Set OpenGL version and profile
-//        glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
-//        glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 5);
-//        glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-//
-//        // Create the window
-//        m_window = glfwCreateWindow(m_width, m_height, m_title, nullptr, nullptr);
-//        if (!m_window) {
-//            std::cerr << "Failed to create GLFW window\n";
-//            glfwTerminate();
-//            return false;
-//        }
-//
-//        // Make the OpenGL context current
-//        glfwMakeContextCurrent(m_window);
-//
-//        return true;
-//    }
-//
-//    void run() {
-//        // Start the rendering thread
-//        m_renderThread = std::thread(&OpenGLApplication::renderThreadFunc, this);
-//
-//        // Main loop
-//        while (!m_shouldClose) {
-//            // Poll for events
-//            glfwPollEvents();
-//        }
-//
-//        // Wait for the rendering thread to finish
-//        m_renderThread.join();
-//    }
-//
-//    void close() {
-//        // Set the should-close flag to true
-//        m_shouldClose = true;
-//
-//        // Wait for the rendering thread to finish
-//        m_renderThread.join();
-//
-//        // Destroy the window
-//        glfwDestroyWindow(m_window);
-//        glfwTerminate();
-//    }
-//
-//private:
-//    int m_width;
-//    int m_height;
-//    const char* m_title;
-//    GLFWwindow* m_window;
-//    std::thread m_renderThread;
-//    bool m_shouldClose;
-//
-//    void render() {
-//        // Implement your rendering code here
-//        glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
-//        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-//
-//        // Swap buffers
-//        glfwSwapBuffers(m_window);
-//    }
-//
-//    void renderThreadFunc() {
-//        // Make the OpenGL context current
-//        glfwMakeContextCurrent(m_window);
-//
-//        // Main rendering loop
-//        while (!m_shouldClose) {
-//            // Call the render method
-//            render();
-//
-//            // Poll for events
-//            glfwPollEvents();
-//        }
-//    }
-//};
-//
-//int main() {
-//    // Initialize GLFW
-//    if (!glfwInit()) {
-//        std::cerr << "Failed to initialize GLFW\n";
-//        return -1;
-//    }
-//
-//    // Create the windows
-//    OpenGLApplication app1(640, 480, "Window 1");
-//    OpenGLApplication app2(640, 480, "Window 2");
-//
-//    // Initialize the windows
-//    if (!app1.init() || !app2.init()) {
-//        return -1;
-//    }
-//
-//    // Run the windows in separate threads
-//    std::thread thread1(&OpenGLApplication::run, &app1);
-//    std::thread thread2(&OpenGLApplication::run, &app2);
-//
-//    // Wait for the threads to finish
-//    thread1.join();
-//    thread2.join();
-//
-//    // Clean up
-//    app1.close();
-//    app2.close();
-//
-//    return 0;
-//}
 
 //#include <iostream>
 //#include <AL/al.h>
@@ -511,35 +383,85 @@ using namespace Uranium::Graphics::Shaders;
 
 class MyScene : public Scene {
 public:
-	void init() {
 
-	}
+	ShaderProgram* program;
 
-	void dispose() {
+	Model* model;
 
-	}
+	struct Vertex {
+		vec2 position;
+	};
+
+	/*
+	* load and unload dynamically
+	*/
 
 	void load() {
 
-		
-		Uniform<vec2> var = Uniform<vec2>();
+		Vertex vertices[] = {
+			vec2(-0.5, -0.5),
+			vec2( 0.5, -0.5),
+			vec2( 0.5,  0.5)
+		};
 
-		ShaderProgram program = ShaderProgram();
-		
+		unsigned int indices[] = {
+			0, 1, 2
+		};
 
+		model = new Model();
+
+		// create buffer
+		IndexBuffer indexBuf = IndexBuffer(*model, GL_STATIC_DRAW, sizeof(indices) / sizeof(unsigned int), indices);
+
+		// create buffer
+		VertexBuffer verBuff = VertexBuffer(*model, GL_STATIC_DRAW, sizeof(vertices) / sizeof(Vertex), sizeof(Vertex), vertices);
+
+		VertexBuffer::VertexAttribute attributes;
+		attributes.location = 0;
+		attributes.componentCount = 2;
+		attributes.readType = GL_FLOAT;
+		attributes.typeNormalization = GL_FALSE;
+		attributes.attribIndex = 0;
+
+		verBuff.setLayout(attributes);
+
+		Shader vertexShader = Shader("src/testV.glsl", GL_VERTEX_SHADER);
+		Shader fragmentShader = Shader("src/testF.glsl", GL_FRAGMENT_SHADER);
+
+		program = new ShaderProgram(vertexShader, fragmentShader);
 
 	}
 
 	void unload() {
-
+		delete model;
+		delete program;
 	}
+
+	/*
+	* update / render scene
+	*/
 
 	void update() {
 
 	}
 
 	void render() {
+		
+		// clear screen buffers
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+		program->start();
+
+		// bind before draw
+		model->bindToRender();
+
+		// draw model
+		glDrawElements(GL_TRIANGLES, model->indexCount(), GL_UNSIGNED_INT, nullptr);
+		
+		// unbind after render
+		model->unbindToRender();
+
+		program->stop();
 	}
 };
 
@@ -569,74 +491,11 @@ public:
 	}
 };
 
-#include <DataStructures/Graphs/MeshGraph.h>
-#include <DataStructures/Containers/Comparable.h>
-#include <DataStructures/HashTables/HashTableOpenAddress.h>
-
-//#include <DataStructures/Trees/BSTArray.h>
-//#include <DataStructures/Trees/HeapSetArray.h>
-#include <DataStructures/Maps/HashMap.h>
-#include <DataStructures/Sets/HashSet.h>
-#include <DataStructures/Lists/ArrayList.h>
-
-#include <Core/Math/vec3.h>
-
-using namespace Uranium::Core::Math;
-using namespace Uranium::DataStructures::Graphs;
-using namespace Uranium::DataStructures::HashTables;
-using namespace Uranium::DataStructures::Containers;
-using namespace Uranium::DataStructures::Sets;
-using namespace Uranium::DataStructures::Maps;
-using namespace Uranium::DataStructures::Lists;
-
 int main() {
-
-	struct Vertex {
-		vec3 position;
-	};
-
-	//std::hash<float> floatHasher;
-
-	//MeshGraph<Vertex> mesh = MeshGraph<Vertex>(10, [&floatHasher](auto vertex) {
-	//	return (unsigned int)(floatHasher(vertex.position.x) + floatHasher(vertex.position.y) + floatHasher(vertex.position.z));
-	//},
-	//[](auto vert1, auto vert2) {
-	//	if(vert1.position == vert2.position)
-	//		return 0; // equal
-	//	return 1; // different
-	//});
-
-	//// adding 3 vertices to the mesh
-	//GraphAddress address1 = mesh.add({vec3(1.0, 0.0, 0.0)});
-	//GraphAddress address2 = mesh.add({vec3(0.0, 2.0, 0.0)});
-	//GraphAddress address3 = mesh.add({vec3(0.0, 0.0, 3.0)});
-
-	//mesh.addIndex(address1);
-	//mesh.addIndex(address2);
-	//mesh.addIndex(address3);
-
-	//std::hash<float> floatHasher;
-
-	//HashMap<Vertex, int> map = HashMap<Vertex, int>(5, 0.75, [&floatHasher](auto vertex) {
-	//	return (unsigned int)(floatHasher(vertex.position.x) + floatHasher(vertex.position.y) + floatHasher(vertex.position.z));
-	//},
-	//[](auto vert1, auto vert2) {
-	//	if (vert1.position == vert2.position)
-	//		return 0; // equal
-	//	return 1; // different
-	//});
-
-	//map.put({ vec3(0.0, 0.0, 0.0) }, 1);
-	//map.put({ vec3(0.0, 0.0, 0.0) }, 1);
-	//map.put({ vec3(1.0, 0.0, 0.0) }, 1);
-	//map.put({ vec3(0.0, 1.0, 0.0) }, 1);
-	//map.put({ vec3(0.0, 0.0, 1.0) }, 1);
-
-	//std::cout << "ended" << std::endl;
-
 
 	/*
 	* Start program
 	*/
 	Application::start(std::make_shared<MyApp>());
 }
+

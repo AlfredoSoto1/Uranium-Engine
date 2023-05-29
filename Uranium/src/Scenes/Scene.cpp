@@ -13,11 +13,12 @@ Scene::Scene() :
 	is_paused(false),
 	is_loaded(false)
 {
-
 }
 
 Scene::~Scene() {
-	
+	// remove all linked scenes
+	// from this one
+	linkedScenes.clear();
 }
 
 bool Scene::isPaused() {

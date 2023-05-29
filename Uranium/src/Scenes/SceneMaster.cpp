@@ -7,7 +7,8 @@
 
 using namespace Uranium::Scenes;
 
-SceneMaster::SceneMaster() :
+SceneMaster::SceneMaster(const std::shared_ptr<Window>& window) :
+	window(window),
 	frameCount(0),
 	updateCount(0),
 	lastFrame(0),
@@ -177,4 +178,13 @@ void SceneMaster::update() {
 	else {
 		updateInTime();
 	}
+}
+
+void SceneMaster::unloadCurrentScene() {
+	// unlink from any posible next scene
+	currentScene->nextScene = nullptr;
+	// unload the scene content
+	currentScene->unload();
+	// update flag
+	currentScene->is_loaded = false;
 }

@@ -2,6 +2,10 @@
 
 #include <memory>
 
+namespace Uranium::Graphics::Display {
+	class Window;
+}
+
 namespace Uranium::Core::Application {
 	class ApplicationProgram;
 }
@@ -15,7 +19,8 @@ namespace Uranium::Scenes {
 		/*
 		* custom alias
 		*/
-		using ApplicationProgram = Uranium::Core::Application::ApplicationProgram;
+		using Window = Graphics::Display::Window;
+		using ApplicationProgram = Core::Application::ApplicationProgram;
 
 	public:
 		virtual ~SceneMaster();
@@ -38,15 +43,43 @@ namespace Uranium::Scenes {
 		/*
 		* private methods
 		*/
-		SceneMaster();
+		/*
+		* copy and move constructors are 
+		* deleted because we don't need them
+		*/
 		SceneMaster(const SceneMaster&) = delete;
 		SceneMaster(const SceneMaster&&) = delete;
+
+		/*
+		* Creates center crontrol that manages
+		* all scenes in our Application program
+		*/
+		SceneMaster(const std::shared_ptr<Window>& window);
 		
+		/*
+		* handles render and update of
+		* current scene
+		*/
 		void render();
 		void update();
 
+		/*
+		* This gets in charge of loading and
+		* unloading a scene in memory
+		*/
 		void handleSceneLoading();
 
+		/*
+		* This method gets called when program 
+		* has ended. The reason is to free resources
+		* from last scene before closing program
+		*/
+		void unloadCurrentScene();
+
+		/*
+		* These manages the rendering of
+		* the current scene synchronized
+		*/
 		void renderInTime();
 		void renderOutTime();
 
@@ -66,7 +99,7 @@ namespace Uranium::Scenes {
 		volatile double renderTimer;
 		volatile double updateTimer;
 
+		std::shared_ptr<Window> window;
 		std::shared_ptr<Scene> currentScene;
-
 	};
 }

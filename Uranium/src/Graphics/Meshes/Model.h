@@ -65,6 +65,12 @@ namespace Uranium::Graphics::Meshes {
 		*/
 		void selectIndexBuffer(unsigned int iboSelected);
 
+		/*
+		* Returns the total index count from the
+		* current seleced ibo
+		*/
+		unsigned int indexCount() const;
+
 	private:
 		/*
 		* friends with other classes

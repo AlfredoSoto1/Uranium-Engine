@@ -89,7 +89,7 @@ namespace Uranium::Graphics::Buffers {
 		/*
 		* Returns the index count of 'this' buffer
 		*/
-		inline unsigned int indexCount() const;
+		unsigned int indexCount() const;
 
 		/*
 		* Returns a void* to a copy of the data in 'this' buffer

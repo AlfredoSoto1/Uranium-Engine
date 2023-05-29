@@ -7,61 +7,49 @@
 
 using namespace Uranium::Graphics::Shaders;
 
-ShaderProgram::ShaderProgram()
-{
-	program = glCreateProgram();
-}
-
 ShaderProgram::~ShaderProgram() {
-
-	// if program is invalid clear list of shaders
-	if (program == 0) {
-		shaders.clear();
-		return;
-	}
-
-	// if list is not empty, detach the shaders
-	if (!shaders.empty()) {
-		for (const auto& shader : shaders)
-			glDetachShader(program, *shader);
-	}
 	
-	// delete shader program
+	/*
+	* deletes 'this' current shader program
+	* detaching automatically the shaders
+	* attached to 'this' program
+	*/
 	glDeleteProgram(program);
-	
-	shaders.clear();
 }
 
 ShaderProgram::operator const Program() const {
 	return program;
 }
 
-void ShaderProgram::attachShader(const std::shared_ptr<Shader>& shader) {
-	// dont add null shaders
-	if (shader == nullptr)
-		return;
-	shaders.push_back(shader);
+void ShaderProgram::attachShader(const Shader& shader) {
+	// attach manually
+	glAttachShader(program, shader);
+}
+
+void ShaderProgram::detachShader(const Shader& shader) {
+	// detach manually
+	glDetachShader(program, shader);
+}
+
+void ShaderProgram::create() {
+	// create shader program
+	program = glCreateProgram();
 }
 
 void ShaderProgram::init() {
-
-	// no need to initialize program
-	// if there are no shaders
-	if (shaders.empty())
-		return;
-
-	// attach shaders
-	for (const auto& shader : shaders)
-		glAttachShader(program, *shader);
-
 	// link the program
 	link();
 
 	// validate the program
 	validate();
 
-	if (program == 0)
+	// check if program is invalid
+	if (program == 0) {
+		return;
 		std::cout << "Current program is invalid (0)" << std::endl;
+	}
+
+	queryUniformLocations();
 }
 
 void ShaderProgram::link() const {
@@ -154,16 +142,24 @@ void ShaderProgram::queryUniformLocations() {
 	// a variable has inside the shader program
 	GLchar* variableName = new GLchar[maxCharLength];
 	
-	GLuint type;
+	UniformType type;
 	GLint size, length;
 
+	start();
 	// get uniform location, uniform name and type
 	for (GLuint i = 0; i < uniformCount; i++) {
 		glGetActiveUniform(program, i, maxCharLength, &length, &size, &type, variableName);
 
-		// store the uniform name and its type
-		uniformNames[variableName] = type;
+		// create uniform props
+		auto& typeLocation = programUniforms[variableName];
+		
+		// store the location as first
+		typeLocation.first = glGetUniformLocation(program, variableName);
+
+		// store the type as second
+		typeLocation.second = type;
 	}
+	stop();
 
 	// free memory
 	delete[] variableName;

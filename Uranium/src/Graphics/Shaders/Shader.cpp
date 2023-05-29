@@ -17,8 +17,6 @@ Shader::Shader(const std::string& filePath, unsigned int shaderType) :
 	filePath(filePath),
 	sType(shaderType)
 {
-	// copy of source code of glsl file
-	std::string shaderSource;
 	// read the file and copy the source code
 	// in the shader source variable
 	toSourceCode(filePath, &shaderSource);
@@ -31,6 +29,7 @@ Shader::Shader(const std::string& filePath, unsigned int shaderType) :
 Shader::Shader(const Shader& copy) :
 	sType(copy.sType),
 	filePath(filePath),
+	shaderSource(copy.shaderSource),
 	shaderId(copy.shaderId)
 {
 	
@@ -38,6 +37,7 @@ Shader::Shader(const Shader& copy) :
 Shader::Shader(Shader&& move) noexcept:
 	sType(move.sType),
 	shaderId(move.shaderId),
+	shaderSource(std::move(move.shaderSource)),
 	filePath(std::move(move.filePath))
 {
 	
@@ -96,7 +96,7 @@ ShaderId Shader::compile(const std::string& sourceCode) {
 	// If shader compiled successfully
 	// return the shader ID
 	if (result != GL_FALSE)
-		return ShaderId(shaderId);
+		return shaderId;
 
 	// Display compilation error of shader type
 	GLint messageLength;
@@ -123,5 +123,5 @@ ShaderId Shader::compile(const std::string& sourceCode) {
 	glDeleteShader(shaderId);
 
 	// default shader bound ID (0) error
-	return ShaderId(0); 
+	return 0;
 }

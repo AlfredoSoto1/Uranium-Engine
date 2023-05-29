@@ -141,8 +141,9 @@ void VertexBuffer::setLayout(const VertexAttribute& layout) {
 	// set the attribute to single vertex
 	glVertexAttribPointer(layout.location, layout.componentCount, layout.readType, layout.typeNormalization, attribSize, (const void*)offset);
 
-	// add the attribute to list
-	attributes.push_back(layout);
+	// copy the layout into the buffer's attribute	
+	for (auto& vertBuffer : model.vbos)
+		vertBuffer.attributes.push_back(layout);
 
 	// unbind vbo
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
@@ -162,8 +163,9 @@ void VertexBuffer::setLayout(const VertexAttribute&& layout) {
 	// set the attribute to single vertex
 	glVertexAttribPointer(layout.location, layout.componentCount, layout.readType, layout.typeNormalization, attribSize, (const void*)offset);
 
-	// add the attribute to list
-	attributes.emplace_back(layout);
+	// copy the layout into the buffer's attribute	
+	for (auto& vertBuffer : model.vbos)
+		vertBuffer.attributes.emplace_back(layout);
 
 	// unbind vbo
 	glBindBuffer(GL_ARRAY_BUFFER, 0);

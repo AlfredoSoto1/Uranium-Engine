@@ -27,6 +27,10 @@ namespace Uranium::Core::Application {
 
 	class Application;
 
+	/*
+	* Blueprint of the application program
+	* 
+	*/
 	class ApplicationProgram {
 	public:
 		/*
@@ -48,13 +52,19 @@ namespace Uranium::Core::Application {
 
 	public:
 		/*
-		* Public methods
+		* Getters and setters
+		*/
+		
+		/*
+		* Pointer returns for application escentials
 		*/
 		Cursor* getCursor();
-		std::shared_ptr<Window> getWindow();
-		
 		SceneMaster* getSceneMaster();
+		std::shared_ptr<Window> getWindow();
 
+		/*
+		* Pointer returns for callbacks
+		*/
 		WindowCallback* getWindowCallback();
 		CursorCallback* getCursorCallback();
 		MouseCallback* getMouseCallback();
@@ -62,11 +72,15 @@ namespace Uranium::Core::Application {
 
 	protected:
 		/*
-		* Pure virtual methods
+		* abstract methods
 		*/
 		void virtual init() = 0;
 		void virtual dispose() = 0;
 
+	protected:
+		/*
+		* protected methods
+		*/
 		void push(std::shared_ptr<Window> window, std::shared_ptr<Scene> scene);
 
 	private:
@@ -82,20 +96,18 @@ namespace Uranium::Core::Application {
 		*/
 		bool hasWindow();
 
+		void pollEvents();
 		void initMembers();	
 		void disposeMembers();
-
 		void updateProgram();
-
-		void pollEvents();
 
 	private:
 		/*
 		* Private members
 		*/
-		WindowCallback* windowCallback;	   // 
-		CursorCallback* cursorCallback;	   // Primitive callbacks for this
-		MouseCallback* mouseCallback;	   // Application-program
+		WindowCallback* windowCallback;	    // 
+		CursorCallback* cursorCallback;	    // Primitive callbacks for this
+		MouseCallback* mouseCallback;	    // Application-program
 		KeyboardCallback* keyboardCallback; // 
 
 		Cursor* cursor;				 

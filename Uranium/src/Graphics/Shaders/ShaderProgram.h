@@ -5,6 +5,9 @@
 #include <vector>
 #include <unordered_map>
 
+#include "Uniform.h"
+#include "ShaderTypes.h"
+
 namespace Uranium::Scenes::Cameras {
 	class Camera;
 }
@@ -20,12 +23,6 @@ namespace Uranium::Graphics::Shaders {
 	template<class T> class Uniform;
 
 	/*
-	* definition of a shader program
-	* as an unsigned int
-	*/
-	using Program = unsigned int;
-
-	/*
 	* Blueprint of a Shader program
 	* 
 	*/
@@ -38,13 +35,23 @@ namespace Uranium::Graphics::Shaders {
 		using Material = Materials::Material;
 
 	public:
-		ShaderProgram();
-		virtual ~ShaderProgram();
+		template<class T, class... Args>
+		ShaderProgram(const T& first, const Args&... args) {
+			// create program
+			create();
 
-		/*
-		* initialize the shader program.
-		*/
-		void init();
+			// attach first always
+			attachShader(first);
+
+			// attach any other shader that
+			// we also want
+			(attachShader(args), ...);
+
+			// initiate program
+			init();
+		}
+
+		virtual ~ShaderProgram();
 
 		/*
 		* Start and stop methods that tells OpenGl
@@ -63,25 +70,6 @@ namespace Uranium::Graphics::Shaders {
 		*/
 		operator const Program() const;
 		
-		/*
-		* attaches the target shader to 'this' program
-		*/
-		void attachShader(const std::shared_ptr<Shader>& shader);
-
-		/*
-		* load camera settings to shader
-		*/
-		//void setCamera(const Camera& camera);
-
-		/*
-		* load custom material to shader
-		*/
-		//void setMaterial(const Material& material);
-
-		/*
-		*/
-		//template<class T> void sendToShader(const Uniform<T>& uniform);
-
 	private:
 		/*
 		* friends with other classes
@@ -94,11 +82,24 @@ namespace Uranium::Graphics::Shaders {
 		*/
 
 		/*
-		* This queries the uniform locations
-		* that exist inside the shader linked to this
-		* shader program
+		* creates the shader program
 		*/
-		void queryUniformLocations();
+		void create();
+
+		/*
+		* links, validates and queries the uniforms
+		*/
+		void init();
+
+		/*
+		* attaches the target shader to 'this' program
+		*/
+		void attachShader(const Shader& shader);
+
+		/*
+		* detaches shader from currently bound program
+		*/
+		void detachShader(const Shader& shader);
 
 		/*
 		* This links the shaders with the program
@@ -111,6 +112,13 @@ namespace Uranium::Graphics::Shaders {
 		* before starting the shader program
 		*/
 		void validate() const;
+		
+		/*
+		* This queries the uniform locations
+		* that exist inside the shader linked to this
+		* shader program
+		*/
+		void queryUniformLocations();
 
 	private:
 		/*
@@ -118,7 +126,7 @@ namespace Uranium::Graphics::Shaders {
 		*/
 		mutable Program program;
 
-		std::vector<std::shared_ptr<Shader>> shaders;
-		std::unordered_map<std::string, unsigned int> uniformNames;
+		//std::vector<std::shared_ptr<>> uniformValues; // shader program must know of uniforms
+		std::unordered_map<std::string, UniformTraits> programUniforms;
 	};
 }

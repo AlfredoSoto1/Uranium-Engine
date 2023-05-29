@@ -2,14 +2,13 @@
 
 #include <string>
 
+#include "ShaderTypes.h"
+
 namespace Uranium::Graphics::Shaders {
 
 	/*
-	* Defines Shader Id as the id used
-	* to manage shaders with OpenGl
+	* Shader class implementation
 	*/
-	using ShaderId = unsigned int;
-	
 	class Shader {
 	public:
 		/*
@@ -53,6 +52,12 @@ namespace Uranium::Graphics::Shaders {
 		*/
 		inline unsigned int shaderType() const;
 
+		/*
+		* Returns the pointer to where 'this'
+		* instance is currently been saved in memory
+		*/
+		std::shared_ptr<Shader> heapReference() const;
+
 	private:
 		/*
 		* private methods
@@ -76,18 +81,13 @@ namespace Uranium::Graphics::Shaders {
 		*/
 		ShaderId compile(const std::string& sourceCode);
 
-		/*
-		* deletes the shader
-		*/
-		void dispose() const;
-
 	private:
 		/*
 		* private members
 		*/
 		ShaderId shaderId;
 		unsigned int sType;
-
 		std::string filePath;
+		std::string shaderSource;
 	};
 }

@@ -170,6 +170,7 @@
     <ClInclude Include="src\Graphics\Renderer\Renderer.h" />
     <ClInclude Include="src\Graphics\Shaders\Shader.h" />
     <ClInclude Include="src\Graphics\Shaders\ShaderProgram.h" />
+    <ClInclude Include="src\Graphics\Shaders\ShaderTypes.h" />
     <ClInclude Include="src\Graphics\Shaders\Uniform.h" />
     <ClInclude Include="src\Graphics\UI\Cursor.h" />
     <ClInclude Include="src\Graphics\UI\CursorShape.h" />

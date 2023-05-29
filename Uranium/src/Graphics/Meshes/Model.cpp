@@ -7,7 +7,7 @@
 
 using namespace Uranium::Graphics::Meshes;
 using namespace Uranium::Graphics::Buffers;
-
+ 
 Model::Model() :
 	iboSelected(0) // first ibo as default
 {
@@ -65,4 +65,8 @@ Model::operator unsigned int() {
 
 void Model::selectIndexBuffer(unsigned int iboSelected) {
 	this->iboSelected = iboSelected;
+}
+
+unsigned int Model::indexCount() const {
+	return ibos[iboSelected].indexCount();
 }

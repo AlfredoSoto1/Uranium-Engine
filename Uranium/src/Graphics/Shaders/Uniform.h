@@ -1,6 +1,7 @@
 #pragma once
 
 #include <type_traits>
+#include "ShaderTypes.h"
 
 namespace Uranium::Core::Math {
 	struct vec2;
@@ -51,12 +52,28 @@ namespace Uranium::Graphics::Shaders {
 			"vectors, matrices or int, double, float, unsigned int");
 	public:
 
-		Uniform() {
+		Uniform() = delete;
 
+		Uniform(const T& data) :
+			data(data)
+		{
+			
 		}
+
+		Uniform(T&& data) :
+			data(std::move(data))
+		{
+			
+		}
+
+		operator T& () {
+			return data;
+		}
+
 	private:
 		/*
 		* private members
 		*/
+		T data;
 	};
 }

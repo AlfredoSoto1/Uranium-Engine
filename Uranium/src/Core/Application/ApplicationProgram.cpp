@@ -80,7 +80,7 @@ bool ApplicationProgram::hasWindow() {
 void ApplicationProgram::initMembers() {
 	
 	// Create scene master & set the current scene
-	sceneMaster = new SceneMaster();
+	sceneMaster = new SceneMaster(window);
 	sceneMaster->setCurrentScene(scene);
 
 	// Set custom pointer to GLFW window
@@ -147,4 +147,9 @@ void ApplicationProgram::updateProgram() {
 		// poll events
 		pollEvents();
 	}
+
+	/*
+	* unload the current scene
+	*/
+	sceneMaster->unloadCurrentScene();
 }

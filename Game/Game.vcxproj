@@ -106,6 +106,10 @@
       <Project>{9014667a-d165-4919-85b1-d9c3cda359ee}</Project>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="src\testF.glsl" />
+    <None Include="src\testV.glsl" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

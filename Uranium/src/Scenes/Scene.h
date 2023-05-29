@@ -23,39 +23,53 @@ namespace Uranium::Scenes {
 
 	public:
 		/*
-		* Public methods
+		* getters and setters
 		*/
+		std::string getName();
+
+		const std::vector<std::shared_ptr<Scene>>& getLinkedScenes();
+
 		bool isPaused();
 		bool isLoaded();
 
-		std::string getName();
-		
-		const std::vector<std::shared_ptr<Scene>>& getLinkedScenes();
+		double getFrameTime();
+		double getUpdateTime();
 
+		unsigned int getTargetUpdates();
+		unsigned int getTargetFramerate();
+
+	public:
+		/*
+		* setters
+		*/
 		void setName(const std::string& name);
 		void linkScene(const std::shared_ptr<Scene>& scene);
 
 		void setTargetUpdate(unsigned int targetUpdate);
 		void setTargetFramerate(unsigned int targetFramerate);
 
-		unsigned int getTargetUpdates();
-		unsigned int getTargetFramerate();
-
-		double getFrameTime();
-		double getUpdateTime();
-
 	protected:
 		/*
-		* Protected methods
+		* abstract methods
 		*/
-		virtual void init() = 0;
+		/*
+		* These methods get called in context
+		* when updating / rendering the scene
+		*/
 		virtual void update() = 0;
 		virtual void render() = 0;
-		virtual void dispose() = 0;
 
+		/*
+		* These methods get called in context when
+		* it needs to load / unload the scene
+		*/
 		virtual void load() = 0;
 		virtual void unload() = 0;
 
+	protected:
+		/*
+		* protected methods
+		*/
 		void pause();
 		void resume();
 
@@ -66,11 +80,6 @@ namespace Uranium::Scenes {
 		* Friends with other classes
 		*/
 		friend SceneMaster;
-
-	private:
-		/*
-		* Private methods
-		*/
 
 	private:
 		/*

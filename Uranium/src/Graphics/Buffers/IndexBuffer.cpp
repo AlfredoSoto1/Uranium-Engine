@@ -26,6 +26,9 @@ IndexBuffer::IndexBuffer(const Model& model, unsigned int accessFormat, unsigned
 	
 	// unbind buffer after use
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+
+	// pass a copy of 'this' buffer
+	model.ibos.push_back(*this);
 }
 
 IndexBuffer::IndexBuffer(const Model& model, unsigned int accessFormat, unsigned int indCount, const void* data) :
@@ -47,6 +50,9 @@ IndexBuffer::IndexBuffer(const Model& model, unsigned int accessFormat, unsigned
 
 	// unbind buffer after use
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+
+	// pass a copy of 'this' buffer
+	model.ibos.push_back(*this);
 }
 
 IndexBuffer::IndexBuffer(const IndexBuffer& copy) :
@@ -92,7 +98,7 @@ inline unsigned int IndexBuffer::bufferSize() const {
 	return indCount * sizeof(unsigned int);
 }
 
-inline unsigned int IndexBuffer::indexCount() const {
+unsigned int IndexBuffer::indexCount() const {
 	return indCount;
 }
 
