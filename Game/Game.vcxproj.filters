@@ -23,4 +23,9 @@
     <None Include="src\testV.glsl" />
     <None Include="src\testF.glsl" />
   </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\Cube.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
 </Project>

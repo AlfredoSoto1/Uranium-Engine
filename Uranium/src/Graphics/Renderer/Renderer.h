@@ -1,5 +1,7 @@
 #pragma once
 
+#include <memory>
+
 namespace Uranium::Graphics::Renderer {
 
 	/*
@@ -13,23 +15,35 @@ namespace Uranium::Graphics::Renderer {
 		/*
 		* Custom Alias
 		*/
+		using ShaderProgram = Shaders::ShaderProgram;
+
 	public:
-
-	protected:
 		/*
-		* protected methods
+		* This method is incharge of drawing
+		* the object in the scene.
 		*/
+		virtual void draw() const = 0;
 
-		void render();
+		/*
+		* Binds all resources before drawing
+		*/
+		virtual void bindResources() const = 0;
 
+		/*
+		* Prepares the states before rendering
+		*/
+		virtual void prepareRenderStates() const = 0;
+
+		/*
+		* Resets the rendering states back to
+		* default, so that they dont conflic with
+		* possible next render call from another renderer
+		*/
+		virtual void cleanUpRenderStates() const = 0;
+	
 	private:
 		/*
-		* private methods
-		*/
-
-	private:
-		/*
-		* Private members
+		* Protected members
 		*/
 		bool renderOnWireframe;
 

@@ -357,6 +357,7 @@
 #include <iostream>
 #include <Core/Application/Application.h>
 #include <Core/Math/vec2.h>
+#include <Core/Math/vec4.h>
 
 #include <Graphics/Display/Window.h>
 
@@ -373,6 +374,9 @@
 #include "Graphics/Shaders/Shader.h"
 #include "Graphics/Shaders/ShaderProgram.h"
 
+#include "Graphics/Renderer/Renderer.h"
+#include "Graphics/Renderer/ModelRenderer.h"
+
 using namespace Uranium::Scenes;
 using namespace Uranium::Core::Application;
 using namespace Uranium::Core::Math;
@@ -380,13 +384,18 @@ using namespace Uranium::Graphics::Display;
 using namespace Uranium::Graphics::Buffers;
 using namespace Uranium::Graphics::Meshes;
 using namespace Uranium::Graphics::Shaders;
+using namespace Uranium::Graphics::Renderer;
 
 class MyScene : public Scene {
 public:
 
+	ModelRenderer* renderer;
+
 	ShaderProgram* program;
 
 	Model* model;
+
+	std::shared_ptr<Uniform<vec4>> color;
 
 	struct Vertex {
 		vec2 position;
@@ -430,11 +439,19 @@ public:
 
 		program = new ShaderProgram(vertexShader, fragmentShader);
 
+		// white color
+		*color = vec4(1.0);
+
+		program->setUniform("u_Color", color);
+
+		renderer = new ModelRenderer();
+
 	}
 
 	void unload() {
 		delete model;
 		delete program;
+		delete renderer;
 	}
 
 	/*
@@ -449,19 +466,9 @@ public:
 		
 		// clear screen buffers
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-		program->start();
-
-		// bind before draw
-		model->bindToRender();
-
-		// draw model
-		glDrawElements(GL_TRIANGLES, model->indexCount(), GL_UNSIGNED_INT, nullptr);
+		glClearColor(0.1, 0.6, 0.85, 1.0);
 		
-		// unbind after render
-		model->unbindToRender();
-
-		program->stop();
+		renderer->draw();
 	}
 };
 

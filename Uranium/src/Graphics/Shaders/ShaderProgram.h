@@ -5,7 +5,6 @@
 #include <vector>
 #include <unordered_map>
 
-#include "Uniform.h"
 #include "ShaderTypes.h"
 
 namespace Uranium::Scenes::Cameras {
@@ -17,10 +16,55 @@ namespace Uranium::Graphics::Materials {
 }
 
 namespace Uranium::Graphics::Shaders {
+	
+	/*
+	* These are all shader uniform enums
+	* compatible with shader program. This
+	* are used when setting a new uniform to
+	* shader program in which it will contain
+	* one of these enums. These enums prioritize how
+	* they should be called in each renderer.
+	*/
+	enum Traits {
+		POSITION_2D,
+		POSITION_3D,
+
+		TEXTURE_COORDS_2D,
+		TEXTURE_COORDS_3D,
+
+		VIEW_MATRIX,
+		PROJECTION_MATRIX,
+
+		COLOR_RGB,
+		COLOR_RGBA,
+
+		ALBEDO,
+		NORMAL,
+		SPECULAR,
+		METAL,
+		ROUGHNESS,
+
+		MATRIX_2D,
+		MATRIX_3D,
+		MATRIX_4D,
+
+		VECTOR_2D,
+		VECTOR_3D,
+		VECTOR_4D,
+
+		INT,
+		BYTE,
+		FLOAT,
+		SHORT,
+		DOUBLE,
+		BOOLEAN,
+		UNSIGNED_INT,
+		UNSIGNED_BYTE,
+		UNSIGNED_SHORT,
+	};
 
 	class Shader;
-
-	template<class T> class Uniform;
+	class BaseUniform;
 
 	/*
 	* Blueprint of a Shader program
@@ -69,6 +113,13 @@ namespace Uranium::Graphics::Shaders {
 		* Returns the shader's program ID
 		*/
 		operator const Program() const;
+
+		/*
+		* Sends the base uniform generated
+		* to the shader program to use with a specific
+		* name given as a parameter
+		*/
+		void setUniform(const std::string& uniformName, std::shared_ptr<BaseUniform> baseUniform);
 		
 	private:
 		/*
@@ -126,7 +177,7 @@ namespace Uranium::Graphics::Shaders {
 		*/
 		mutable Program program;
 
-		//std::vector<std::shared_ptr<>> uniformValues; // shader program must know of uniforms
+		std::vector<std::shared_ptr<BaseUniform>> uniformVariables;
 		std::unordered_map<std::string, UniformTraits> programUniforms;
 	};
 }

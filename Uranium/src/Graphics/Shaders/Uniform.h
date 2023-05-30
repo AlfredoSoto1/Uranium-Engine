@@ -1,6 +1,8 @@
 #pragma once
 
+#include <memory>
 #include <type_traits>
+
 #include "ShaderTypes.h"
 
 namespace Uranium::Core::Math {
@@ -14,7 +16,18 @@ namespace Uranium::Core::Math {
 
 namespace Uranium::Graphics::Shaders {
 
-	template<class T> class Uniform {
+	class BaseUniform {
+	protected:
+		/*
+		* protected methods
+		*/
+	};
+
+	/*
+	* Blueprint template of OpenGl's 
+	* Uniform shader variables
+	*/
+	template<class T> class Uniform : public BaseUniform {
 	public:
 		/*
 		* Custom Alias
@@ -52,22 +65,52 @@ namespace Uranium::Graphics::Shaders {
 			"vectors, matrices or int, double, float, unsigned int");
 	public:
 
-		Uniform() = delete;
+		static T& modify(const std::shared_ptr<Uniform<T>>& pointer) {
+			return *pointer;
+		}
 
+		/*
+		* copy constructor
+		*/
 		Uniform(const T& data) :
 			data(data)
 		{
-			
+
 		}
 
-		Uniform(T&& data) :
+		/*
+		* move constructor
+		*/
+		Uniform(T&& data) noexcept:
 			data(std::move(data))
 		{
 			
 		}
 
+		/*
+		* get default value by casting
+		* 'this' instance class to T
+		*/
 		operator T& () {
 			return data;
+		}
+
+		/*
+		* Overload the '=' operator to copy the 
+		* target T instance to 'this' instance uniform
+		*/
+		Uniform& operator = (const T& copy) {
+			data = move;
+			return *this;
+		}
+
+		/*
+		* Overload the '=' operator to move the
+		* target T instance to 'this' instance uniform
+		*/
+		Uniform& operator = (const T&& move) {
+			data = std::move(move);
+			return *this;
 		}
 
 	private:

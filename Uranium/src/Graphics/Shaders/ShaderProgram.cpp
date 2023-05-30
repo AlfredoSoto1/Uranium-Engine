@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include "Shader.h"
+#include "Uniform.h"
 #include "ShaderProgram.h"
 
 using namespace Uranium::Graphics::Shaders;
@@ -19,6 +20,15 @@ ShaderProgram::~ShaderProgram() {
 
 ShaderProgram::operator const Program() const {
 	return program;
+}
+
+void ShaderProgram::setUniform(const std::string& uniformName, std::shared_ptr<BaseUniform> baseUniform) {
+	/*
+	* shader program will remember the base uniform
+	* from this list whenever it needs to set a value
+	* to the named uniform given as parameter
+	*/
+	uniformVariables.push_back(baseUniform);
 }
 
 void ShaderProgram::attachShader(const Shader& shader) {
