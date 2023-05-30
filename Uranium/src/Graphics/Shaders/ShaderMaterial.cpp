@@ -3,15 +3,15 @@
 using namespace Uranium::Graphics::Shaders;
 using namespace Uranium::Graphics::Materials;
 
-std::shared_ptr<Assets> ShaderMaterial::getAssets() {
+std::shared_ptr<Assets> ShaderMaterial::getAssets() const {
 	return assets;
 }
 
-std::shared_ptr<Material> ShaderMaterial::getMaterial() {
+std::shared_ptr<Material> ShaderMaterial::getMaterial() const {
 	return material;
 }
 
-std::shared_ptr<ShaderProgram> ShaderMaterial::getShaderProgram() {
+std::shared_ptr<ShaderProgram> ShaderMaterial::getShaderProgram() const {
 	return shaderProgram;
 }
 

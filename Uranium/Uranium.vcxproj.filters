@@ -99,7 +99,7 @@
     <ClCompile Include="src\Graphics\Shaders\UnifromFactory.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Graphics\Renderer\ModelRenderer.cpp">
+    <ClCompile Include="src\Graphics\Renderer\GroupRenderer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Graphics\Renderer\Renderer.cpp">
@@ -308,7 +308,7 @@
     <ClInclude Include="src\Graphics\Shaders\UniformFactory.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Graphics\Renderer\ModelRenderer.h">
+    <ClInclude Include="src\Graphics\Renderer\GroupRenderer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Scenes\Objects\Entity.h">
@@ -321,9 +321,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Graphics\Materials\Assets.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Graphics\Meshes\ModelCollection.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Graphics\Meshes\RigidBody.h">

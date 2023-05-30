@@ -100,7 +100,7 @@ namespace Uranium::Graphics::Shaders {
 		* target T instance to 'this' instance uniform
 		*/
 		Uniform& operator = (const T& copy) {
-			data = move;
+			data = copy;
 			return *this;
 		}
 

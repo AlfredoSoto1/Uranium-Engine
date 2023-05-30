@@ -2,6 +2,10 @@
 
 #include <memory>
 
+namespace Uranium::Graphics::Shaders {
+	class ShaderProgram;
+}
+
 namespace Uranium::Graphics::Renderer {
 
 	/*

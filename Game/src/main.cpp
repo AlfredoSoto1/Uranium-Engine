@@ -375,7 +375,7 @@
 #include "Graphics/Shaders/ShaderProgram.h"
 
 #include "Graphics/Renderer/Renderer.h"
-#include "Graphics/Renderer/ModelRenderer.h"
+#include "Graphics/Renderer/GroupRenderer.h"
 
 using namespace Uranium::Scenes;
 using namespace Uranium::Core::Application;
@@ -389,7 +389,7 @@ using namespace Uranium::Graphics::Renderer;
 class MyScene : public Scene {
 public:
 
-	ModelRenderer* renderer;
+	GroupRenderer* renderer;
 
 	ShaderProgram* program;
 
@@ -444,7 +444,7 @@ public:
 
 		program->setUniform("u_Color", color);
 
-		renderer = new ModelRenderer();
+		renderer = new GroupRenderer();
 
 	}
 

@@ -34,9 +34,9 @@ namespace Uranium::Graphics::Shaders {
 		/*
 		* getters
 		*/
-		std::shared_ptr<Assets> getAssets();
-		std::shared_ptr<Material> getMaterial();
-		std::shared_ptr<ShaderProgram> getShaderProgram();
+		std::shared_ptr<Assets> getAssets() const;
+		std::shared_ptr<Material> getMaterial() const;
+		std::shared_ptr<ShaderProgram> getShaderProgram() const;
 
 	public:
 		/*

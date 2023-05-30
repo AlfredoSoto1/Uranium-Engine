@@ -1,7 +1,7 @@
 #pragma once
 
 namespace Uranium::Graphics::Renderer {
-
+	
 	/*
 	* Renderable interface
 	* This declares the methods required
@@ -9,6 +9,12 @@ namespace Uranium::Graphics::Renderer {
 	* be renderable by the renderer
 	*/
 	class Renderable {
+	protected:
+		/*
+		* friends with other classes
+		*/
+		friend class GroupRenderer;
+
 	protected:
 		/*
 		* This draw() method is called inside the
@@ -25,7 +31,7 @@ namespace Uranium::Graphics::Renderer {
 		* Binds the resources like:
 		* materials, assets, textures, etc...
 		*/
-		virtual void bindResources() = 0;
+		virtual void bindResources() = 0; 
 
 	};
 }
