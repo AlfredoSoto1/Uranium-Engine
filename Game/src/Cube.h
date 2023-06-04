@@ -1,8 +1,10 @@
 #pragma once
 
 #include "Scenes/Objects/Entity.h"
+#include "Graphics/Shaders/ShaderProgram.h"
 
 using namespace Uranium::Scenes::Objects;
+using namespace Uranium::Graphics::Shaders;
 
 class Cube : public Entity {
 public:
@@ -15,15 +17,12 @@ public:
 
 private:
 
-	void draw() override {
+	void preloadUniforms(std::shared_ptr<ShaderProgram> shaderProgram) override {
 
 	}
 
-	void loadUniforms() override {
+	void updateUniforms(std::shared_ptr<ShaderProgram> shaderProgram) override {
 
 	}
 
-	void bindResources() override {
-
-	}
 };

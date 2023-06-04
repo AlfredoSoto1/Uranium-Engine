@@ -1,9 +1,12 @@
 #include <GLFW/glfw3.h>
 
-#include "Scene.h"
 #include <stdexcept>
 
+#include "Scene.h"
+#include "Graphics/Renderer/SceneRenderer.h"
+
 using namespace Uranium::Scenes;
+using namespace Uranium::Graphics::Renderer;
 
 Scene::Scene() :
 	nextScene(nullptr),
@@ -13,27 +16,34 @@ Scene::Scene() :
 	is_paused(false),
 	is_loaded(false)
 {
+	renderer = new SceneRenderer();
 }
 
 Scene::~Scene() {
 	// remove all linked scenes
 	// from this one
 	linkedScenes.clear();
+
+	delete renderer;
 }
 
-bool Scene::isPaused() {
+bool Scene::isPaused() const {
 	return is_paused;
 }
 
-bool Scene::isLoaded() {
+bool Scene::isLoaded() const {
 	return is_loaded;
 }
 
-std::string Scene::getName() {
+std::string Scene::getName() const {
 	return sceneName;
 }
 
-const std::vector<std::shared_ptr<Scene>>& Scene::getLinkedScenes() {
+SceneRenderer& Scene::getRenderer() const {
+	return *renderer;
+}
+
+const std::vector<std::shared_ptr<Scene>>& Scene::getLinkedScenes() const {
 	return linkedScenes;
 }
 
@@ -55,18 +65,18 @@ void Scene::setTargetFramerate(unsigned int targetFramerate) {
 	this->targetFrames = targetFramerate;
 }
 
-unsigned int Scene::getTargetUpdates() {
+unsigned int Scene::getTargetUpdates() const {
 	return targetUpdates;
 }
-unsigned int Scene::getTargetFramerate() {
+unsigned int Scene::getTargetFramerate() const {
 	return targetFrames;
 }
 
-double Scene::getFrameTime() {
+double Scene::getFrameTime() const {
 	return 1.0 / targetFrames;
 }
 
-double Scene::getUpdateTime() {
+double Scene::getUpdateTime() const {
 	return 1.0 / targetUpdates;
 }
 

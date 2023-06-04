@@ -4,7 +4,7 @@
 
 #include "Graphics/Meshes/Model.h"
 #include "Graphics/Meshes/RigidBody.h"
-#include "Graphics/Renderer/Renderable.h"
+#include "Graphics/Shaders/LoadableShader.h"
 
 namespace Uranium::Graphics::Shaders {
 	class ShaderMaterial;
@@ -12,7 +12,7 @@ namespace Uranium::Graphics::Shaders {
 
 namespace Uranium::Scenes::Objects {
 
-	class Entity : public Graphics::Renderer::Renderable {
+	class Entity : public Graphics::Shaders::LoadableShader {
 	public:
 		/*
 		* custom alias

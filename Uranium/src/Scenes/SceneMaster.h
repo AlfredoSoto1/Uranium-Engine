@@ -101,5 +101,6 @@ namespace Uranium::Scenes {
 
 		std::shared_ptr<Window> window;
 		std::shared_ptr<Scene> currentScene;
+
 	};
 }

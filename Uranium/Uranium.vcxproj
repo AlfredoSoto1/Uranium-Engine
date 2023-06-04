@@ -104,10 +104,12 @@
     <ClCompile Include="src\Graphics\Display\Monitor.cpp" />
     <ClCompile Include="src\Graphics\Display\Window.cpp" />
     <ClCompile Include="src\Graphics\Display\WindowProps.cpp" />
+    <ClCompile Include="src\Graphics\Materials\Assets.cpp" />
+    <ClCompile Include="src\Graphics\Materials\Material.cpp" />
     <ClCompile Include="src\Graphics\Meshes\Model.cpp" />
     <ClCompile Include="src\Graphics\Meshes\RigidBody.cpp" />
     <ClCompile Include="src\Graphics\Renderer\GroupRenderer.cpp" />
-    <ClCompile Include="src\Graphics\Renderer\Renderer.cpp" />
+    <ClCompile Include="src\Graphics\Renderer\SceneRenderer.cpp" />
     <ClCompile Include="src\Graphics\Shaders\Shader.cpp" />
     <ClCompile Include="src\Graphics\Shaders\ShaderMaterial.cpp" />
     <ClCompile Include="src\Graphics\Shaders\ShaderProgram.cpp" />
@@ -176,8 +178,8 @@
     <ClInclude Include="src\Graphics\Meshes\Model.h" />
     <ClInclude Include="src\Graphics\Meshes\RigidBody.h" />
     <ClInclude Include="src\Graphics\Renderer\GroupRenderer.h" />
-    <ClInclude Include="src\Graphics\Renderer\Renderable.h" />
-    <ClInclude Include="src\Graphics\Renderer\Renderer.h" />
+    <ClInclude Include="src\Graphics\Renderer\SceneRenderer.h" />
+    <ClInclude Include="src\Graphics\Shaders\LoadableShader.h" />
     <ClInclude Include="src\Graphics\Shaders\Shader.h" />
     <ClInclude Include="src\Graphics\Shaders\ShaderMaterial.h" />
     <ClInclude Include="src\Graphics\Shaders\ShaderProgram.h" />

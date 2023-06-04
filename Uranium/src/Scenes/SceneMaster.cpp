@@ -20,7 +20,7 @@ SceneMaster::SceneMaster(const std::shared_ptr<Window>& window) :
 }
 
 SceneMaster::~SceneMaster() {
-
+	
 }
 
 const std::shared_ptr<Scene>& SceneMaster::getCurrentScene() {

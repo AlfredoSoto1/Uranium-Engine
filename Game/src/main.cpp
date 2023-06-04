@@ -374,8 +374,7 @@
 #include "Graphics/Shaders/Shader.h"
 #include "Graphics/Shaders/ShaderProgram.h"
 
-#include "Graphics/Renderer/Renderer.h"
-#include "Graphics/Renderer/GroupRenderer.h"
+#include "Graphics/Renderer/SceneRenderer.h"
 
 using namespace Uranium::Scenes;
 using namespace Uranium::Core::Application;
@@ -388,8 +387,6 @@ using namespace Uranium::Graphics::Renderer;
 
 class MyScene : public Scene {
 public:
-
-	GroupRenderer* renderer;
 
 	ShaderProgram* program;
 
@@ -444,14 +441,11 @@ public:
 
 		program->setUniform("u_Color", color);
 
-		renderer = new GroupRenderer();
-
 	}
 
 	void unload() {
 		delete model;
 		delete program;
-		delete renderer;
 	}
 
 	/*
@@ -468,7 +462,7 @@ public:
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		glClearColor(0.1, 0.6, 0.85, 1.0);
 		
-		renderer->draw();
+		//getRenderer().drawCollection();
 	}
 };
 
