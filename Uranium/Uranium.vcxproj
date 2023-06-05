@@ -108,7 +108,7 @@
     <ClCompile Include="src\Graphics\Materials\Material.cpp" />
     <ClCompile Include="src\Graphics\Meshes\Model.cpp" />
     <ClCompile Include="src\Graphics\Meshes\RigidBody.cpp" />
-    <ClCompile Include="src\Graphics\Renderer\GroupRenderer.cpp" />
+    <ClCompile Include="src\Graphics\Renderer\RenderableObject.cpp" />
     <ClCompile Include="src\Graphics\Renderer\SceneRenderer.cpp" />
     <ClCompile Include="src\Graphics\Shaders\Shader.cpp" />
     <ClCompile Include="src\Graphics\Shaders\ShaderMaterial.cpp" />
@@ -177,7 +177,7 @@
     <ClInclude Include="src\Graphics\Materials\Material.h" />
     <ClInclude Include="src\Graphics\Meshes\Model.h" />
     <ClInclude Include="src\Graphics\Meshes\RigidBody.h" />
-    <ClInclude Include="src\Graphics\Renderer\GroupRenderer.h" />
+    <ClInclude Include="src\Graphics\Renderer\RenderableObject.h" />
     <ClInclude Include="src\Graphics\Renderer\SceneRenderer.h" />
     <ClInclude Include="src\Graphics\Shaders\LoadableShader.h" />
     <ClInclude Include="src\Graphics\Shaders\Shader.h" />
@@ -196,6 +196,7 @@
     <ClInclude Include="src\Scenes\Cameras\Camera.h" />
     <ClInclude Include="src\Scenes\Cameras\FPCamera.h" />
     <ClInclude Include="src\Scenes\Objects\Entity.h" />
+    <ClInclude Include="src\Scenes\Objects\EntityCollection.h" />
     <ClInclude Include="src\Scenes\Scene.h" />
     <ClInclude Include="src\Scenes\SceneMaster.h" />
     <ClInclude Include="src\STL_pch.h" />

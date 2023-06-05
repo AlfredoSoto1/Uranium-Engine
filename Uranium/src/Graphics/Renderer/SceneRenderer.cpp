@@ -58,7 +58,7 @@ void SceneRenderer::drawCollection(const DrawableCollection& drawableCollection)
 	shaderProgram->start();
 
 	// iterate over the group (model - entity list)
-	for (auto& [shadedModel, renderableObjectCollection] : drawableCollection) {
+	for (auto& [shadedModel, entities] : drawableCollection) {
 
 		// unpack references as const reference
 		// since we are not going to modify them
@@ -74,17 +74,23 @@ void SceneRenderer::drawCollection(const DrawableCollection& drawableCollection)
 		prepareRenderStates();
 
 		// iterate over all entities
-		for (auto& renderable : renderableObjectCollection) {
+		for (auto& entity : *entities) {
 
 			// update rigid body here (Temporarely, must be done in update() method/thread)
 			//entity.getRigidBody().update();
 
-			// load uniforms from entity
-			// transformation related
-			std::static_pointer_cast<LoadableShader>(renderable)->updateUniforms(shaderProgram);
+			// update entity's uniforms
+			std::static_pointer_cast<LoadableShader>(entity)->updateUniforms(shaderProgram);
 
-			// draw the entity
-			
+			// Draw model
+			if (renderOnWireframe) {
+				glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+				glDrawElements(GL_TRIANGLES, entity->getModel()->indexCount(), GL_UNSIGNED_INT, nullptr);
+				glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+			}
+			else {
+				glDrawElements(GL_TRIANGLES, entity->getModel()->indexCount(), GL_UNSIGNED_INT, nullptr);
+			}
 		}
 
 		// clean rendering states HERE
@@ -103,11 +109,11 @@ void SceneRenderer::drawCollection(const DrawableCollection& drawableCollection)
 }
 
 void SceneRenderer::prepareRenderStates() const {
-
+	glEnable(GL_DEPTH_TEST);
 }
 
 void SceneRenderer::cleanUpRenderStates() const {
-
+	glDisable(GL_DEPTH_TEST);
 }
 
 void SceneRenderer::bindShaderMaterial(std::shared_ptr<ShaderMaterial> shaderMaterial) const {

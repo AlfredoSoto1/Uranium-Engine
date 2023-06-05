@@ -376,6 +376,8 @@
 
 #include "Graphics/Renderer/SceneRenderer.h"
 
+#include "Cube.h"
+
 using namespace Uranium::Scenes;
 using namespace Uranium::Core::Application;
 using namespace Uranium::Core::Math;
@@ -441,6 +443,7 @@ public:
 
 		program->setUniform("u_Color", color);
 
+		
 	}
 
 	void unload() {
@@ -462,7 +465,7 @@ public:
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		glClearColor(0.1, 0.6, 0.85, 1.0);
 		
-		//getRenderer().drawCollection();
+		//getRenderer().drawCollection(entities);
 	}
 };
 

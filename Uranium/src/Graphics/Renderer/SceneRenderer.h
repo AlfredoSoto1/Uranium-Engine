@@ -53,9 +53,9 @@ namespace Uranium::Graphics::Renderer {
 		using LoadableShader = Shaders::LoadableShader;
 
 		using ShadedModel = std::pair<std::shared_ptr<Model>, std::shared_ptr<ShaderMaterial>>;
-		using EntityCollection = std::vector<std::shared_ptr<Entity>>;
+		using EntityCollection = std::shared_ptr<std::vector<std::shared_ptr<Entity>>>;
 
-		using DrawableCollection = std::unordered_map<ShadedModel, EntityCollection&>;
+		using DrawableCollection = std::unordered_map<ShadedModel, EntityCollection>;
 
 	public:
 		/*
