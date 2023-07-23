@@ -127,6 +127,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="src\Uranium\Core\Application.cpp" />
     <ClCompile Include="src\Vendor\stb_image.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -200,6 +201,12 @@
     <ClInclude Include="src\Scenes\Scene.h" />
     <ClInclude Include="src\Scenes\SceneMaster.h" />
     <ClInclude Include="src\STL_pch.h" />
+    <ClInclude Include="src\Uranium.h" />
+    <ClInclude Include="src\Uranium\Core\Application.h" />
+    <ClInclude Include="src\Uranium\Core\ApplicationThread.h" />
+    <ClInclude Include="src\Uranium\Core\ApplicationThreadPool.h" />
+    <ClInclude Include="src\Uranium\Core\EngineTools.h" />
+    <ClInclude Include="src\Uranium\Core\EntryPoint.h" />
     <ClInclude Include="src\Vendor\stb_image.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
