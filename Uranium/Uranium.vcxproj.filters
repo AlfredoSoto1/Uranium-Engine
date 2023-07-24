@@ -123,6 +123,9 @@
     <ClCompile Include="src\Uranium\Core\Application.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\Uranium\Core\Context.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\STL_pch.h">
@@ -350,10 +353,7 @@
     <ClInclude Include="src\Uranium\Core\EngineTools.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Uranium\Core\ApplicationThread.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Uranium\Core\ApplicationThreadPool.h">
+    <ClInclude Include="src\Uranium\Core\Context.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

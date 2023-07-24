@@ -511,14 +511,27 @@
 class MyGame : public Uranium::Core::Application {
 public:
 
+	using Context = Uranium::Core::Context;
+
+	std::shared_ptr<Context> context;
+
+	/*
+	* This constructor is the start of
+	* the main application.
+	*/
 	MyGame() :
 		Application()
 	{
-
+		start(context = std::make_shared<Context>());
 	}
 
+	/*
+	* This destructor is the end of the
+	* application where everything gets
+	* released from memory.
+	*/
 	~MyGame() {
-
+		dispose(context);
 	}
 };
 

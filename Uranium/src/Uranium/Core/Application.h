@@ -2,13 +2,15 @@
 
 namespace Uranium::Core {
 
-	class ApplicationThreadPool;
+	class Context;
 
 	/*
 	* 
 	*/
 	class Application {
 	public:
+		using thread = std::thread;
+
 		/*
 		* Declaration of the main
 		* application for the Uranium Engine
@@ -38,12 +40,15 @@ namespace Uranium::Core {
 		/*
 		* Public methods
 		*/
+		void start(std::shared_ptr<Context> context);
+		void dispose(std::shared_ptr<Context> context);
 
 	private:
 		/*
 		* Private modifiers
 		*/
-		ApplicationThreadPool* threadPool;
+		std::vector<std::shared_ptr<thread>> activeThreads;
+		std::vector<std::shared_ptr<Context>> activeContexts;
 
 	private:
 		/*

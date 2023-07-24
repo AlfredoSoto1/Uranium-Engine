@@ -128,6 +128,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="src\Uranium\Core\Application.cpp" />
+    <ClCompile Include="src\Uranium\Core\Context.cpp" />
     <ClCompile Include="src\Vendor\stb_image.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -203,8 +204,7 @@
     <ClInclude Include="src\STL_pch.h" />
     <ClInclude Include="src\Uranium.h" />
     <ClInclude Include="src\Uranium\Core\Application.h" />
-    <ClInclude Include="src\Uranium\Core\ApplicationThread.h" />
-    <ClInclude Include="src\Uranium\Core\ApplicationThreadPool.h" />
+    <ClInclude Include="src\Uranium\Core\Context.h" />
     <ClInclude Include="src\Uranium\Core\EngineTools.h" />
     <ClInclude Include="src\Uranium\Core\EntryPoint.h" />
     <ClInclude Include="src\Vendor\stb_image.h" />

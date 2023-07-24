@@ -14,6 +14,12 @@ namespace Uranium::Graphics::Display {
 	class Monitor;
 	class WindowProps;
 
+	/*
+	* Window class
+	* 
+	* This class creates an instance of 
+	* a window within a OpenGL (GLFW) context.
+	*/
 	class Window {
 	public:
 		/*
@@ -22,7 +28,15 @@ namespace Uranium::Graphics::Display {
 		using WindowCallback = Uranium::Input::Callbacks::WindowCallback;
 
 	public:
-		Window(const std::string& title, unsigned int width, unsigned int height);
+
+		// Single and unique Window constructor
+		// - title - as a String to be displayed at the top
+		// - width & height - dimensions of such window
+		explicit Window(const std::string& title, unsigned int width, unsigned int height);
+		
+		// Destruction and release of
+		// memory contained by 'this'
+		// Window instance.
 		virtual ~Window();
 
 		void setMonitor(std::shared_ptr<Monitor> monitor);
