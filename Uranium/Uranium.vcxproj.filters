@@ -126,6 +126,9 @@
     <ClCompile Include="src\Uranium\Core\Context.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\Uranium\Graphics\Display\Window.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\STL_pch.h">
@@ -354,6 +357,15 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Uranium\Core\Context.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Uranium\Graphics\Display\Window.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Uranium\utils\Dimension.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Uranium\utils\Position.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
