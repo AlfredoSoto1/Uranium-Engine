@@ -1,16 +1,56 @@
 #pragma once
 
+#include <memory>
+#include <thread>
+#include <vector>
+
+namespace Uranium::Graphics::Display {
+	class Monitor;
+}
+
+namespace Uranium::Callbacks {
+	class MonitorCallback;
+}
+
 namespace Uranium::Core {
 
-	class Context;
+	class EntryPoint;
 
 	/*
 	* 
 	*/
 	class Application {
 	public:
+		/*
+		* Custom alias
+		*/
 		using thread = std::thread;
+		using Monitor = Graphics::Display::Monitor;
+		using MonitorCallback = Callbacks::MonitorCallback;
 
+	public:
+		/*
+		* public static declarations
+		*/
+		static volatile bool isGLFWActive();
+		static volatile bool hasAppStarted();
+
+	private:
+		/*
+		* private static declarations
+		*/
+		static volatile bool glfwInitiated;
+		static volatile bool applicationStarted;
+
+		static void errorCallbackReceive(int error, const char* description);
+	
+	private:
+		/*
+		* Friend with other classes
+		*/
+		friend EntryPoint;
+
+	public:
 		/*
 		* Declaration of the main
 		* application for the Uranium Engine
@@ -33,27 +73,29 @@ namespace Uranium::Core {
 
 	public:
 		/*
-		* Public modifiers from Application
+		* public methods
 		*/
 
-	public:
-		/*
-		* Public methods
-		*/
-		void start(std::shared_ptr<Context> context);
-		void dispose(std::shared_ptr<Context> context);
+		// Returns a monitor
+		Monitor getPrimaryMonitor();
 
-	private:
-		/*
-		* Private modifiers
-		*/
-		std::vector<std::shared_ptr<thread>> activeThreads;
-		std::vector<std::shared_ptr<Context>> activeContexts;
+		// Return a vector containing all
+		// the connected monitors to the PC
+		// If no monitors are connected, vector will be empty
+		std::vector<Monitor> getConnectedMonitors();
 
 	private:
 		/*
-		* Private methods
+		* private methods
 		*/
+		void run();
 
+		void createCallbacks();
+
+	private:
+		/*
+		* private members
+		*/
+		MonitorCallback* monitorCallback;
 	};
 }

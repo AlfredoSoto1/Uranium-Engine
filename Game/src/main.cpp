@@ -511,9 +511,16 @@
 class MyGame : public Uranium::Core::Application {
 public:
 
-	using Context = Uranium::Core::Context;
+	using Position = Uranium::Utils::Position;
+	using Dimension = Uranium::Utils::Dimension;
 
-	std::shared_ptr<Context> context;
+	using Window = Uranium::Graphics::Display::Window;
+	using WindowMode = Uranium::Graphics::Display::WindowMode;
+	using WindowProps = Uranium::Graphics::Display::WindowProps;
+	
+	using Monitor = Uranium::Graphics::Display::Monitor;
+
+	std::shared_ptr<Window> window;
 
 	/*
 	* This constructor is the start of
@@ -522,7 +529,15 @@ public:
 	MyGame() :
 		Application()
 	{
-		start(context = std::make_shared<Context>());
+		WindowProps props;
+
+		props.title = "First window display";
+		props.position = Position(0, 0);
+		props.dimension = Dimension(1280, 70);
+
+		WindowMode winMode;
+
+		window = std::make_shared<Window>(props, winMode, Application::getPrimaryMonitor());
 	}
 
 	/*
@@ -531,7 +546,7 @@ public:
 	* released from memory.
 	*/
 	~MyGame() {
-		dispose(context);
+		
 	}
 };
 

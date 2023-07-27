@@ -12,16 +12,44 @@ namespace Uranium {
 // application.
 extern Uranium::Core::Application* Uranium::createApplication();
 
+namespace Uranium::Core {
+	
+	// Application declaration
+	class Application;
+
+	/*
+	* EntryPoint class
+	*/
+	class EntryPoint {
+	public:
+		// Application ptr
+		Application* application;
+		
+		EntryPoint() {
+			// Call the defined in client entry point
+			// to launch the application
+			application = Uranium::createApplication();
+		}
+		
+		~EntryPoint() {
+			// Free all resources allocated by the application
+			delete application;
+		}
+
+		void start() {
+			// Run application
+			application->run();
+		}
+	};
+}
+
 // Create and define entry point for the main
 // engine framework.
 auto main() -> int {
 
-	// Call the defined in client entry point
-	// to launch the application
-	auto application = Uranium::createApplication();
-	
-	// Free all resources allocated by the application
-	delete application;
+	Uranium::Core::EntryPoint entryPoint;
+
+	entryPoint.start();
 }
 
 #endif

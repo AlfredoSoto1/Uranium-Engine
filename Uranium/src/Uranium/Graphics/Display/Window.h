@@ -1,30 +1,24 @@
 #pragma once
 
-#include <string>
-
-#include "Uranium/Utils/Position.h"
-#include "Uranium/Utils/Dimension.h"
+#include "Monitor.h"
+#include "WindowHint.h"
+#include "WindowMode.h"
+#include "WindowProps.h"
 
 struct GLFWwindow;
 
-namespace Uranium::Utils {
-	struct Position;
-	struct Dimension;
-}
-
 namespace Uranium::Graphics::Display {
+
+	class Monitor;
+	class WindowMode;
+	class WindowProps;
+	enum class WindowHint;
+
 	/*
 	* Window class
 	* 
 	*/
 	class Window {
-	public:
-		/*
-		* custom alias
-		*/
-		using Position = Uranium::Utils::Position;
-		using Dimension = Uranium::Utils::Dimension;
-
 	public:
 		/*
 		* Minimun and maximum default dimensions
@@ -34,96 +28,53 @@ namespace Uranium::Graphics::Display {
 		static const unsigned int MIN_HEIGHT = 180;
 
 	public:
-		// 
-		// Explicit creation of a window inside a context
-		// + title - Title as string on top of window
-		// + width/height representing the window Dimensions
-		//
-		explicit Window(const std::string& title, unsigned int width, unsigned int height);
+		explicit Window(
+			const WindowProps& windowProps,
+			const WindowMode& windowMode,
+			const Monitor& monitor
+		);
 		
 		~Window();
 
+		void create();
+		void dispose();
+
+		void setHint(const WindowHint& hint);
+
 	public:
 		/*
-		* Setters
+		* Public methods that can
+		* be called without window
+		* creation.
 		*/
-		//void setMonitor();
-
-		void setTitle(const std::string& title);
-
-		void setSize(const Dimension& dimension);
-		void setPosition(const Position& position);
-		void setFullscreen(const Dimension& dimension);
-
-		void setVisible(bool isVisible);
-		void setResizable(bool isResizable);
-		void setDecorated(bool isDecorated);
-		void setAlwaysOnTop(bool isAlwaysOnTop);
-
-		void setTransparency(unsigned int transparency);
-		
-	public:
-		/*
-		* Window-action methods
-		*/
-		void close();
-		void focus();			
 		void restore();			
 		void maximize();		
 		void minimize();		
-		void centerWindow();	
+		void fullscreen();
+
+		bool hasResized();
+
+	public:
+		/*
+		* Public methods that cannot
+		* be called without window being
+		* created first.
+		*/
+		void close();
+		void focus();			
+		void centerWindow();
 		void requestAttention();
-
-	public:
-		/*
-		* Getters
-		*/
-		auto getSize() -> Dimension;
-		auto getPosition() -> Position;
-
-		unsigned int getTransparency();
-
-	public:
-		/*
-		* Result of actions
-		*/
-		bool hasClosed();
-
-		bool isRestored();		 
-		bool isMaximized();		 
-		bool isMinimized();	
-
-		bool isVisible();		 
-		bool isResizable();		 
-		bool isDecorated();		 
-		bool isFullscreen();	 
-		bool isAlwaysOnTop();	 
 
 	private:
 		/*
 		* Private members
 		*/
-		GLFWwindow* windowContext;
+		GLFWwindow* glWindow;
+		
+		Monitor monitor;
+		WindowMode windowMode;
+		WindowProps windowProps;
 
-		std::string title;
-
-		Position position;
-		Dimension dimension;
-
-		unsigned int transparency;
-
-		bool is_Visible;
-		bool is_Resizable;
-		bool is_Decorated;
-		bool is_Fullscreen;
-		bool is_AlwaysOnTop;
-
-		bool is_Maximized;
-		bool is_Minimized;
-
-	private:
-		/*
-		* Private methods
-		*/
+		bool resized;
 	};
 }
