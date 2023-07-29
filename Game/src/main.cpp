@@ -530,14 +530,21 @@ public:
 		Application()
 	{
 		WindowProps props;
-
 		props.title = "First window display";
 		props.position = Position(0, 0);
-		props.dimension = Dimension(1280, 70);
+		//props.dimension = Dimension(1280, 720);
 
 		WindowMode winMode;
+		winMode.visible = true;
+		winMode.resizable = true;
+		winMode.decorated = true;
+		winMode.alwaysOnTop = false;
 
-		window = std::make_shared<Window>(props, winMode, Application::getPrimaryMonitor());
+		window = std::make_shared<Window>(props, winMode);
+
+		// register window to display it
+		registerWindow(window);
+		registerWindow(std::make_shared<Window>(props, winMode));
 	}
 
 	/*

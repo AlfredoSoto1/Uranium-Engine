@@ -6,7 +6,11 @@
 #include "WindowHint.h"
 #include "WindowMode.h"
 #include "WindowProps.h"
+
+#include "Monitor.h"
+
 #include "Uranium/Utils/Dimension.h"
+
 #include "Uranium/Core/EngineTools.h"
 #include "Uranium/Core/Application.h"
 
@@ -15,8 +19,9 @@ namespace Uranium::Graphics::Display {
 	// 
 	// Window - private defined error messages
 	// 
+	constexpr const char* DISPOSED_ALREADY = "'this' window has been disposed already.";
 	constexpr const char* NO_CONTEXT_ERROR = "'this' window has no GLFW context.";
-	constexpr const char* FAILED_GLEW_INIT = "Failed to initiate GLEW.";
+	constexpr const char* NO_MONITOR_CONNECTED = "There should be atleast one monitor connected";
 	constexpr const char* FAILED_WINDOW_CREATION = "Window could not be created.";
 	constexpr const char* OUT_OF_APPLICATION_SCOPE = "Window must be created inside the application.";
 
@@ -24,18 +29,18 @@ namespace Uranium::Graphics::Display {
 	// Window class implementation
 	// 
 
-	Window::Window(const WindowProps& windowProps, const WindowMode& windowMode, const Monitor& monitor) :
+	Window::Window(const WindowProps& windowProps, const WindowMode& windowMode) :
 		glWindow(nullptr),
-		monitor(monitor),
 		windowMode(windowMode),
 		windowProps(windowProps),
 
-		resized(false)
+		resized(false),
+		hasDisposed(false)
 	{
 		// 
 		// Prepare default window hints
 		// 
-		debug_break(not Core::Application::isGLFWActive(), OUT_OF_APPLICATION_SCOPE);
+		debug_break(not Core::Application::instance()->isGLFWActive(), OUT_OF_APPLICATION_SCOPE);
 
 		glfwDefaultWindowHints();
 
@@ -56,10 +61,12 @@ namespace Uranium::Graphics::Display {
 	}
 
 	Window::~Window() {
+		if (hasDisposed)
+			return;
 		dispose();
 	}
 
-	void Window::create() {
+	void Window::build() {
 		// Create a GLFW window with the given parameters
 		glWindow = glfwCreateWindow(windowProps.dimension.width, windowProps.dimension.height, windowProps.title.c_str(), nullptr, nullptr);
 
@@ -86,23 +93,14 @@ namespace Uranium::Graphics::Display {
 		//if (windowProps.opacity < 100)
 		//	windowProps->setWindowTransparency(windowProps->getWindowTransparency());
 
-		glfwMakeContextCurrent(glWindow);
-		
 		glfwShowWindow(glWindow);
-
-		glfwSwapInterval(0); // No g-sync
-
-		if (glewInit() != GLEW_OK) {
-			dispose();
-			throw std::exception(FAILED_GLEW_INIT);
-		}
-
-		print_status(glGetString(GL_VERSION));
-
-		glViewport(0, 0, windowProps.dimension.width, windowProps.dimension.height);
 	}
 
 	void Window::dispose() {
+		if (hasDisposed)
+			throw std::exception(DISPOSED_ALREADY);
+		hasDisposed = true;
+		glfwHideWindow(glWindow);
 		glfwDestroyWindow(glWindow);
 	}
 
@@ -128,12 +126,15 @@ namespace Uranium::Graphics::Display {
 		if (glWindow) glfwIconifyWindow(glWindow);
 	}
 
-	void Window::fullscreen() {
+	void Window::fullscreen(const Monitor& monitor) {
 		// Set the window mode flag to fullscreen
 		windowMode.fullscreen = true;
 		
 		if (not glWindow)
 			return;
+
+		if (not monitor.isConnected())
+			throw std::invalid_argument(NO_MONITOR_CONNECTED);
 
 		int xpos;
 		int ypos;
@@ -142,7 +143,7 @@ namespace Uranium::Graphics::Display {
 		windowProps.position.x = xpos;
 		windowProps.position.y = ypos;
 
-		if (windowMode.fullscreen && monitor != nullptr)
+		if (windowMode.fullscreen)
 			// make window fullscreen with:
 			glfwSetWindowMonitor(
 				glWindow,
@@ -181,23 +182,30 @@ namespace Uranium::Graphics::Display {
 		glfwFocusWindow(glWindow);
 	}
 
-	void Window::centerWindow() {
+	void Window::requestAttention() {
+		debug_break(not glWindow, NO_CONTEXT_ERROR);
+		glfwRequestWindowAttention(glWindow);
+	}
 
-		if (not glWindow)
-			debug_break(not glWindow, NO_CONTEXT_ERROR);
+	void Window::centerWindow(const Monitor& monitor) {
+
+		debug_break(not glWindow, NO_CONTEXT_ERROR);
+
+		if (not monitor.isConnected())
+			throw std::invalid_argument(NO_MONITOR_CONNECTED);
 
 		// If no monitor is present, or is maximized or minimized
 		// there is no need to update the window position since
 		// there is not going to be visible if any of these conditions happen
-		if (monitor == nullptr or windowMode.maximized or windowMode.minimized)
+		if (windowMode.maximized or windowMode.minimized)
 			return;
 
 		const Utils::Dimension& windowDimensions = windowProps.dimension;
-		const Utils::Dimension& monitorDimensions = monitor.getDimensions();
+		const Utils::Dimension& monitorResolution = monitor.getResolution();
 
 		// calculate relative position retlative to center
-		int newPositionX = (monitorDimensions.width - windowDimensions.width) / 2;
-		int newPositionY = (monitorDimensions.height - windowDimensions.height) / 2;
+		int newPositionX = (monitorResolution.width - windowDimensions.width) / 2;
+		int newPositionY = (monitorResolution.height - windowDimensions.height) / 2;
 
 		// set new position to Props. and update GLFW window
 		windowProps.position.x = newPositionX;
@@ -205,8 +213,20 @@ namespace Uranium::Graphics::Display {
 		glfwSetWindowPos(glWindow, newPositionX, newPositionY);
 	}
 
-	void Window::requestAttention() {
+	bool Window::isCurrent() {
 		debug_break(not glWindow, NO_CONTEXT_ERROR);
-		glfwRequestWindowAttention(glWindow);
+		// Returns true if the current context
+		// is the same as 'this' glWindow
+		return glfwGetCurrentContext() == glWindow;
+	}
+
+	bool Window::shouldClose() {
+		debug_break(not glWindow, NO_CONTEXT_ERROR);
+		return glfwWindowShouldClose(glWindow);
+	}
+
+	Window::operator GLFWwindow* () const {
+		debug_break(not glWindow, NO_CONTEXT_ERROR);
+		return glWindow;
 	}
 }

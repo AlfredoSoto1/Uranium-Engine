@@ -1,11 +1,13 @@
 #pragma once
 
-#include "Monitor.h"
-#include "WindowHint.h"
 #include "WindowMode.h"
 #include "WindowProps.h"
 
 struct GLFWwindow;
+
+namespace Uranium::Core {
+	class Application;
+}
 
 namespace Uranium::Graphics::Display {
 
@@ -21,6 +23,12 @@ namespace Uranium::Graphics::Display {
 	class Window {
 	public:
 		/*
+		* Custom alias
+		*/
+		using Application = Core::Application;
+
+	public:
+		/*
 		* Minimun and maximum default dimensions
 		* for a window when resizing and creation
 		*/
@@ -30,14 +38,10 @@ namespace Uranium::Graphics::Display {
 	public:
 		explicit Window(
 			const WindowProps& windowProps,
-			const WindowMode& windowMode,
-			const Monitor& monitor
+			const WindowMode& windowMode
 		);
 		
 		~Window();
-
-		void create();
-		void dispose();
 
 		void setHint(const WindowHint& hint);
 
@@ -50,7 +54,8 @@ namespace Uranium::Graphics::Display {
 		void restore();			
 		void maximize();		
 		void minimize();		
-		void fullscreen();
+
+		void fullscreen(const Monitor& monitor);
 
 		bool hasResized();
 
@@ -62,8 +67,27 @@ namespace Uranium::Graphics::Display {
 		*/
 		void close();
 		void focus();			
-		void centerWindow();
 		void requestAttention();
+
+		void centerWindow(const Monitor& monitor);
+
+		bool isCurrent();
+		bool shouldClose();
+
+		operator GLFWwindow* () const;
+
+	private:
+		/*
+		* friends with other classes
+		*/
+		friend Application;
+
+	private:
+		/*
+		* Private methods
+		*/
+		void build();
+		void dispose();
 
 	private:
 		/*
@@ -71,10 +95,10 @@ namespace Uranium::Graphics::Display {
 		*/
 		GLFWwindow* glWindow;
 		
-		Monitor monitor;
 		WindowMode windowMode;
 		WindowProps windowProps;
 
 		bool resized;
+		bool hasDisposed;
 	};
 }

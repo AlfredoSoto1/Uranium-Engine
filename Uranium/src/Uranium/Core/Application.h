@@ -1,15 +1,16 @@
 #pragma once
 
 #include <memory>
+#include <mutex>
 #include <thread>
 #include <vector>
 
 namespace Uranium::Graphics::Display {
+	class Window;
 	class Monitor;
 }
 
 namespace Uranium::Callbacks {
-	class MonitorCallback;
 }
 
 namespace Uranium::Core {
@@ -24,32 +25,25 @@ namespace Uranium::Core {
 		/*
 		* Custom alias
 		*/
-		using thread = std::thread;
+		using Thread = std::thread;
+		using Window = Graphics::Display::Window;
 		using Monitor = Graphics::Display::Monitor;
-		using MonitorCallback = Callbacks::MonitorCallback;
 
 	public:
 		/*
 		* public static declarations
 		*/
-		static volatile bool isGLFWActive();
-		static volatile bool hasAppStarted();
+		static Application* instance();
 
 	private:
 		/*
 		* private static declarations
 		*/
-		static volatile bool glfwInitiated;
-		static volatile bool applicationStarted;
-
+		static Application* instanceReference;
+		
+		// Delaration of glfw error callback
 		static void errorCallbackReceive(int error, const char* description);
-	
-	private:
-		/*
-		* Friend with other classes
-		*/
-		friend EntryPoint;
-
+		
 	public:
 		/*
 		* Declaration of the main
@@ -73,29 +67,44 @@ namespace Uranium::Core {
 
 	public:
 		/*
-		* public methods
+		* public members
 		*/
+		volatile bool isGLFWActive();
+		volatile bool hasAppStarted();
 
-		// Returns a monitor
-		Monitor getPrimaryMonitor();
+		void exit();
 
-		// Return a vector containing all
-		// the connected monitors to the PC
-		// If no monitors are connected, vector will be empty
-		std::vector<Monitor> getConnectedMonitors();
+		void registerWindow(std::shared_ptr<Window> window);
+
+	private:
+		/*
+		* Friend with other classes
+		*/
+		friend Window;
+		friend EntryPoint;
 
 	private:
 		/*
 		* private methods
 		*/
+		void createCallbacks();
+
 		void run();
 
-		void createCallbacks();
+		void update(std::shared_ptr<Window> window);
 
 	private:
 		/*
 		* private members
 		*/
-		MonitorCallback* monitorCallback;
+		volatile bool exitRequested;
+		volatile bool glfwInitiated;
+		volatile bool applicationRunning;
+
+		unsigned int activeContexts;
+
+		std::mutex contextMutex;
+
+		std::vector<std::shared_ptr<Thread>> activeThreads;
 	};
 }

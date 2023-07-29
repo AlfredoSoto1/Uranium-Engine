@@ -9,7 +9,7 @@ namespace Uranium::Graphics::Display {
 		/*
 		* Window props constructors
 		*/
-		WindowMode() :
+		explicit WindowMode() :
 			visible(true),
 			resizable(true),
 			decorated(true),

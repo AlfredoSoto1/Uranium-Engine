@@ -1,14 +1,9 @@
 #pragma once
 
 #include <vector>
-#include <memory>
 
 struct GLFWmonitor;
 struct GLFWvidmode;
-
-namespace Uranium::Core {
-	class Application;
-}
 
 namespace Uranium::Utils {
 	struct Dimension;
@@ -26,7 +21,15 @@ namespace Uranium::Graphics::Display {
 		* custom alias
 		*/
 		using Dimension = Utils::Dimension;
-		using Application = Core::Application;
+
+	public:
+		// Returns the primary monitor if any
+		static Monitor getPrimaryMonitor();
+
+		// Return a vector containing all
+		// the connected monitors to the PC
+		// If no monitors are connected, vector will be empty
+		static std::vector<Monitor> getConnectedMonitors();
 
 	public:
 		// Delete the Monitor() constructor
@@ -36,19 +39,18 @@ namespace Uranium::Graphics::Display {
 
 		// Convert an instance to a
 		// GLFWmonitor pointer
-		operator GLFWmonitor* ();
+		operator GLFWmonitor* () const;
 
-		bool isConnected();
+		// Returns true if the current
+		// instance is connected.
+		bool isConnected() const;
 
-		int getRefreshRate();
+		// Returns the monitor refreshrate in hz
+		int getRefreshRate() const;
 
-		Dimension getDimensions();
-
-	private:
-		/*
-		* firends with other classes
-		*/
-		friend Application;
+		// Returns the resolution of
+		// the connected monitor
+		Dimension getResolution() const;
 
 	private:
 		/*
