@@ -14,7 +14,6 @@ namespace Uranium::Graphics::Display {
 	class Monitor;
 	class WindowMode;
 	class WindowProps;
-	enum class WindowHint;
 
 	/*
 	* Window class
@@ -43,8 +42,6 @@ namespace Uranium::Graphics::Display {
 		
 		~Window();
 
-		void setHint(const WindowHint& hint);
-
 	public:
 		/*
 		* Public methods that can
@@ -58,7 +55,7 @@ namespace Uranium::Graphics::Display {
 		void fullscreen(const Monitor& monitor);
 
 		bool hasResized();
-
+		
 	public:
 		/*
 		* Public methods that cannot

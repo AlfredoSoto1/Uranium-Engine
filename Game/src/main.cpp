@@ -530,6 +530,9 @@ public:
 		Application()
 	{
 		WindowProps props;
+
+		props.set(WindowProps::PropHint::TITLE, "New Title window");
+
 		props.title = "First window display";
 		props.position = Position(0, 0);
 		//props.dimension = Dimension(1280, 720);

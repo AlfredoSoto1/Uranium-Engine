@@ -132,6 +132,9 @@
     <ClCompile Include="src\Uranium\Graphics\Display\Monitor.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\Uranium\Graphics\Display\WindowProps.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\STL_pch.h">
@@ -374,13 +377,13 @@
     <ClInclude Include="src\Uranium\Graphics\Display\WindowProps.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Uranium\Graphics\Display\WindowHint.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="src\Uranium\Graphics\Display\WindowMode.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Uranium\Graphics\Display\Monitor.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Uranium\Callbacks\WindowCallback.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

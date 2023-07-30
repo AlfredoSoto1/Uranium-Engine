@@ -3,7 +3,6 @@
 #include <GLFW/glfw3.h>
 
 #include "Window.h"
-#include "WindowHint.h"
 #include "WindowMode.h"
 #include "WindowProps.h"
 
@@ -102,10 +101,6 @@ namespace Uranium::Graphics::Display {
 		hasDisposed = true;
 		glfwHideWindow(glWindow);
 		glfwDestroyWindow(glWindow);
-	}
-
-	void Window::setHint(const WindowHint& hint) {
-
 	}
 
 	void Window::restore() {

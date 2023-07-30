@@ -152,7 +152,6 @@ namespace Uranium::Core {
 
 		while (not window->shouldClose() && not exitRequested) {
 			
-
 			// check if window has resized
 			int width, height;
 			glfwGetFramebufferSize(*window, &width, &height);
