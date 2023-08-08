@@ -521,6 +521,7 @@ public:
 	using Monitor = Uranium::Graphics::Display::Monitor;
 
 	std::shared_ptr<Window> window;
+	std::shared_ptr<Window> second;
 
 	/*
 	* This constructor is the start of
@@ -529,25 +530,37 @@ public:
 	MyGame() :
 		Application()
 	{
-		WindowProps props;
 
-		props.set(WindowProps::PropHint::TITLE, "New Title window");
+		Monitor monitor = Monitor::getPrimary();
 
-		props.title = "First window display";
-		props.position = Position(0, 0);
-		//props.dimension = Dimension(1280, 720);
+		window = std::make_shared<Window>();
+		second = std::make_shared<Window>();
 
-		WindowMode winMode;
-		winMode.visible = true;
-		winMode.resizable = true;
-		winMode.decorated = true;
-		winMode.alwaysOnTop = false;
+		WindowProps& props = window->getProps();
+		WindowProps& secon = second->getProps();
 
-		window = std::make_shared<Window>(props, winMode);
+		props.setTitle("First Window Display :) 1");
+		props.setPosition(Position(0, 0));
+
+		secon.setTitle("First Window Display :) 2");
+		secon.setPosition(Position(0, 0));
+
+		WindowMode& winMode1 = window->getModes();
+		WindowMode& winMode2 = second->getModes();
+
+		winMode1.setVisible(true);
+		winMode1.setResizable(true);
+		winMode1.setDecorated(true);
+		winMode1.setAlwaysOnTop(true);
+
+		winMode2.setVisible(true);
+		winMode2.setResizable(true);
+		winMode2.setDecorated(true);
+		winMode2.setAlwaysOnTop(true);
 
 		// register window to display it
 		registerWindow(window);
-		registerWindow(std::make_shared<Window>(props, winMode));
+		registerWindow(second);
 	}
 
 	/*

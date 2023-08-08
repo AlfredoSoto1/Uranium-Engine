@@ -127,10 +127,12 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="src\Uranium\Callbacks\MonitorCallback.cpp" />
     <ClCompile Include="src\Uranium\Core\Application.cpp" />
     <ClCompile Include="src\Uranium\Core\WorkingUnit.cpp" />
     <ClCompile Include="src\Uranium\Graphics\Display\Monitor.cpp" />
     <ClCompile Include="src\Uranium\Graphics\Display\Window.cpp" />
+    <ClCompile Include="src\Uranium\Graphics\Display\WindowMode.cpp" />
     <ClCompile Include="src\Uranium\Graphics\Display\WindowProps.cpp" />
     <ClCompile Include="src\Vendor\stb_image.cpp" />
   </ItemGroup>
@@ -206,6 +208,7 @@
     <ClInclude Include="src\Scenes\SceneMaster.h" />
     <ClInclude Include="src\STL_pch.h" />
     <ClInclude Include="src\Uranium.h" />
+    <ClInclude Include="src\Uranium\Callbacks\MonitorCallback.h" />
     <ClInclude Include="src\Uranium\Callbacks\WindowCallback.h" />
     <ClInclude Include="src\Uranium\Core\Application.h" />
     <ClInclude Include="src\Uranium\Core\WorkingUnit.h" />

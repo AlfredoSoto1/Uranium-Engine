@@ -1,29 +1,68 @@
 #pragma once
 
-#include <string>
+struct GLFWwindow;
 
 namespace Uranium::Graphics::Display {
 
+	class Window;
+	class Monitor;
+
+	/*
+	* Window Modes blueprint
+	*/
 	class WindowMode {
 	public:
 		/*
-		* Window props constructors
+		* public setter modes
 		*/
-		explicit WindowMode() :
-			visible(true),
-			resizable(true),
-			decorated(true),
-			fullscreen(false),
-			alwaysOnTop(false),
+		void setVisible(bool visible);
+		void setResizable(bool resizable);
+		void setDecorated(bool decorated);
+		void setAlwaysOnTop(bool alwaysOnTop);
 
-			maximized(false),
-			minimized(false)
-		{
-		}
+		void setFullscreen(const Monitor& monitor);
 
 	public:
 		/*
-		* Public modes
+		* Public methods that can
+		* be called without window
+		* creation.
+		*/
+		void restore();
+		void maximize();
+		void minimize();
+
+	public:
+		/*
+		* public getters
+		*/
+		inline bool hasResized() const;
+
+	private:
+		/*
+		* Friends with other classes
+		*/
+		friend Window;
+
+	private:
+		/*
+		* Private Mode constructor
+		*/
+		explicit WindowMode();
+
+		void initDefault() const;
+
+	private:
+		/*
+		* private members
+		*/
+		bool resized;
+
+		GLFWwindow* glWindow;
+
+	private:
+		/*
+		* Private modes
 		*/
 		bool visible;
 		bool resizable;

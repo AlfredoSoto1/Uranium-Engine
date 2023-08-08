@@ -23,13 +23,10 @@ namespace Uranium::Graphics::Display {
 		using Dimension = Utils::Dimension;
 
 	public:
-		// Returns the primary monitor if any
-		static Monitor getPrimaryMonitor();
 
-		// Return a vector containing all
-		// the connected monitors to the PC
-		// If no monitors are connected, vector will be empty
-		static std::vector<Monitor> getConnectedMonitors();
+		static Monitor getPrimary();
+
+		static std::vector<Monitor> allConnected();
 
 	public:
 		// Delete the Monitor() constructor

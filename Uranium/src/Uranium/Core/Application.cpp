@@ -11,6 +11,8 @@
 #include "WorkingUnit.h"
 #include "Application.h"
 
+#include "Uranium/Callbacks/WindowCallback.h"
+
 #include "Uranium/Graphics/Display/Window.h"
 #include "Uranium/Graphics/Display/Monitor.h"
 
@@ -28,6 +30,8 @@ namespace Uranium::Core {
 		applicationRunning(false),
 
 		activeContexts(0),
+
+		windowCallback(nullptr),
 
 		contextMutex(),
 		activeThreads()
@@ -51,6 +55,8 @@ namespace Uranium::Core {
 		// delete callbacks here
 
 		activeThreads.clear();
+
+		disposeCallbacks();
 
 		// Terminate the GLFW just before
 		// the application ends.
@@ -78,7 +84,11 @@ namespace Uranium::Core {
 	}
 
 	void Application::createCallbacks() {
+		windowCallback = new WindowCallback();
+	}
 
+	void Application::disposeCallbacks() {
+		delete windowCallback;
 	}
 
 	void Application::run() {

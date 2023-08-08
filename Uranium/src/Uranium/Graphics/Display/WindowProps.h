@@ -1,7 +1,6 @@
 #pragma once
 
 #include <string>
-#include <type_traits>
 
 #include "Uranium/Utils/Position.h"
 #include "Uranium/Utils/Dimension.h"
@@ -15,6 +14,13 @@ namespace Uranium::Utils {
 
 namespace Uranium::Graphics::Display {
 
+	class Window;
+	class WindowMode;
+
+	/*
+	* Window Properties blueprint
+	* 
+	*/
 	class WindowProps {
 	public:
 		/*
@@ -33,80 +39,55 @@ namespace Uranium::Graphics::Display {
 		static constexpr unsigned int MIN_WIDTH = 320;
 		static constexpr unsigned int MIN_HEIGHT = 180;
 
-		enum class PropHint {
-			TITLE,
-			POSITION,
-			DIMENSION,
-			ASPECT_RATIO,
+	public:
+		/*
+		* public methods
+		*/
+		void setGLVersion(unsigned int mayor, unsigned int minor);
 
-			ICON,
-			OPACITY,
-		};
+		void setTitle(const std::string& title);
+
+		void setOpacity(unsigned int opacity);
+		void setPosition(const Position& position);
+		void setDimension(const Dimension& dimension);
+		void setResolution(const Dimension& resolution);
 
 	public:
 		/*
-		* Window props constructors
+		* Public getters
 		*/
-		explicit WindowProps() : 
-			mayorGLVersion(3),
-			minorGLVersion(3),
+		std::string getTitle() const;
 
-			glWindow(nullptr),
+		unsigned int getMayorGLVersion() const;
+		unsigned int getMinorGLVersion() const;
 
-			title("Uranium Engine"),
+		inline unsigned int getOpacity() const;
 
-			opacity(100),
-			position(0, 0),
-			dimension(MIN_WIDTH, MIN_HEIGHT)
-		{
-		}
-
-		// Resolve at compile time using templates
-		// Compare the type-V entered and call the
-		// corresponding method that matches its type
-		template<typename V> void set(const PropHint& hint, const V& value) {
-			if constexpr (std::is_same<V, int>::value)
-				setInt(hint, value);
-			else if constexpr (std::is_same<V, Position>::value)
-				setPosition(value);
-			else if constexpr (std::is_same<V, Dimension>::value)
-				setDimension(hint, value);
-			else if constexpr (std::is_same<V, std::string>::value)
-				setTitle(value);
-			else
-				static_assert(
-					std::is_same<V, int>::value         ||
-					std::is_same<V, Position>::value    ||
-					std::is_same<V, Dimension>::value   ||
-					std::is_same<V, std::string>::value,
-					"Incompatible type as parameter"
-				);
-		}
-
-		// Specialization for handling const char[]
-		template<std::size_t N> void set(const PropHint& hint, const char(&value)[N]) {
-			set(hint, std::string(value));
-		}
+		Position& getPosition();
+		Dimension& getDimension();
+		Dimension& getResolution();
 
 	private:
 		/*
-		* Private methods
+		* Friends with other classes
 		*/
-		void setInt(const PropHint& hint, int integerValue);
+		friend Window;
 
-		void setTitle(const std::string& title);
-		void setPosition(const Position& position);
-		void setDimension(const PropHint& hint, const Dimension& dimension);
-
-	public:
+	private:
 		/*
-		* public props
+		* Non visible constructor
+		*/
+		explicit WindowProps();
+		
+		void initDefault() const;
+
+	private:
+		/*
+		* private members
 		*/
 		unsigned int mayorGLVersion;
 		unsigned int minorGLVersion;
 
-		// Current bound window for 'this'
-		// WindowProps instance
 		GLFWwindow* glWindow;
 
 		std::string title;
@@ -115,5 +96,6 @@ namespace Uranium::Graphics::Display {
 
 		Position position;
 		Dimension dimension;
+		Dimension resolution;
 	};
 }

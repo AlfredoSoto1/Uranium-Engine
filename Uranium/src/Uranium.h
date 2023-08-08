@@ -11,6 +11,9 @@
 // Import engine tools
 #include "Uranium/Core/EngineTools.h"
 
+// Import Callbacks
+#include "Uranium/Callbacks/WindowCallback.h"
+
 // Import Graphics essentials
 #include "Uranium/Graphics/Display/Monitor.h"
 #include "Uranium/Graphics/Display/Window.h"

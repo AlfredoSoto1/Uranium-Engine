@@ -35,27 +35,13 @@ namespace Uranium::Graphics::Display {
 		static const unsigned int MIN_HEIGHT = 180;
 
 	public:
-		explicit Window(
-			const WindowProps& windowProps,
-			const WindowMode& windowMode
-		);
+		explicit Window();
 		
 		~Window();
 
-	public:
-		/*
-		* Public methods that can
-		* be called without window
-		* creation.
-		*/
-		void restore();			
-		void maximize();		
-		void minimize();		
+		WindowMode& getModes();
+		WindowProps& getProps();
 
-		void fullscreen(const Monitor& monitor);
-
-		bool hasResized();
-		
 	public:
 		/*
 		* Public methods that cannot
@@ -90,12 +76,11 @@ namespace Uranium::Graphics::Display {
 		/*
 		* Private members
 		*/
+		bool hasDisposed;
+
 		GLFWwindow* glWindow;
 		
 		WindowMode windowMode;
 		WindowProps windowProps;
-
-		bool resized;
-		bool hasDisposed;
 	};
 }

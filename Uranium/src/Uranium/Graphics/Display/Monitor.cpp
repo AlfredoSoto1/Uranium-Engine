@@ -5,7 +5,13 @@
 
 namespace Uranium::Graphics::Display {
 
-	std::vector<Monitor> Monitor::getConnectedMonitors() {
+	Monitor Monitor::getPrimary() {
+		// Returns a new Monitor object containing
+		// all data from the primary monitor
+		return Monitor(glfwGetPrimaryMonitor());
+	}
+
+	std::vector<Monitor> Monitor::allConnected() {
 		// Obtain the monitor count that GLFW provides
 		int monitorCount;
 		// Retrieve a C array from GLFW 
@@ -18,12 +24,6 @@ namespace Uranium::Graphics::Display {
 		for (int i = 0; i < monitorCount; i++)
 			connectedMonitors.push_back(Monitor(monitors[i]));
 		return connectedMonitors;
-	}
-
-	Monitor Monitor::getPrimaryMonitor() {
-		// Returns a new Monitor object containing
-		// all data from the primary monitor
-		return Monitor(glfwGetPrimaryMonitor());
 	}
 
 	Monitor::Monitor(GLFWmonitor* monitor) :
