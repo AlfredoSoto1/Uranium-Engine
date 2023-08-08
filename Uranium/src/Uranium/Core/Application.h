@@ -90,12 +90,12 @@ namespace Uranium::Core {
 		/*
 		* private methods
 		*/
-		void createCallbacks();
-		void disposeCallbacks();
-
 		void run();
 
 		void update(std::shared_ptr<Window> window);
+
+		void createCallbacks();
+		void disposeCallbacks();
 
 	private:
 		/*

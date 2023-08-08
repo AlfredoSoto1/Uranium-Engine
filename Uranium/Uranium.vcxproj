@@ -128,6 +128,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="src\Uranium\Callbacks\MonitorCallback.cpp" />
+    <ClCompile Include="src\Uranium\Callbacks\WindowCallback.cpp" />
     <ClCompile Include="src\Uranium\Core\Application.cpp" />
     <ClCompile Include="src\Uranium\Core\WorkingUnit.cpp" />
     <ClCompile Include="src\Uranium\Graphics\Display\Monitor.cpp" />

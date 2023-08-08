@@ -141,6 +141,9 @@
     <ClCompile Include="src\Uranium\Callbacks\MonitorCallback.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\Uranium\Callbacks\WindowCallback.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\STL_pch.h">
