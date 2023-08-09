@@ -508,7 +508,9 @@
 
 #include <Uranium.h>
 
-class MyGame : public Uranium::Core::Application {
+#include "Uranium/Listeners/WindowListener.h"
+
+class MyGame : public Uranium::Core::Application, public Uranium::Listeners::WindowListener {
 public:
 
 	using Position = Uranium::Utils::Position;
@@ -535,6 +537,8 @@ public:
 
 		window = std::make_shared<Window>();
 		second = std::make_shared<Window>();
+
+		window->setWindowListener(this);
 
 		WindowProps& props = window->getProps();
 		WindowProps& secon = second->getProps();
@@ -570,6 +574,46 @@ public:
 	*/
 	~MyGame() {
 		
+	}
+
+	void onClose() {
+		
+	}
+
+	void onMoved(int xpos, int ypos) {
+		print_status("moved across: " << xpos << ", " << ypos);
+	}
+
+	void onResize(unsigned int width, unsigned int height) {
+		print_status("resized : " << width << ", " << height);
+	}
+
+	void onFocus() {
+		print_status("on Focus");
+	}
+
+	void offFocus() {
+		print_status("off Focus");
+	}
+
+	void onRestored() {
+		print_status("window restored");
+	}
+
+	void onMaximized() {
+		print_status("window maximized");
+	}
+
+	void onMinimized() {
+		print_status("window minimized");
+	}
+
+	void onCanvasRefresh() {
+		print_status("canvas refreshed");
+	}
+
+	void onFramebufferResize(unsigned int width, unsigned int height) {
+		print_status("updated frame buffer to: " << width << ", " << height);
 	}
 };
 

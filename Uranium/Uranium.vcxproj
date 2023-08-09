@@ -219,6 +219,7 @@
     <ClInclude Include="src\Uranium\Graphics\Display\Window.h" />
     <ClInclude Include="src\Uranium\Graphics\Display\WindowMode.h" />
     <ClInclude Include="src\Uranium\Graphics\Display\WindowProps.h" />
+    <ClInclude Include="src\Uranium\Listeners\WindowListener.h" />
     <ClInclude Include="src\Uranium\utils\Dimension.h" />
     <ClInclude Include="src\Uranium\utils\Position.h" />
     <ClInclude Include="src\Vendor\stb_image.h" />

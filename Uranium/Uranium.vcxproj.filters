@@ -398,5 +398,8 @@
     <ClInclude Include="src\Uranium\Callbacks\MonitorCallback.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\Uranium\Listeners\WindowListener.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

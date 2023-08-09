@@ -11,6 +11,7 @@
 #include "Monitor.h"
 
 #include "Uranium/Utils/Dimension.h"
+#include "Uranium/Callbacks/WindowCallback.h"
 
 #include "Uranium/Core/EngineTools.h"
 #include "Uranium/Core/Application.h"
@@ -32,10 +33,13 @@ namespace Uranium::Graphics::Display {
 
 	Window::Window() :
 		glWindow(nullptr),
+		callback(nullptr),
+		windowListener(nullptr),
 
 		windowMode(),
 		windowProps(),
 
+		hasCreated(false),
 		hasDisposed(false)
 	{
 		// 
@@ -70,6 +74,14 @@ namespace Uranium::Graphics::Display {
 		return windowProps;
 	}
 
+	auto Window::getWindowListener() const -> WindowListener* {
+		return windowListener;
+	}
+
+	void Window::setWindowListener(WindowListener* windowListener) {
+		this->windowListener = windowListener;
+	}
+
 	void Window::build() {
 		// Create a GLFW window with the given parameters
 		glWindow = glfwCreateWindow(
@@ -87,7 +99,12 @@ namespace Uranium::Graphics::Display {
 		windowMode.glWindow = this->glWindow;
 		windowProps.glWindow = this->glWindow;
 
+		hasCreated = true;
+
 		glfwSetWindowUserPointer(glWindow, this);
+
+		// Prepare and create the window callbacks
+		callback = new WindowCallback(this);
 
 		// Provide the corresponding values to the hints
 		// declared before window creation after the window
@@ -115,6 +132,12 @@ namespace Uranium::Graphics::Display {
 		if (hasDisposed)
 			throw std::exception(DISPOSED_ALREADY);
 		hasDisposed = true;
+		
+		if (not hasCreated)
+			return;
+
+		delete callback;
+
 		glfwHideWindow(glWindow);
 		glfwDestroyWindow(glWindow);
 	}

@@ -9,6 +9,14 @@ namespace Uranium::Core {
 	class Application;
 }
 
+namespace Uranium::Listeners {
+	class WindowListener;
+}
+
+namespace Uranium::Callbacks {
+	class WindowCallback;
+}
+
 namespace Uranium::Graphics::Display {
 
 	class Monitor;
@@ -26,6 +34,9 @@ namespace Uranium::Graphics::Display {
 		*/
 		using Application = Core::Application;
 
+		using WindowCallback = Callbacks::WindowCallback;
+		using WindowListener = Listeners::WindowListener;
+
 	public:
 		/*
 		* Minimun and maximum default dimensions
@@ -41,6 +52,10 @@ namespace Uranium::Graphics::Display {
 
 		WindowMode& getModes();
 		WindowProps& getProps();
+
+		auto getWindowListener() const -> WindowListener*;
+
+		void setWindowListener(WindowListener* windowListener);
 
 	public:
 		/*
@@ -76,10 +91,13 @@ namespace Uranium::Graphics::Display {
 		/*
 		* Private members
 		*/
+		bool hasCreated;
 		bool hasDisposed;
 
 		GLFWwindow* glWindow;
-		
+		WindowCallback* callback;
+		WindowListener* windowListener;
+
 		WindowMode windowMode;
 		WindowProps windowProps;
 	};

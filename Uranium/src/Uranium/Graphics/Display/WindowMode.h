@@ -2,6 +2,10 @@
 
 struct GLFWwindow;
 
+namespace Uranium::Callbacks {
+	class WindowCallback;
+}
+
 namespace Uranium::Graphics::Display {
 
 	class Window;
@@ -11,6 +15,12 @@ namespace Uranium::Graphics::Display {
 	* Window Modes blueprint
 	*/
 	class WindowMode {
+	public:
+		/*
+		* custom alias
+		*/
+		using WindowCallback = Callbacks::WindowCallback;
+
 	public:
 		/*
 		* public setter modes
@@ -43,6 +53,7 @@ namespace Uranium::Graphics::Display {
 		* Friends with other classes
 		*/
 		friend Window;
+		friend WindowCallback;
 
 	private:
 		/*

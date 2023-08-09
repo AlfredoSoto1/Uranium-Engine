@@ -29,7 +29,12 @@ namespace Uranium::Callbacks {
 		/*
 		* Callback constructor
 		*/
-		explicit WindowCallback(std::shared_ptr<Window> window);
+		WindowCallback(WindowCallback& copy) = delete;
+		WindowCallback(WindowCallback&& move) = delete;
+		WindowCallback(const WindowCallback& copy) = delete;
+		WindowCallback(const WindowCallback&& move) = delete;
+
+		explicit WindowCallback(Window* window);
 		
 		~WindowCallback();
 
@@ -52,6 +57,10 @@ namespace Uranium::Callbacks {
 		/*
 		* Private members
 		*/
-		std::shared_ptr<Window> window;
+		// Use a raw pointer type since this class
+		// will only be created once inside the parent Window
+		// class. Meaning that this class cannot have a copy 
+		// or can be moved out of the Window scope instance.
+		Window* window;
 	};
 }

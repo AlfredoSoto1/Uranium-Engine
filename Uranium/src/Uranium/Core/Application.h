@@ -10,10 +10,6 @@ namespace Uranium::Graphics::Display {
 	class Monitor;
 }
 
-namespace Uranium::Callbacks {
-	class WindowCallback;
-}
-
 namespace Uranium::Core {
 
 	class EntryPoint;
@@ -29,8 +25,6 @@ namespace Uranium::Core {
 		using Thread = std::thread;
 		using Window = Graphics::Display::Window;
 		using Monitor = Graphics::Display::Monitor;
-
-		using WindowCallback = Callbacks::WindowCallback;
 
 	public:
 		/*
@@ -94,9 +88,6 @@ namespace Uranium::Core {
 
 		void update(std::shared_ptr<Window> window);
 
-		void createCallbacks();
-		void disposeCallbacks();
-
 	private:
 		/*
 		* private members
@@ -106,8 +97,6 @@ namespace Uranium::Core {
 		volatile bool applicationRunning;
 
 		unsigned int activeContexts;
-
-		WindowCallback* windowCallback;
 
 		std::mutex contextMutex;
 
