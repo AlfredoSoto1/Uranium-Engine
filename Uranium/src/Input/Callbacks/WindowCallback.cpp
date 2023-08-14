@@ -1,120 +1,143 @@
 #include <GLFW/glfw3.h>
 
+#include <iostream>
+#include <memory>
+
 #include "WindowCallback.h"
+#include "Input/Listeners/WindowListener.h"
+
 #include "Graphics/Display/Window.h"
 #include "Graphics/Display/WindowProps.h"
-#include "Core/Application/ApplicationProgram.h"
 
-using namespace Uranium::Input::Callbacks;
-using namespace Uranium::Graphics::Display;
-using namespace Uranium::Core::Application;
+namespace Uranium::Input::Callbacks {
 
-WindowCallback::WindowCallback(std::shared_ptr<Window> window) :
-	EventCallback(window),
-	has_Resized(false)
-{
-	// Initiate Callback
-	initCallbacks();
-}
+	// 
+	// Create all the corresponding callbacks
+	// related to window events
+	//
+	WindowCallback::WindowCallback(Window* window) :
+		window(window),
 
-WindowCallback::~WindowCallback() {
+		focused(false),
+		resized(false)
+	{
+		glfwSetWindowPosCallback(*window,       WindowCallback::positionChange);
+		glfwSetWindowSizeCallback(*window,      WindowCallback::sizeChange);
+		glfwSetWindowCloseCallback(*window,     WindowCallback::windowClose);
+		glfwSetWindowFocusCallback(*window,     WindowCallback::onFocus);
+		glfwSetWindowIconifyCallback(*window,   WindowCallback::minimize);
+		glfwSetWindowRefreshCallback(*window,   WindowCallback::canvasRefresh);
+		glfwSetWindowMaximizeCallback(*window,  WindowCallback::maximize);
+		glfwSetFramebufferSizeCallback(*window, WindowCallback::frameBufferSize);
+	}
 
-	// free callbacks
-	glfwSetWindowPosCallback(*EventCallback::getWindow(), nullptr);
-	glfwSetWindowSizeCallback(*EventCallback::getWindow(), nullptr);
-	glfwSetWindowCloseCallback(*EventCallback::getWindow(), nullptr);
-	glfwSetWindowFocusCallback(*EventCallback::getWindow(), nullptr);
-	glfwSetWindowIconifyCallback(*EventCallback::getWindow(), nullptr);
-	glfwSetWindowRefreshCallback(*EventCallback::getWindow(), nullptr);
-	glfwSetWindowMaximizeCallback(*EventCallback::getWindow(), nullptr);
-	glfwSetFramebufferSizeCallback(*EventCallback::getWindow(), nullptr);
-}
+	// 
+	// Free all the window callbacks created
+	//
+	WindowCallback::~WindowCallback() {
+		glfwSetWindowPosCallback(*window,       nullptr);
+		glfwSetWindowSizeCallback(*window,      nullptr);
+		glfwSetWindowCloseCallback(*window,     nullptr);
+		glfwSetWindowFocusCallback(*window,     nullptr);
+		glfwSetWindowIconifyCallback(*window,   nullptr);
+		glfwSetWindowRefreshCallback(*window,   nullptr);
+		glfwSetWindowMaximizeCallback(*window,  nullptr);
+		glfwSetFramebufferSizeCallback(*window, nullptr);
+	}
 
-void WindowCallback::initCallbacks() { 
+	void WindowCallback::windowClose(GLFWwindow* glWindow) {
+		Window& window = *static_cast<Window*>(glfwGetWindowUserPointer(glWindow));
 
-	auto positionCallback = [](GLFWwindow* window, int xpos, int ypos) {
-
-		// obtain Application-program reference via glfw user pointer
-		ApplicationProgram* program = static_cast<ApplicationProgram*>(glfwGetWindowUserPointer(window));
-		if (program == nullptr)
+		if (window.getWindowListener() == nullptr)
 			return;
 
-		// update window props for
-		// xPosition and yPosition
-		program->getWindow()->getProperties().xPosition = xpos;
-		program->getWindow()->getProperties().yPosition = ypos;
-	};
+		window.getWindowListener()->onClose();
+	}
 
-	auto sizeCallback = [](GLFWwindow* window, int width, int height) {
+	void WindowCallback::sizeChange(GLFWwindow* glWindow, int width, int height) {
+		Window& window = *static_cast<Window*>(glfwGetWindowUserPointer(glWindow));
 
-		// obtain Application-program reference via glfw user pointer
-		ApplicationProgram* program = static_cast<ApplicationProgram*>(glfwGetWindowUserPointer(window));
-		if (program == nullptr)
+		// Update resized flag to true
+		window.callback->resized = true;
+
+		if (window.getWindowListener() == nullptr)
 			return;
 
-		// update resize flag
-		program->getWindowCallback()->has_Resized = true;
+		window.getWindowListener()->onResize(width, height);
+	}
 
-		// update window props for
-		// width and height
-		program->getWindow()->getProperties().width = width;
-		program->getWindow()->getProperties().height = height;
+	void WindowCallback::positionChange(GLFWwindow* glWindow, int xpos, int ypos) {
+		Window& window = *static_cast<Window*>(glfwGetWindowUserPointer(glWindow));
 
-	};
+		if (window.getWindowListener() == nullptr)
+			return;
 
-	auto closeCallback = [](GLFWwindow* window) {
-		//Window& window = Application::get().getWindow();
-		//if (window.listener != nullptr)
-		//	window.listener->windowClosed();
-	};
+		window.getWindowListener()->onMoved(xpos, ypos);
+	}
 
-	auto focusCallback = [](GLFWwindow* window, int isFocused) {
-		//Window& window = Application::get().getWindow();
-		//if (window.listener != nullptr)
-		//	window.listener->windowFocused(isFocused > 0 ? true : false);
-	};
-
-	auto iconifyCallback = [](GLFWwindow* window, int isIconified) {
-		//Window& window = Application::get().getWindow();
-		//if (window.listener != nullptr)
-		//	window.listener->windowIconified(isIconified > 0 ? true : false);
-	};
-
-	auto maximizeCallback = [](GLFWwindow* window, int isMaximized) {
-		//Window& window = Application::get().getWindow();
-		//if (window.listener != nullptr)
-		//	window.listener->windowMaximized(isMaximized > 0 ? true : false);
-	};
-
-	auto refreshCallback = [](GLFWwindow* window) {
-		//Window& window = Application::get().getWindow();
-		//if (window.listener != nullptr)
-		//	window.listener->windowRefresh();
-	};
-
-	auto frameBufferSizeCallback = [](GLFWwindow* window, int width, int height) {
-		//Window& window = Application::get().getWindow();
-		//if (window.listener != nullptr)
-		//	window.listener->windowFrameBufferSize(width, height);
-	};
-
-	// sets the corresponding callback to GLFW
-	glfwSetWindowPosCallback(*EventCallback::getWindow(), positionCallback);
-	glfwSetWindowSizeCallback(*EventCallback::getWindow(), sizeCallback);
-	glfwSetWindowCloseCallback(*EventCallback::getWindow(), closeCallback);
-	glfwSetWindowFocusCallback(*EventCallback::getWindow(), focusCallback);
-	glfwSetWindowIconifyCallback(*EventCallback::getWindow(), iconifyCallback);
-	glfwSetWindowRefreshCallback(*EventCallback::getWindow(), refreshCallback);
-	glfwSetWindowMaximizeCallback(*EventCallback::getWindow(), maximizeCallback);
-	glfwSetFramebufferSizeCallback(*EventCallback::getWindow(), frameBufferSizeCallback);
-}
-
-void WindowCallback::updateCallbackEvent() { 
+	void WindowCallback::onFocus(GLFWwindow* glWindow, int isFocused) {
+		Window& window = *static_cast<Window*>(glfwGetWindowUserPointer(glWindow));
 	
-	// update resize flag
-	has_Resized = false;
-}
+		//std::cout << window.getProps().getTitle() << " " << isFocused << std::endl;
 
-bool WindowCallback::hasResized() {
-	return has_Resized;
+		window.callback->focused = (bool)isFocused;
+
+		if (window.getWindowListener() == nullptr)
+			return;
+
+		if (isFocused)
+			window.getWindowListener()->onFocus();
+		else
+			window.getWindowListener()->offFocus();
+	}
+
+	void WindowCallback::minimize(GLFWwindow* glWindow, int isMinimized) {
+		Window& window = *static_cast<Window*>(glfwGetWindowUserPointer(glWindow));
+
+		if (window.getWindowListener() == nullptr)
+			return;
+
+		if (isMinimized)
+			window.getWindowListener()->onMinimized();
+	}
+
+	void WindowCallback::maximize(GLFWwindow* glWindow, int isMaximized) {
+		Window& window = *static_cast<Window*>(glfwGetWindowUserPointer(glWindow));
+		
+		if (window.getWindowListener() == nullptr)
+			return;
+
+		if (isMaximized)
+			window.getWindowListener()->onMaximized();
+	}
+
+	void WindowCallback::canvasRefresh(GLFWwindow* glWindow) {
+		Window& window = *static_cast<Window*>(glfwGetWindowUserPointer(glWindow));
+
+		if (window.getWindowListener() == nullptr)
+			return;
+
+		window.getWindowListener()->onCanvasRefresh();
+	}
+
+	void WindowCallback::frameBufferSize(GLFWwindow* glWindow, int width, int height) {
+		Window& window = *static_cast<Window*>(glfwGetWindowUserPointer(glWindow));
+
+		if (window.getWindowListener() == nullptr)
+			return;
+
+		window.getWindowListener()->onFramebufferResize(width, height);
+	}
+
+	auto WindowCallback::hasFocused() const -> volatile bool {
+		return focused;
+	}
+
+	auto WindowCallback::hasResized() const -> volatile bool {
+		return resized;
+	}
+
+	void WindowCallback::setHasResized(bool resized) {
+		this->resized = resized;
+	}
 }

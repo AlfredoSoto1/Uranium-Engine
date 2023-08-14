@@ -1,55 +1,69 @@
 #pragma once
 
-#include "EventCallback.h"
+struct GLFWwindow;
+
+namespace Uranium::Core {
+	class UnitProgram;
+}
+
+namespace Uranium::Graphics::Display {
+	class Window;
+}
 
 namespace Uranium::Input::Callbacks {
 
 	/*
-	* Mouse Callback
+	* Mouse Callback blueprint
+	* 
 	*/
-	class MouseCallback : public EventCallback {
+	class MouseCallback {
 	public:
 		/*
 		* custom alias
 		*/
 		using Window = Uranium::Graphics::Display::Window;
-		using Application = Uranium::Core::Application::Application;
-		using ApplicationProgram = Uranium::Core::Application::ApplicationProgram;
 
 	public:
-		virtual ~MouseCallback();
-
-		bool isButtonDown(int _button);
-		int isMouseToggled(int _button);
+		bool isButtonDown(int button);
+		int isMouseToggled(int button);
 	
-	protected:
+	private:
 		/*
-		* Protected methods
+		* Friend with other classes
 		*/
-		void initCallbacks();
-		void updateCallbackEvent();
+		friend Core::UnitProgram;
 
 	private:
 		/*
-		* Mutual friend classes
+		* Callback constructors
 		*/
-		friend Application;
-		friend ApplicationProgram;
+		MouseCallback(MouseCallback& copy) = delete;
+		MouseCallback(MouseCallback&& move) = delete;
+		MouseCallback(const MouseCallback& copy) = delete;
+		MouseCallback(const MouseCallback&& move) = delete;
 
-	private:
-		/*
-		* Private methods
-		*/
-		MouseCallback() = delete;
-		MouseCallback(const MouseCallback&) = delete;
-		MouseCallback(const MouseCallback&&) = delete;
+		explicit MouseCallback(Window* window);
 		
-		MouseCallback(std::shared_ptr<Window> window);
+		~MouseCallback();
+
+	private:
+		/*
+		* Private static callbacks
+		*/
+		static void clickDetected(GLFWwindow* window, int button, int action, int mods);
+		static void scrollDetected(GLFWwindow* window, double xOffset, double yOffset);
+		static void positionDetected(GLFWwindow* window, double xpos, double ypos);
 
 	private:
 		/*
 		* Private members
 		*/
+		// Use a raw pointer type since this class
+		// will only be created once inside the parent Window
+		// class. Meaning that this class cannot have a copy 
+		// or can be moved out of the Window scope instance.
+		Window* window;
+
 		bool* mouseButtons;
 	};
 }

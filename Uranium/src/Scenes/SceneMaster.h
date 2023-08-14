@@ -6,10 +6,6 @@ namespace Uranium::Graphics::Display {
 	class Window;
 }
 
-namespace Uranium::Core::Application {
-	class ApplicationProgram;
-}
-
 namespace Uranium::Scenes {
 
 	class Scene;
@@ -20,7 +16,6 @@ namespace Uranium::Scenes {
 		* custom alias
 		*/
 		using Window = Graphics::Display::Window;
-		using ApplicationProgram = Core::Application::ApplicationProgram;
 
 	public:
 		virtual ~SceneMaster();
@@ -37,7 +32,6 @@ namespace Uranium::Scenes {
 		/*
 		* Friends with other classes
 		*/
-		friend ApplicationProgram;
 
 	private:
 		/*

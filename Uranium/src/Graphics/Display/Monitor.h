@@ -1,53 +1,65 @@
 #pragma once
 
 #include <vector>
-#include <memory>
 
 struct GLFWmonitor;
 struct GLFWvidmode;
 
+namespace Uranium::Utils {
+	struct Dimension;
+}
+
 namespace Uranium::Graphics::Display {
 
+	/*
+	* Monitor class
+	* 
+	*/
 	class Monitor {
 	public:
 		/*
-		* static methods
+		* custom alias
 		*/
-
-		/*
-		* @return the primary monitor
-		*/
-		static std::shared_ptr<Monitor> getPrimaryMonitor();
-		
-		/*
-		* @return a vector containing all
-		* monitors that are connected to the PC. and are registered
-		* by the GPU.
-		*/
-		static std::vector<std::shared_ptr<Monitor>> getConnectedMonitors();
+		using Dimension = Utils::Dimension;
 
 	public:
-		Monitor();
-		virtual ~Monitor();
 
-		operator GLFWmonitor* ();
+		static Monitor getPrimary();
 
-		int getWidth();
-		int getHeight();
-		int getRefreshRate();
+		static std::vector<Monitor> allConnected();
+
+	public:
+		// Delete the Monitor() constructor
+		// since we dont want the client to
+		// be creating hollow monitor objects
+		Monitor() = delete;
+
+		// Convert an instance to a
+		// GLFWmonitor pointer
+		operator GLFWmonitor* () const;
+
+		// Returns true if the current
+		// instance is connected.
+		bool isConnected() const;
+
+		// Returns the monitor refreshrate in hz
+		int getRefreshRate() const;
+
+		// Returns the resolution of
+		// the connected monitor
+		Dimension getResolution() const;
 
 	private:
 		/*
 		* private methods
 		*/
 		Monitor(GLFWmonitor* monitor);
-	
+
 	private:
 		/*
 		* private members
 		*/
 		GLFWmonitor* monitor;
 		const GLFWvidmode* vidmode;
-
 	};
 }

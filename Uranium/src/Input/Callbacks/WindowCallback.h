@@ -1,56 +1,82 @@
 #pragma once
 
-#include "EventCallback.h"
+struct GLFWwindow;
+
+namespace Uranium::Core {
+	class UnitProgram;
+}
+
+namespace Uranium::Graphics::Display {
+	class Window;
+}
 
 namespace Uranium::Input::Callbacks {
 
 	/*
-	* Window Callback
+	* Window Callback blueprint
+	* 
 	*/
-	class WindowCallback : public EventCallback {
+	class WindowCallback {
 	public:
 		/*
-		* custom alias
+		* Custom alias
 		*/
-		using Window = Uranium::Graphics::Display::Window;
-		using Application = Uranium::Core::Application::Application;
-		using ApplicationProgram = Uranium::Core::Application::ApplicationProgram;
+		using Window = Graphics::Display::Window;
 
 	public:
-		virtual ~WindowCallback();
-
-		bool hasResized();
-
-	protected:
 		/*
-		* Protected methods
+		* Public modifiers
 		*/
-		void initCallbacks();
-		void updateCallbackEvent();
-
-	private:
-		/*
-		* Mutual friend classes
-		*/
-		friend Window;
-		friend Application;
-		friend ApplicationProgram;
+		auto hasFocused() const -> volatile bool;
+		auto hasResized() const -> volatile bool;
 	
+		void setHasResized(bool resized);
+
 	private:
 		/*
-		* Private methods
+		* Friend with other classes
 		*/
-		WindowCallback() = delete;
-		WindowCallback(const WindowCallback&) = delete;
-		WindowCallback(const WindowCallback&&) = delete;
+		friend Core::UnitProgram;
+		
+	private:
+		/*
+		* Callback constructor
+		*/
+		WindowCallback(WindowCallback& copy) = delete;
+		WindowCallback(WindowCallback&& move) = delete;
+		WindowCallback(const WindowCallback& copy) = delete;
+		WindowCallback(const WindowCallback&& move) = delete;
 
-		WindowCallback(std::shared_ptr<Window> window);
+		explicit WindowCallback(Window* window);
+		
+		~WindowCallback();
+
+	private:
+		/*
+		* Private static callbacks
+		*/
+		static void windowClose(GLFWwindow* glWindow);
+		static void sizeChange(GLFWwindow* glWindow, int width, int height);
+		static void positionChange(GLFWwindow* glWindow, int xpos, int ypos);
+
+		static void onFocus(GLFWwindow* glWindow, int isFocused);
+		static void minimize(GLFWwindow* glWindow, int isMinimized);
+		static void maximize(GLFWwindow* glWindow, int isMaximized);
+
+		static void canvasRefresh(GLFWwindow* glWindow);
+		static void frameBufferSize(GLFWwindow* glWindow, int width, int height);
 
 	private:
 		/*
 		* Private members
 		*/
-		bool has_Resized;
+		// Use a raw pointer type since this class
+		// will only be created once inside the parent Window
+		// class. Meaning that this class cannot have a copy 
+		// or can be moved out of the Window scope instance.
+		Window* window;
 
+		volatile bool focused;
+		volatile bool resized;
 	};
 }

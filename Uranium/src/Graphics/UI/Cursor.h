@@ -6,10 +6,6 @@ namespace Uranium::Graphics::Display {
 	class Window;
 }
 
-namespace Uranium::Core::Application {
-	class ApplicationProgram;
-}
-
 namespace Uranium::Input::Callbacks {
 	class MouseCallback;
 	class CursorCallback;
@@ -19,43 +15,51 @@ namespace Uranium::Graphics::UI {
 	
 	class CursorShape;
 
+	/*
+	* Cursor blueprint
+	* 
+	*/
 	class Cursor {
 	public:
 		/*
 		* Custom alias
 		*/
-		using Window				= Uranium::Graphics::Display::Window;
-		using ApplicationProgram	= Uranium::Core::Application::ApplicationProgram;
-		using MouseCallback			= Uranium::Input::Callbacks::MouseCallback;
-		using CursorCallback		= Uranium::Input::Callbacks::CursorCallback;
+		using Window         = Uranium::Graphics::Display::Window;
+		using MouseCallback  = Uranium::Input::Callbacks::MouseCallback;
+		using CursorCallback = Uranium::Input::Callbacks::CursorCallback;
 
 	public:
-		virtual ~Cursor();
+		/*
+		* Public modifiers
+		*/
+		void hide();
+		void grab();
 
+		void toDefault();
+		void toDefaultShape();
+
+	public:
+		/*
+		* Public setters
+		*/
 		void setPosition(double xpos, double ypos);
 		void setCursorShape(std::shared_ptr<CursorShape> cursorProps);
 
 	public:
 		/*
-		* Public methods
+		* Public getters
 		*/
-		double getXPosition();
-		double getYPosition();
+		bool isMoving();
+		bool isInside();
 
 		double getXSpeed();
 		double getYSpeed();
 
+		double getXPosition();
+		double getYPosition();
+
 		double getXNormPosition();
 		double getYNormPosition();
-
-		bool isMoving();
-		bool isInside();
-
-		void hide();
-		void grab();
-		void toDefault();
-
-		void toDefaultShape();
 
 	private:
 		/*
@@ -63,24 +67,34 @@ namespace Uranium::Graphics::UI {
 		*/
 		friend MouseCallback;
 		friend CursorCallback;
-		friend ApplicationProgram;
 
 	private:
 		/*
 		* Private methods
 		*/
 		Cursor() = delete;
-		Cursor(const Cursor&) = delete;
-		Cursor(const Cursor&&) = delete;
+		Cursor(Cursor& copy) = delete;
+		Cursor(Cursor&& move) = delete;
+		Cursor(const Cursor& copy) = delete;
+		Cursor(const Cursor&& move) = delete;
 
-		Cursor(std::shared_ptr<Window> _window);
+		explicit Cursor(std::shared_ptr<Window> _window);
 
+		virtual ~Cursor();
+
+	private:
+		/*
+		* private modifiers
+		*/
 		void setNormPosition(double xposN, double yposN);
 
 	private:
 		/*
 		* Private members
 		*/
+		std::shared_ptr<Window> window;
+		std::shared_ptr<CursorShape> cursorShape;
+		
 		double xPosition;
 		double yPosition;
 
@@ -94,10 +108,5 @@ namespace Uranium::Graphics::UI {
 		double yNorm;
 
 		bool isActive;
-
-		std::shared_ptr<Window> window;
-
-		std::shared_ptr<CursorShape> cursorShape;
-
 	};
 }

@@ -1,60 +1,56 @@
-#include "Monitor.h"
-
 #include <GLFW/glfw3.h>
 
-using namespace Uranium::Graphics::Display;
+#include "Monitor.h"
+#include "Utils/Dimension.h"
 
-std::shared_ptr<Monitor> Monitor::getPrimaryMonitor() {
-	return std::shared_ptr<Monitor>(new Monitor(glfwGetPrimaryMonitor()));
+namespace Uranium::Graphics::Display {
+
+	Monitor Monitor::getPrimary() {
+		// Returns a new Monitor object containing
+		// all data from the primary monitor
+		return Monitor(glfwGetPrimaryMonitor());
+	}
+
+	std::vector<Monitor> Monitor::allConnected() {
+		// Obtain the monitor count that GLFW provides
+		int monitorCount;
+		// Retrieve a C array from GLFW 
+		// with the returned monitor count
+		GLFWmonitor** monitors = glfwGetMonitors(&monitorCount);
+
+		// Store the monitors obtained by GLFW
+		// into an std::vector
+		std::vector<Monitor> connectedMonitors;
+		for (int i = 0; i < monitorCount; i++)
+			connectedMonitors.push_back(Monitor(monitors[i]));
+		return connectedMonitors;
+	}
+
+	Monitor::Monitor(GLFWmonitor* monitor) :
+		monitor(monitor),
+		vidmode(nullptr)
+	{
+		if (monitor != nullptr)
+			vidmode = glfwGetVideoMode(monitor);
+	}
+
+	Monitor::operator GLFWmonitor* () const {
+		return monitor;
+	}
+
+	bool Monitor::isConnected() const {
+		return monitor != nullptr;
+	}
+
+	Monitor::Dimension Monitor::getResolution() const {
+		if (vidmode == nullptr)
+			return Dimension(GLFW_DONT_CARE, GLFW_DONT_CARE);
+		return Dimension(vidmode->width, vidmode->height);
+	}
+
+	int Monitor::getRefreshRate() const {
+		if (vidmode == nullptr)
+			return GLFW_DONT_CARE;
+		return vidmode->refreshRate;
+	}
 }
-
-std::vector<std::shared_ptr<Monitor>> Monitor::getConnectedMonitors() {
-	int count;
-	GLFWmonitor** monitors = glfwGetMonitors(&count);
-
-	std::vector<std::shared_ptr<Monitor>> result;
-	for (int i = 0; i < count ;i++)
-		result.push_back(std::shared_ptr<Monitor>(new Monitor(monitors[i])));
-	return result;
-}
-
-Monitor::Monitor(GLFWmonitor* monitor) :
-	monitor(monitor),
-	vidmode(glfwGetVideoMode(monitor))
-{
-	
-}
-
-Monitor::Monitor() :
-	monitor(nullptr),
-	vidmode(nullptr)
-{
-
-}
-
-Monitor::~Monitor() {
-
-}
-
-Monitor::operator GLFWmonitor* () {
-	return monitor;
-}
-
-int Monitor::getWidth() {
-	if (vidmode == nullptr)
-		return 0;
-	return vidmode->width;
-}
-
-int Monitor::getHeight() {
-	if (vidmode == nullptr)
-		return 0;
-	return vidmode->height;
-}
-
-int Monitor::getRefreshRate() {
-	if (vidmode == nullptr)
-		return 0;
-	return vidmode->refreshRate;
-}
-

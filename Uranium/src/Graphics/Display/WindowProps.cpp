@@ -1,152 +1,101 @@
-#include "WindowProps.h"
-#include "Monitor.h"
-#include "Window.h"
-
 #include <GLFW/glfw3.h>
 
-using namespace Uranium::Graphics::Display;
+#include "WindowProps.h"
 
-WindowProps::WindowProps(const std::string& title, unsigned int width, unsigned int height) :
-	title(title),
-	width(width),
-	height(height),
-	xPosition(),
-	yPosition(),
-	is_Visible(true),
-	is_Resizable(true),
-	is_Decorated(true),
-	is_Fullscreen(false),
-	is_AlwaysOnTop(false),	
-	is_Maximized(false),
-	is_Minimized(false),
+namespace Uranium::Graphics::Display {
 
-	transparency(100), // max value - no transparency
+	WindowProps::WindowProps() :
+		mayorGLVersion(3),
+		minorGLVersion(3),
 
-	mayorGLVersion(4), // Latest OpenGL version
-	minorGLVersion(6)
-{
+		glWindow(nullptr),
 
-}
+		title("Uranium Engine"),
 
-WindowProps::~WindowProps() {
+		opacity(100),
+		position(0, 0),
+		dimension(MIN_WIDTH, MIN_HEIGHT),
+		resolution(MIN_WIDTH, MIN_HEIGHT)
+	{
+	}
 
-}
+	void WindowProps::initDefault() const {
+		//glfwWindowHint(GLFW_TRANSPARENT_FRAMEBUFFER, opacity < 100 ? GL_TRUE : GL_FALSE);
+		//glfwWindowHint(GLFW_CENTER_CURSOR, true ? GL_TRUE : GL_FALSE);
+	}
 
-void WindowProps::setContext(Window* windowContext) {
-	this->windowContext = windowContext;
-}
+	void WindowProps::setGLVersion(unsigned int mayor, unsigned int minor) {
+		this->mayorGLVersion = mayor;
+		this->minorGLVersion = minor;
+	}
 
-void WindowProps::setTitle(const std::string& title) {
-	this->title = title;
-	if (*windowContext) glfwSetWindowTitle(*windowContext, title.c_str());
-}
+	void WindowProps::setTitle(const std::string& title) {
+		this->title = title;
+		if (glWindow) glfwSetWindowTitle(glWindow, title.c_str());
+	}
 
-void WindowProps::setOpenGLVersion(unsigned int mayor, unsigned int minor) {
-	this->mayorGLVersion = mayor;
-	this->minorGLVersion = minor;
-}
+	void WindowProps::setOpacity(unsigned int opacity) {
+		this->opacity = opacity;
 
-void WindowProps::setSize(unsigned int width, unsigned int height) {
-	this->width = width;
-	this->height = height;
-}
+		if (not glWindow or opacity == 100) return;
 
-void WindowProps::setPosition(int xpos, int ypos) {
-	this->xPosition = xpos;
-	this->yPosition = ypos;
-}
+		glfwSetWindowAttrib(
+			// Establish window attribute to be -> frame buffer
+			glWindow, GLFW_TRANSPARENT_FRAMEBUFFER,
+			// Tell the frame buffer to become transparent
+			// if and only if the opacity is lower than 100%
+			opacity < 100 ? GLFW_TRUE : GLFW_FALSE
+		);
 
-void WindowProps::setWindowTransparency(unsigned int transparency) {
-	this->transparency = transparency;
-	if (*windowContext != nullptr) return;
-	glfwSetWindowAttrib(*windowContext, GLFW_TRANSPARENT_FRAMEBUFFER, transparency < 100 ? GLFW_TRUE : GLFW_FALSE);
-	glfwSetWindowOpacity(*windowContext, transparency / 1.0f);
-}
+		// Set the opacity of the window to be in a scale of [0, 100]
+		glfwSetWindowOpacity(glWindow, opacity / 100.0f);
+	}
 
-void WindowProps::setVisible(bool isVisible) {
-	this->is_Visible = isVisible;
-	if (*windowContext == nullptr) return;
-	if (is_Visible)
-		glfwShowWindow(*windowContext);
-	else
-		glfwHideWindow(*windowContext);
-}
+	void WindowProps::setPosition(const Position& position) {
+		this->position = position;
 
-void WindowProps::setResizable(bool isResizable) {
-	this->is_Resizable = isResizable;
-	if (*windowContext) glfwSetWindowAttrib(*windowContext, GLFW_RESIZABLE, is_Resizable ? GLFW_TRUE : GLFW_FALSE);
-}
+		if (not glWindow) return;
 
-void WindowProps::setDecorated(bool isDecorated) {
-	this->is_Decorated = isDecorated;
-	if (*windowContext) glfwSetWindowAttrib(*windowContext, GLFW_DECORATED, is_Decorated ? GLFW_TRUE : GLFW_FALSE);
-}
+		glfwSetWindowPos(glWindow, position.x, position.y);
+	}
 
-void WindowProps::setAlwaysOnTop(bool isAlwaysOnTop) {
-	this->is_AlwaysOnTop = isAlwaysOnTop;
-	if (*windowContext) glfwSetWindowAttrib(*windowContext, GLFW_FLOATING, is_AlwaysOnTop ? GLFW_TRUE : GLFW_FALSE);
-}
+	void WindowProps::setDimension(const Dimension& dimension) {
+		this->dimension = dimension;
 
-std::string WindowProps::getTitle() {
-	return title;
-}
+		if (not glWindow) return;
 
-unsigned int WindowProps::getWindowTransparency() {
-	return transparency;
-}
+		glfwSetWindowSize(glWindow, dimension.width, dimension.height);
+	}
 
-unsigned int WindowProps::getWidth() {
-	return width;
-}
+	void WindowProps::setResolution(const Dimension& resolution) {
+		this->resolution = resolution;
+	}
 
-unsigned int WindowProps::getHeight() {
-	return height;
-}
+	std::string WindowProps::getTitle() const {
+		return title;
+	}
 
-void WindowProps::getSize(unsigned int& width, unsigned int& height) {
-	width = this->width;
-	height = this->height;
-}
+	unsigned int WindowProps::getMayorGLVersion() const {
+		return mayorGLVersion;
+	}
 
-void WindowProps::getPosition(int& xpos, int& ypos) {
-	xpos = this->xPosition;
-	ypos = this->yPosition;
-}
+	unsigned int WindowProps::getMinorGLVersion() const {
+		return minorGLVersion;
+	}
 
-void WindowProps::getOpenGlVersion(unsigned int& mayor, unsigned int& minor) {
-	mayor = this->mayorGLVersion;
-	minor = this->minorGLVersion;
-}
+	inline unsigned int WindowProps::getOpacity() const {
+		return opacity;
+	}
 
+	WindowProps::Position& WindowProps::getPosition() {
+		return position;
+	}
 
-bool WindowProps::isRestored() {
-	return !is_Minimized && !is_Maximized;
-}
+	WindowProps::Dimension& WindowProps::getDimension() {
+		return dimension;
+	}
 
-bool WindowProps::isMaximized() {
-	return is_Maximized;
-}
-
-bool WindowProps::isMinimized() {
-	return is_Minimized;
-}
-
-bool WindowProps::isVisible() {
-	return is_Visible;
-}
-
-bool WindowProps::isResizable() {
-	return is_Resizable;
-}
-
-bool WindowProps::isDecorated() {
-	return is_Decorated;
-}
-
-bool WindowProps::isFullscreen() {
-	return is_Fullscreen;
-}
-
-bool WindowProps::isAlwaysOnTop() {
-	return is_AlwaysOnTop;
+	WindowProps::Dimension& WindowProps::getResolution() {
+		return resolution;
+	}
 }

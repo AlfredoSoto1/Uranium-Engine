@@ -1,47 +1,61 @@
 #pragma once
 
-#include "EventCallback.h"
+struct GLFWwindow;
+
+namespace Uranium::Core {
+	class UnitProgram;
+}
+
+namespace Uranium::Graphics::Display {
+	class Window;
+}
 
 namespace Uranium::Input::Callbacks {
 
 	/*
 	* Cursor Callback
 	*/
-	class CursorCallback : public EventCallback {
+	class CursorCallback {
 	public:
 		/*
 		* custom alias
 		*/
 		using Window = Uranium::Graphics::Display::Window;
-		using Application = Uranium::Core::Application::Application;
-		using ApplicationProgram = Uranium::Core::Application::ApplicationProgram;
-
-	public:
-		virtual ~CursorCallback();
-
-	protected:
-		/*
-		* Protected methods
-		*/
-		void initCallbacks();
-		void updateCallbackEvent();
 
 	private:
 		/*
 		* Mutual friend classes
 		*/
-		friend Application;
-		friend ApplicationProgram;
+		friend Core::UnitProgram;
 
 	private:
 		/*
 		* Private methods
 		*/
-		CursorCallback() = delete;
-		CursorCallback(const CursorCallback&) = delete;
-		CursorCallback(const CursorCallback&&) = delete;
+		CursorCallback(CursorCallback& copy) = delete;
+		CursorCallback(CursorCallback&& move) = delete;
+		CursorCallback(const CursorCallback& copy) = delete;
+		CursorCallback(const CursorCallback&& move) = delete;
 
-		CursorCallback(std::shared_ptr<Window> window);
+		explicit CursorCallback(Window* window);
 
+		~CursorCallback();
+
+	private:
+		/*
+		* Private static callbacks
+		*/
+		static void dropDetected(GLFWwindow* window, int pathCount, const char** paths);
+		static void enteredDetected(GLFWwindow* window, int isInside);
+
+	private:
+		/*
+		* Private members
+		*/
+		// Use a raw pointer type since this class
+		// will only be created once inside the parent Window
+		// class. Meaning that this class cannot have a copy 
+		// or can be moved out of the Window scope instance.
+		Window* window;
 	};
 }

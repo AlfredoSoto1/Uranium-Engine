@@ -1,18 +1,18 @@
 #pragma once
 
-#include "Core/Math/vec3.h"
-#include "Core/Math/mat4.h"
+#include "Math/vec3.h"
+#include "Math/mat4.h"
 
 namespace Uranium::Graphics::Meshes {
 
 	class RigidBody {
 	public:
 		/*
-		* custom alias
+		* Custom alias
 		*/
 		using vec3 = Core::Math::vec3;
 		using mat4 = Core::Math::mat4;
-	
+
 	public:
 		/*
 		* default constructor

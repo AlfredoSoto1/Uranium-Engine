@@ -507,10 +507,9 @@
 #define UR_PLATFORM_WINDOWS
 
 #include <Uranium.h>
+#include <Core/UnitProgram.h>
 
-#include "Uranium/Listeners/WindowListener.h"
-
-class MyGame : public Uranium::Core::Application, public Uranium::Listeners::WindowListener {
+class MyGame : public Uranium::Core::Application {
 public:
 
 	using Position = Uranium::Utils::Position;
@@ -532,39 +531,26 @@ public:
 	MyGame() :
 		Application()
 	{
-
 		Monitor monitor = Monitor::getPrimary();
 
 		window = std::make_shared<Window>();
-		second = std::make_shared<Window>();
-
-		window->setWindowListener(this);
 
 		WindowProps& props = window->getProps();
-		WindowProps& secon = second->getProps();
+
+		props.setGLVersion(4, 6);
 
 		props.setTitle("First Window Display :) 1");
 		props.setPosition(Position(0, 0));
 
-		secon.setTitle("First Window Display :) 2");
-		secon.setPosition(Position(0, 0));
-
 		WindowMode& winMode1 = window->getModes();
-		WindowMode& winMode2 = second->getModes();
 
 		winMode1.setVisible(true);
 		winMode1.setResizable(true);
 		winMode1.setDecorated(true);
 		winMode1.setAlwaysOnTop(true);
 
-		winMode2.setVisible(true);
-		winMode2.setResizable(true);
-		winMode2.setDecorated(true);
-		winMode2.setAlwaysOnTop(true);
-
 		// register window to display it
 		registerWindow(window);
-		registerWindow(second);
 	}
 
 	/*
@@ -574,46 +560,8 @@ public:
 	*/
 	~MyGame() {
 		
-	}
+		Uranium::Core::UnitProgram program;
 
-	void onClose() {
-		
-	}
-
-	void onMoved(int xpos, int ypos) {
-		print_status("moved across: " << xpos << ", " << ypos);
-	}
-
-	void onResize(unsigned int width, unsigned int height) {
-		print_status("resized : " << width << ", " << height);
-	}
-
-	void onFocus() {
-		print_status("on Focus");
-	}
-
-	void offFocus() {
-		print_status("off Focus");
-	}
-
-	void onRestored() {
-		print_status("window restored");
-	}
-
-	void onMaximized() {
-		print_status("window maximized");
-	}
-
-	void onMinimized() {
-		print_status("window minimized");
-	}
-
-	void onCanvasRefresh() {
-		print_status("canvas refreshed");
-	}
-
-	void onFramebufferResize(unsigned int width, unsigned int height) {
-		print_status("updated frame buffer to: " << width << ", " << height);
 	}
 };
 

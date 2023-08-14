@@ -1,59 +1,70 @@
 #pragma once
 
-#include "EventCallback.h"
+struct GLFWwindow;
+
+namespace Uranium::Core {
+	class UnitProgram;
+}
+
+namespace Uranium::Graphics::Display {
+	class Window;
+}
 
 namespace Uranium::Input::Callbacks {
 
 	/*
 	* Keyboard Callback
 	*/
-	class KeyboardCallback : public EventCallback {
+	class KeyboardCallback {
 	public:
 		/*
 		* Custom alias
 		*/
 		using Window = Uranium::Graphics::Display::Window;
-		using Application = Uranium::Core::Application::Application;
-		using ApplicationProgram = Uranium::Core::Application::ApplicationProgram;
 
 	public:
-		virtual ~KeyboardCallback();
-
 		bool isKeyDown(int key);
 		bool isKeyToggled(int key);
 		bool isKeyReleased(int key);
 
-	protected:
-		/*
-		* Protected methods
-		*/
-		void initCallbacks();
-		void updateCallbackEvent();
 	private:
 		/*
 		* Mutual friend classes
 		*/
-		friend Application;
-		friend ApplicationProgram;
+		friend Core::UnitProgram;
 
 	private:
 		/*
 		* Private methods
 		*/
-		KeyboardCallback() = delete;
-		KeyboardCallback(const KeyboardCallback&) = delete;
-		KeyboardCallback(const KeyboardCallback&&) = delete;
-		
-		KeyboardCallback(std::shared_ptr<Window> window);
+		KeyboardCallback(KeyboardCallback& copy) = delete;
+		KeyboardCallback(KeyboardCallback&& move) = delete;
+		KeyboardCallback(const KeyboardCallback& copy) = delete;
+		KeyboardCallback(const KeyboardCallback&& move) = delete;
+
+		explicit KeyboardCallback(Window* window);
+
+		~KeyboardCallback();
+
+	private:
+		/*
+		* Private static callbacks
+		*/
+		static void keyDetected(GLFWwindow* window, int key, int scancode, int action, int mods);
+		static void charDetected(GLFWwindow* window, unsigned int codePoint);
 
 	private:
 		/*
 		* Private members
 		*/
-		bool* keys;
+		// Use a raw pointer type since this class
+		// will only be created once inside the parent Window
+		// class. Meaning that this class cannot have a copy 
+		// or can be moved out of the Window scope instance.
+		Window* window;
 
+		bool* keys;
 		bool toggled;
 		bool released;
-
 	};
 }

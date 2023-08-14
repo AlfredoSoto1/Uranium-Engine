@@ -1,115 +1,101 @@
 #pragma once
 
 #include <string>
-#include <memory>
 
-namespace Uranium::Input::Callbacks {
-	class WindowCallback;
+#include "Utils/Position.h"
+#include "Utils/Dimension.h"
+
+struct GLFWwindow;
+
+namespace Uranium::Utils {
+	struct Position;
+	struct Dimension;
 }
 
 namespace Uranium::Graphics::Display {
 
 	class Window;
-	class Monitor;
+	class WindowMode;
 
+	/*
+	* Window Properties blueprint
+	* 
+	*/
 	class WindowProps {
 	public:
 		/*
-		* custom alias
+		* Custom alias
 		*/
-		using WindowCallback = Uranium::Input::Callbacks::WindowCallback;
+		using Position = Uranium::Utils::Position;
+		using Dimension = Uranium::Utils::Dimension;
 
 	public:
 		/*
 		* Minimun and maximum default dimensions
 		* for a window when resizing and creation
+		* 
+		*  - unsinged int as pixels
 		*/
-		static const unsigned int MIN_WIDTH = 320;
-		static const unsigned int MIN_HEIGHT = 180;
+		static constexpr unsigned int MIN_WIDTH = 320;
+		static constexpr unsigned int MIN_HEIGHT = 180;
 
 	public:
 		/*
-		* Default constructor for creating window props.
-		* ~title
-		* ~width-height
-		* ~monitor to where it will be displayed at first
+		* public methods
 		*/
-		WindowProps(const std::string& title, unsigned int width, unsigned int height);
-		virtual ~WindowProps();
+		void setGLVersion(unsigned int mayor, unsigned int minor);
 
 		void setTitle(const std::string& title);
-		void setOpenGLVersion(unsigned int mayor, unsigned int minor);
 
-		void setSize(unsigned int width, unsigned int height);
-		void setPosition(int xpos, int ypos);
+		void setOpacity(unsigned int opacity);
+		void setPosition(const Position& position);
+		void setDimension(const Dimension& dimension);
+		void setResolution(const Dimension& resolution);
 
-		void setWindowTransparency(unsigned int transparency);
+	public:
+		/*
+		* Public getters
+		*/
+		std::string getTitle() const;
 
-		void setVisible(bool isVisible);
-		void setResizable(bool isResizable);
-		void setDecorated(bool isDecorated);
-		void setAlwaysOnTop(bool isAlwaysOnTop);
+		unsigned int getMayorGLVersion() const;
+		unsigned int getMinorGLVersion() const;
 
-		std::string getTitle();
+		inline unsigned int getOpacity() const;
 
-		unsigned int getWindowTransparency();
-
-		unsigned int getWidth();
-		unsigned int getHeight();
-
-		void getSize(unsigned int& width, unsigned int& height);
-		void getPosition(int& xpos, int& ypos);
-		void getOpenGlVersion(unsigned int& mayor, unsigned int& minor);
-		
-		bool isRestored();		 // 
-		bool isMaximized();		 // 
-		bool isMinimized();		 // 
-								 // 
-		bool isVisible();		 // Current Window status
-		bool isResizable();		 // 
-		bool isDecorated();		 // 
-		bool isFullscreen();	 // 
-		bool isAlwaysOnTop();	 // 
+		Position& getPosition();
+		Dimension& getDimension();
+		Dimension& getResolution();
 
 	private:
 		/*
-		* Mutual friend classes
+		* Friends with other classes
 		*/
 		friend Window;
-		friend WindowCallback;
 
 	private:
 		/*
-		* Private methods
+		* Non visible constructor
 		*/
-		void setContext(Window* windowContext);
-
-	private:
-		/*
-		* Private members
-		*/
-		Window* windowContext;
+		explicit WindowProps();
 		
-		std::string title;
+		void initDefault() const;
 
-		unsigned int width;
-		unsigned int height;
-
+	private:
+		/*
+		* private members
+		*/
 		unsigned int mayorGLVersion;
 		unsigned int minorGLVersion;
 
-		unsigned int transparency;
+		GLFWwindow* glWindow;
 
-		int xPosition;
-		int yPosition;
+		std::string title;
 
-		bool is_Visible;
-		bool is_Resizable;
-		bool is_Decorated;
-		bool is_Fullscreen;
-		bool is_AlwaysOnTop;
+		unsigned int opacity;
 
-		bool is_Maximized;
-		bool is_Minimized;
+		Position position;
+		Dimension dimension;
+		Dimension resolution;
 	};
 }

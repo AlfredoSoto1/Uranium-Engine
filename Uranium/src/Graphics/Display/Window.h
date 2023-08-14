@@ -1,9 +1,14 @@
 #pragma once
 
-#include <memory>
-#include <string>
-
 struct GLFWwindow;
+
+namespace Uranium::Core {
+	class Application;
+}
+
+namespace Uranium::Input::Listeners {
+	class WindowListener;
+}
 
 namespace Uranium::Input::Callbacks {
 	class WindowCallback;
@@ -12,89 +17,93 @@ namespace Uranium::Input::Callbacks {
 namespace Uranium::Graphics::Display {
 
 	class Monitor;
+	class WindowMode;
 	class WindowProps;
 
 	/*
 	* Window class
 	* 
-	* This class creates an instance of 
-	* a window within a OpenGL (GLFW) context.
 	*/
 	class Window {
 	public:
 		/*
 		* Custom alias
 		*/
-		using WindowCallback = Uranium::Input::Callbacks::WindowCallback;
+		using Application = Core::Application;
 
-	public:
-
-		// Single and unique Window constructor
-		// - title - as a String to be displayed at the top
-		// - width & height - dimensions of such window
-		explicit Window(const std::string& title, unsigned int width, unsigned int height);
-		
-		// Destruction and release of
-		// memory contained by 'this'
-		// Window instance.
-		virtual ~Window();
-
-		void setMonitor(std::shared_ptr<Monitor> monitor);
-		
-		operator GLFWwindow* ();
-		
-		WindowProps& getProperties();
-		std::shared_ptr<Monitor> getMonitor();
+		using WindowCallback = Input::Callbacks::WindowCallback;
+		using WindowListener = Input::Listeners::WindowListener;
 
 	public:
 		/*
-		* public methods
+		* Minimun and maximum default dimensions
+		* for a window when resizing and creation
 		*/
+		static const unsigned int MIN_WIDTH = 320;
+		static const unsigned int MIN_HEIGHT = 180;
 
-		bool hasClosed();
-		bool failedOnCreation();
-
-		void init();				// 
-		void close();				// main methods that controls
-		void dispose();				// the initialization and finalization of window
+	public:
+		explicit Window();
 		
-		void focus();				// 
-		void restore();				// These are the basic integrated window
-		void maximize();			// commands used for modifying the aspect
-		void minimize();			// of the window itself
-		void requestAttention();	// 
-		void centerWindow();		// 
+		~Window();
 
-		// set fullscreen with a resolution
-		void fullscreen(unsigned int width, unsigned int height);
-		
+		auto getModes()    -> WindowMode&;
+		auto getProps()    -> WindowProps&;
+		auto getCallback() -> WindowCallback&;
+
+	public:
+		/*
+		* Public methods that cannot
+		* be called without window being
+		* created first.
+		*/
+		void close();
+		void focus();			
+		void requestAttention();
+
+		void centerWindow(const Monitor& monitor);
+
+		bool isCurrent() const;
+		bool shouldClose() const;
+
+		operator GLFWwindow* () const;
+
+	public:
+		/*
+		* Public methods that can
+		* be called without the window being
+		* created first
+		*/
+		auto getWindowListener() const-> WindowListener*;
+
+		void setWindowListener(WindowListener* windowListener);
+
 	private:
 		/*
-		* Friend with other classes
+		* friends with other classes
 		*/
-		friend WindowProps;
+		friend Application;
 		friend WindowCallback;
 
 	private:
 		/*
 		* Private methods
 		*/
-		void prepareWindowHints();		//
-		void prepareWindowGLVersion();	// Constructs window hints beforea
-		void prepareContextHints();		// and after creation.
-
-		void createWindow();
+		void build();
+		void dispose();
 
 	private:
 		/*
 		* Private members
 		*/
-		bool hasFailed;
-		bool hasDisposed;
-		
-		GLFWwindow* window;
-		WindowProps* windowProps;
+		volatile bool hasCreated;
+		volatile bool hasDisposed;
 
-		std::shared_ptr<Monitor> monitor;
+		GLFWwindow* glWindow;
+		WindowListener* windowListener;
+
+		WindowMode* windowMode;   // Window current modes
+		WindowProps* windowProps; // Window current properties
+		WindowCallback* callback; // Window callbacks
 	};
 }

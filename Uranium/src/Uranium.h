@@ -9,19 +9,23 @@
 // 
 
 // Import engine tools
-#include "Uranium/Core/EngineTools.h"
+#include "Core/EngineTools.h"
+
+#include "Utils/Position.h"
+#include "Utils/Dimension.h"
 
 // Import Callbacks
-#include "Uranium/Callbacks/WindowCallback.h"
+#include "Input/Callbacks/WindowCallback.h"
 
 // Import Graphics essentials
-#include "Uranium/Graphics/Display/Monitor.h"
-#include "Uranium/Graphics/Display/Window.h"
+#include "Graphics/Display/Monitor.h"
+#include "Graphics/Display/Window.h"
+#include "Graphics/Display/WindowMode.h"
+#include "Graphics/Display/WindowProps.h"
 
 // Import Application-Core essentials
-#include "Uranium/Core/WorkingUnit.h"
-#include "Uranium/Core/Application.h"
+#include "Core/Application.h"
 
 // ------------------ Entry point definition -------------------------
-#include "Uranium/Core/EntryPoint.h"
+#include "Core/EntryPoint.h"
 // -------------------------------------------------------------------
