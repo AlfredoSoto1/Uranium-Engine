@@ -108,9 +108,11 @@ namespace Uranium::Core {
 
 		std::shared_ptr<Window> window;
 
+		// Display related callbacks
 		CursorCallback* cursorCallback;
 		WindowCallback* windowCallback;
 
+		// Peripheral related callbacks
 		MouseCallback*    mouseCallback;
 		MonitorCallback*  monitorCallback;
 		KeyboardCallback* keyboardCallback;

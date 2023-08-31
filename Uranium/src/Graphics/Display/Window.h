@@ -43,13 +43,15 @@ namespace Uranium::Graphics::Display {
 		static const unsigned int MIN_HEIGHT = 180;
 
 	public:
+		/*
+		* Default Window constructor & destructor
+		*/
 		explicit Window();
 		
 		~Window();
 
 		auto getModes()    -> WindowMode&;
 		auto getProps()    -> WindowProps&;
-		auto getCallback() -> WindowCallback&;
 
 	public:
 		/*
@@ -83,7 +85,6 @@ namespace Uranium::Graphics::Display {
 		* friends with other classes
 		*/
 		friend Application;
-		friend WindowCallback;
 
 	private:
 		/*
@@ -104,6 +105,5 @@ namespace Uranium::Graphics::Display {
 
 		WindowMode* windowMode;   // Window current modes
 		WindowProps* windowProps; // Window current properties
-		WindowCallback* callback; // Window callbacks
 	};
 }

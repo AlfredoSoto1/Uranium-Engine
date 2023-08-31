@@ -33,7 +33,6 @@ namespace Uranium::Graphics::Display {
 
 	Window::Window() :
 		glWindow(nullptr),
-		callback(nullptr),
 		windowListener(nullptr),
 
 		windowMode(new WindowMode()),
@@ -77,10 +76,6 @@ namespace Uranium::Graphics::Display {
 
 	auto Window::getProps() -> WindowProps& {
 		return *windowProps;
-	}
-
-	auto Window::getCallback() -> WindowCallback& {
-		return *callback;
 	}
 
 	auto Window::getWindowListener() const -> WindowListener* {
@@ -128,9 +123,6 @@ namespace Uranium::Graphics::Display {
 
 		glfwSetWindowUserPointer(glWindow, this);
 
-		// Prepare and create the window callbacks
-		callback = new WindowCallback(this);
-
 		// Provide the corresponding values to the hints
 		// declared before window creation after the window
 		// has initialized correctly.
@@ -161,7 +153,6 @@ namespace Uranium::Graphics::Display {
 		if (not hasCreated)
 			return;
 
-		delete callback;    // Free all allocated memory
 		delete windowMode;  // related to callbacks,
 		delete windowProps; // Window modes and properties
 
