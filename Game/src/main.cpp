@@ -504,72 +504,95 @@
 //}
 
 // Define the necessay macros to launch the application
-#define UR_PLATFORM_WINDOWS
+//#define UR_PLATFORM_WINDOWS
+//
+//#include <Uranium.h>
+//#include <Core/UnitProgram.h>
+//
+//class MyGame : public Uranium::Core::Application {
+//public:
+//
+//	using Position = Uranium::Utils::Position;
+//	using Dimension = Uranium::Utils::Dimension;
+//
+//	using Window = Uranium::Graphics::Display::Window;
+//	using WindowMode = Uranium::Graphics::Display::WindowMode;
+//	using WindowProps = Uranium::Graphics::Display::WindowProps;
+//	
+//	using Monitor = Uranium::Graphics::Display::Monitor;
+//
+//	std::shared_ptr<Window> window;
+//	std::shared_ptr<Window> second;
+//
+//	/*
+//	* This constructor is the start of
+//	* the main application.
+//	*/
+//	MyGame() :
+//		Application()
+//	{
+//		Monitor monitor = Monitor::getPrimary();
+//
+//		window = std::make_shared<Window>();
+//
+//		WindowProps& props = window->getProps();
+//
+//		props.setGLVersion(4, 6);
+//
+//		props.setTitle("First Window Display :) 1");
+//		props.setPosition(Position(0, 0));
+//
+//		WindowMode& winMode1 = window->getModes();
+//
+//		winMode1.setVisible(true);
+//		winMode1.setResizable(true);
+//		winMode1.setDecorated(true);
+//		winMode1.setAlwaysOnTop(true);
+//
+//		// register window to display it
+//		registerWindow(window);
+//	}
+//
+//	/*
+//	* This destructor is the end of the
+//	* application where everything gets
+//	* released from memory.
+//	*/
+//	~MyGame() {
+//		
+//		Uranium::Core::UnitProgram program;
+//
+//	}
+//};
+//
+//// 
+//// Uranium Engine's entry-point definition
+////
+//Uranium::Core::Application* Uranium::createApplication() {
+//	// Create and return a new instance
+//	// of the main application to be executed
+//	return new MyGame();
+//}
 
-#include <Uranium.h>
-#include <Core/UnitProgram.h>
+import <memory>;
+import <iostream>;
+import Uranium.Core.Application;
 
-class MyGame : public Uranium::Core::Application {
+using namespace Uranium::Core;
+
+class MyGame : public Application {
 public:
-
-	using Position = Uranium::Utils::Position;
-	using Dimension = Uranium::Utils::Dimension;
-
-	using Window = Uranium::Graphics::Display::Window;
-	using WindowMode = Uranium::Graphics::Display::WindowMode;
-	using WindowProps = Uranium::Graphics::Display::WindowProps;
-	
-	using Monitor = Uranium::Graphics::Display::Monitor;
-
-	std::shared_ptr<Window> window;
-	std::shared_ptr<Window> second;
-
-	/*
-	* This constructor is the start of
-	* the main application.
-	*/
 	MyGame() :
-		Application()
+		Application() 
 	{
-		Monitor monitor = Monitor::getPrimary();
-
-		window = std::make_shared<Window>();
-
-		WindowProps& props = window->getProps();
-
-		props.setGLVersion(4, 6);
-
-		props.setTitle("First Window Display :) 1");
-		props.setPosition(Position(0, 0));
-
-		WindowMode& winMode1 = window->getModes();
-
-		winMode1.setVisible(true);
-		winMode1.setResizable(true);
-		winMode1.setDecorated(true);
-		winMode1.setAlwaysOnTop(true);
-
-		// register window to display it
-		registerWindow(window);
+		std::cout << "Application created" << std::endl;
 	}
 
-	/*
-	* This destructor is the end of the
-	* application where everything gets
-	* released from memory.
-	*/
 	~MyGame() {
-		
-		Uranium::Core::UnitProgram program;
 
 	}
 };
 
-// 
-// Uranium Engine's entry-point definition
-//
-Uranium::Core::Application* Uranium::createApplication() {
-	// Create and return a new instance
-	// of the main application to be executed
-	return new MyGame();
+std::unique_ptr<Application> createApplication() {
+	return std::make_unique<MyGame>();
 }
