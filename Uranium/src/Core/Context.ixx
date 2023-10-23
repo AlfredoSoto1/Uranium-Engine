@@ -1,11 +1,11 @@
-#pragma once 
+module;
 
 export module Uranium.Core.Context;
 
 import <memory>;
 import <thread>;
 
-namespace Uranium::Core {
+export namespace Uranium::Core {
 	
 	class Context {
 	public:

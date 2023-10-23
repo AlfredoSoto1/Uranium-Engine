@@ -574,9 +574,10 @@
 //	return new MyGame();
 //}
 
-import <memory>;
-import <iostream>;
 import Uranium.Core.Application;
+
+#include <memory>
+#include <iostream>
 
 using namespace Uranium::Core;
 

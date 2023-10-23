@@ -1,4 +1,4 @@
-#pragma once
+module;
 
 export module Uranium.Core.Application;
 
@@ -6,7 +6,7 @@ import <memory>;
 import <vector>;
 import <string>;
 
-namespace Uranium::Core {
+export namespace Uranium::Core {
 
 	extern class Context;
 

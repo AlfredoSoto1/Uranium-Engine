@@ -1,12 +1,12 @@
+import Uranium.Core.Context;
+import Uranium.Core.Application;
+
 #define GLEW_STATIC
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 
-import <memory>;
-import <iostream>;
-
-import Uranium.Core.Context;
-import Uranium.Core.Application;
+#include <memory>
+#include <iostream>
 
 namespace Uranium::Core {
 
@@ -76,7 +76,7 @@ namespace Uranium::Core {
 		// Create a virtual thread context if and only if
 		// there is no context existing context before running the application
 		if (contexts.empty())
-			contexts.push_back(
+			contexts.emplace_back(
 				std::make_unique<Context>(Context::ThreadType::VIRTUAL_THREAD)
 			);
 
