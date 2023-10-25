@@ -574,19 +574,20 @@
 //	return new MyGame();
 //}
 
-import Uranium.Core.Application;
+#include <memory>
+#include <iostream>
 
-#include <memory>;
-#include <iostream>;
+import Uranium.Program.Context;
+import Uranium.Program.Application;
 
-using namespace Uranium::Core;
+using namespace Uranium::Program;
 
-class MyGame : public Application {
+class MyGame : public Context {
 public:
 	MyGame() :
-		Application() 
+		Context(ThreadType::VIRTUAL_THREAD) 
 	{
-		std::cout << "Application created" << std::endl;
+		
 	}
 
 	~MyGame() {
@@ -595,5 +596,20 @@ public:
 };
 
 std::unique_ptr<Application> createApplication() {
-	return std::make_unique<MyGame>();
+	
+	/*
+	* Create the unique application
+	* 
+	* This application must contain atleast *one*
+	* Context to be able to compile and run.
+	* 
+	* These contexts define the type of virtual thread
+	* the application must handle. In a virtual thread
+	* there are no OpenGL contexts, in OpenGL contexts
+	* same otherwise.
+	*/
+	return std::make_unique<Application>(
+		std::make_unique<MyGame>()
+		// Make more unique contexts separated by commas
+	);
 }

@@ -1,23 +1,20 @@
-import Uranium.Core.Context;
-import Uranium.Core.Application;
-
 #define GLEW_STATIC
-#include <GL/glew.h>
+#include <iostream>
 #include <GLFW/glfw3.h>
 
-#include <memory>
-#include <iostream>
+import Uranium.Program.Context;
+import Uranium.Program.Application;
 
-namespace Uranium::Core {
+namespace Uranium::Program {
 
 	Application* Application::instanceReference = nullptr;
-	
+
 	Application& Application::instance() {
 		return *instanceReference;
 	}
 
 	void Application::build(int argc, char* argv[], std::unique_ptr<Application> application) {
-		
+
 		// Pass all the arguments from the terminal
 		// to the application
 		for (int i = 0; i < argc; i++)
@@ -26,7 +23,8 @@ namespace Uranium::Core {
 		try {
 			// Run the application
 			application->run();
-		} catch (const std::exception& e) {
+		}
+		catch (const std::exception& e) {
 			e.what();
 		}
 
@@ -38,24 +36,6 @@ namespace Uranium::Core {
 		// print_status() macro because we want to detect errors even
 		// on release. (Could change in the future)
 		std::printf("Error [%i]: %s\n", error, description);
-	}
-
-	Application::Application() noexcept :
-		exitRequested(false),
-		arguments(),
-		contexts()
-	{
-		// These types of if statements that
-		// serve to check conditions that should not
-		// happen ever, need to be later in the future
-		// turned into a macro so that in release this doesnt get evaluated
-#ifdef _DEBUG
-		if (instanceReference != nullptr)
-			throw std::runtime_error("Instance of application already exists!");
-#endif // _DEBUG
-		// if the the application has not been created,
-		// make it remember that an instance of it already exist
-		instanceReference = this;
 	}
 
 	Application::~Application() {
@@ -72,13 +52,6 @@ namespace Uranium::Core {
 	}
 
 	void Application::run() {
-		
-		// Create a virtual thread context if and only if
-		// there is no context existing context before running the application
-		if (contexts.empty())
-			contexts.emplace_back(
-				std::make_unique<Context>(Context::ThreadType::VIRTUAL_THREAD)
-			);
 
 		// Initialize GLFW and check it did it correctly
 		// If the application doesn't initiate, exit the application
@@ -90,9 +63,12 @@ namespace Uranium::Core {
 		// the lifetime of the glfw application
 		glfwSetErrorCallback(&Application::diagnosticErrors);
 
-		while (!contexts.empty() && exitRequested) {
+		volatile unsigned int points = 0;
+
+		while (!(contexts.empty() && exitRequested) && points < 1000) {
 			// Update glfw callbacks
 			glfwPollEvents();
+			points++;
 		}
 
 		// End all the active contexts before ending application

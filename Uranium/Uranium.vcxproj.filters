@@ -18,22 +18,19 @@
     <ClCompile Include="src\STL_pch.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Core\EntryPoint.cpp">
+    <ClCompile Include="src\Program\Context.ixx">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Core\Application.ixx">
+    <ClCompile Include="src\Program\Context.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Core\Application.cppm">
+    <ClCompile Include="src\Program\EntryPoint.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Core\Context.ixx">
+    <ClCompile Include="src\Program\Application.ixx">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Core\Context.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Core\IApplication.ixx">
+    <ClCompile Include="src\Program\Application.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

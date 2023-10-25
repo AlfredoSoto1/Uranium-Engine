@@ -1,10 +1,11 @@
-export module Uranium.Core.Application;
+export module Uranium.Program.Application;
 
 import <memory>;
 import <vector>;
 import <string>;
+import <stdexcept>;
 
-export namespace Uranium::Core {
+export namespace Uranium::Program {
 
 	extern class Context;
 
@@ -20,7 +21,7 @@ export namespace Uranium::Core {
 		* entry point (main function).
 		*/
 		static void build(int argc, char* argv[], std::unique_ptr<Application> application);
-	
+
 	private:
 		/*
 		* private static declarations
@@ -38,8 +39,33 @@ export namespace Uranium::Core {
 		* This must not throw an exception since this
 		* is all what it must start from the application.
 		*/
-		explicit Application() noexcept;
-		
+		template<class T, class... Args>
+		explicit Application(T first, Args... args) noexcept :
+			exitRequested(false),
+			arguments(),
+			contexts()
+		{
+			// These types of if statements that
+			// serve to check conditions that should not
+			// happen ever, need to be later in the future
+			// turned into a macro so that in release this doesnt get evaluated
+#ifdef _DEBUG
+			if (instanceReference != nullptr)
+				throw std::runtime_error("Instance of application already exists!");
+#endif // _DEBUG
+
+			// if the the application has not been created,
+			// make it remember that an instance of it already exist
+			instanceReference = this;
+
+			// Emplace the unique reference to the context
+			// as an rvalue first
+			contexts.emplace_back(std::move(first));
+
+			// Then emplace the rest of the references parameters
+			(contexts.emplace_back(std::move(args)), ...);
+		}
+
 		/*
 		* Frees the memory created by the application.
 		* This does NOT frees memory allocated by OpenGL

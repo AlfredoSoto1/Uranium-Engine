@@ -1,12 +1,11 @@
-import Uranium.Core.Context;
+import Uranium.Program.Context;
 
 #define GLEW_STATIC
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
+#include <iostream>;
 
-#include <iostream>
-
-namespace Uranium::Core {
+namespace Uranium::Program {
 
 	Context::Context(ThreadType type) noexcept :
 		type(type),
@@ -33,7 +32,7 @@ namespace Uranium::Core {
 		exitRequested = true;
 	}
 
-	void Context::endContext() const {
+	void Context::endContext() {
 		// Join the thread and update
 		// contextActive flag to false to tell
 		// the client that the context has ended

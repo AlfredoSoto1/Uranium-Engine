@@ -1,14 +1,15 @@
-module;
-
-export module Uranium.Core.Context;
+export module Uranium.Program.Context;
 
 import <memory>;
 import <thread>;
 
-export namespace Uranium::Core {
+export namespace Uranium::Program {
 	
 	class Context {
 	public:
+		/*
+		* Context thread type
+		*/
 		enum class ThreadType {
 			OPENGL_THREAD = 0,
 			VIRTUAL_THREAD
@@ -33,6 +34,12 @@ export namespace Uranium::Core {
 		Context(const Context&) = delete;
 		Context(const Context&&) = delete;
 
+	private:
+		/*
+		* Friend with other classes
+		*/
+		friend extern class Application;
+
 	public:
 		/*
 		* Getters and Setters
@@ -45,13 +52,29 @@ export namespace Uranium::Core {
 		* Public modifiers
 		*/
 		void exit() const;
-		void endContext() const;
+
+		/*
+		* Sets a display for the current
+		* context created. This only works when
+		* *this* context is created with a ThreadType
+		* of OpenGL support.
+		*/
+		void setDisplay();
 
 	private:
 		/*
 		* Private modifiers
 		*/
+
+		/*
+		* Starts *this* context in a thread
+		*/
 		void startContext();
+
+		/*
+		* Ends *this* context from virtual thread
+		*/
+		void endContext();
 
 	private:
 		/*

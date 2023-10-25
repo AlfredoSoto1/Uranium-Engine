@@ -1,6 +1,6 @@
 import <memory>;
 
-import Uranium.Core.Application;
+import Uranium.Program.Application;
 
 /*
 * Define a custom entry point where
@@ -8,7 +8,7 @@ import Uranium.Core.Application;
 * a main function. With this the application can handle
 * efficiently the lifetime of the Application.
 */
-extern std::unique_ptr<Uranium::Core::Application> createApplication();
+extern std::unique_ptr<Uranium::Program::Application> createApplication();
 
 /*
 * Definition of the default main function
@@ -18,7 +18,7 @@ auto main(int argc, char* argv[]) -> int {
 	/*
 	* Build the Application
 	*/
-	Uranium::Core::Application::build(
+	Uranium::Program::Application::build(
 		argc, // argument count
 		argv, // argument values as an array
 		std::move(createApplication())
