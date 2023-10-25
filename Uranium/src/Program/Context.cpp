@@ -1,14 +1,23 @@
-import Uranium.Program.Context;
-
 #define GLEW_STATIC
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
-#include <iostream>;
+#include <iostream>
+
+import Uranium.Display.Window;
+import Uranium.Program.Context;
 
 namespace Uranium::Program {
 
 	Context::Context(ThreadType type) noexcept :
+		/*
+		* Parameters
+		*/
 		type(type),
+		currentDisplay(nullptr),
+
+		/*
+		* Context-members
+		*/
 		exitRequested(false),
 		contextActive(false),
 		contextThread(&Context::startContext, this)
@@ -44,6 +53,9 @@ namespace Uranium::Program {
 		// Context thread starts to be active
 		// when the thread starts running
 		contextActive = true;
+
+		// Run in context (thread)
+		run();
 
 		// Set the default context for 'this' thread.
 		//glfwMakeContextCurrent(*window);

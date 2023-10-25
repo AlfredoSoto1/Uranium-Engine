@@ -3,6 +3,10 @@ export module Uranium.Program.Context;
 import <memory>;
 import <thread>;
 
+namespace Uranium::Display {
+	extern class Window;
+}
+
 export namespace Uranium::Program {
 	
 	class Context {
@@ -53,13 +57,19 @@ export namespace Uranium::Program {
 		*/
 		void exit() const;
 
+	protected:
 		/*
-		* Sets a display for the current
-		* context created. This only works when
-		* *this* context is created with a ThreadType
-		* of OpenGL support.
+		* Protected modifiers
 		*/
-		//void setDisplay(std::shared_ptr<Window> window);
+
+		/*
+		* This method gets called every frame
+		* inside the defined contex thread.
+		* For virtual threads it runs once,
+		* but for the OpenGL context this method gets
+		* called every frame to update the display
+		*/
+		virtual void run() = 0;
 
 	private:
 		/*
@@ -86,5 +96,7 @@ export namespace Uranium::Program {
 		volatile mutable bool exitRequested;
 
 		mutable std::thread contextThread;
+
+		std::shared_ptr<Display::Window> currentDisplay;
 	};
 }

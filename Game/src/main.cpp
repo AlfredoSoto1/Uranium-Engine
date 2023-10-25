@@ -577,20 +577,34 @@
 #include <memory>
 #include <iostream>
 
+import Uranium.Display.Window;
 import Uranium.Program.Context;
 import Uranium.Program.Application;
 
+using namespace Uranium::Display;
 using namespace Uranium::Program;
 
 class MyGame : public Context {
 public:
+	std::shared_ptr<Window> window;
+
 	MyGame() :
 		Context(ThreadType::VIRTUAL_THREAD) 
-	{
+	{	
+		//std::unique_ptr<Monitor> monitor = Monitor::getPrimary();
 		
+		window = std::make_shared<Window>();
+
 	}
 
 	~MyGame() {
+
+	}
+
+	/*
+	* 
+	*/
+	void run() override {
 
 	}
 };

@@ -59,15 +59,13 @@ export namespace Uranium::Display {
 		* Public setters
 		*/
 		template<class T>
-		void setProperty(Properties property, T type) {
-			switch (property) {
-			case Properties::TITLE:
-				if constexpr (std::is_same<T, std::string>::value) {
-					title = "dsa";
-				}
-				break;
-			}
-		}
+		void setProperty(Properties property, T type);
+
+		//void setTitle(const std::string& title);
+		//void setOpacity(unsigned int opacity);
+		//void setPosition(const glm::ivec2& position);
+		//void setDimension(const glm::ivec2& dimension);
+		//void setResolution(const glm::ivec2& resolution);
 
 	public:
 		/*
@@ -127,4 +125,24 @@ export namespace Uranium::Display {
 		bool maximized;
 		bool minimized;
 	};
+
+	template<class T>
+	void Window::setProperty(Window::Properties property, T type) {
+#ifdef _DEBUG
+		if constexpr (!std::is_same<T, glm::ivec2>::value)
+			throw std::exception("Type entered is not a glm::ivec2 type");
+#endif // _DEBUG
+
+		switch (property) {
+		case Properties::POSITION:
+			
+			break;
+		case Properties::DIMENSION:
+
+			break;
+		case Properties::RESOLUTION:
+
+			break;
+		}
+	}
 }
