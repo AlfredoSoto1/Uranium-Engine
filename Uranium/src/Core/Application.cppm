@@ -82,7 +82,7 @@ namespace Uranium::Core {
 
 		// Initialize GLFW and check it did it correctly
 		// If the application doesn't initiate, exit the application
-		if (glfwInit() == GLFW_FALSE) {
+		if (glfwInit() == GLFW_FALSE)
 			throw std::exception("Application could not initiate GLFW.");
 
 		// Set the custom error callback

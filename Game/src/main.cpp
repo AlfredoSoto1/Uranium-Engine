@@ -576,8 +576,8 @@
 
 import Uranium.Core.Application;
 
-#include <memory>
-#include <iostream>
+#include <memory>;
+#include <iostream>;
 
 using namespace Uranium::Core;
 

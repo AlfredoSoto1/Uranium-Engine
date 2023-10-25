@@ -1,5 +1,3 @@
-module;
-
 export module Uranium.Core.Application;
 
 import <memory>;

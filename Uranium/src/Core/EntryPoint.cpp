@@ -1,7 +1,6 @@
+import <memory>;
 
 import Uranium.Core.Application;
-
-import <memory>;
 
 /*
 * Define a custom entry point where
