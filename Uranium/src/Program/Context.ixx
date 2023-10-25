@@ -59,7 +59,7 @@ export namespace Uranium::Program {
 		* *this* context is created with a ThreadType
 		* of OpenGL support.
 		*/
-		void setDisplay();
+		//void setDisplay(std::shared_ptr<Window> window);
 
 	private:
 		/*
