@@ -17,22 +17,6 @@ export namespace Uranium::Display {
 		static constexpr unsigned int MIN_WIDTH = 320;
 		static constexpr unsigned int MIN_HEIGHT = 180;
 
-		enum class Modes {
-			VISIBLE = 0,
-			RESIZABLE,
-			DECORATED,
-			FULLSCREEN,
-			ALWAYS_ON_TOP,
-		};
-
-		enum class Properties {
-			TITLE = 0,
-			OPACITY,
-			POSITION,
-			DIMENSION,
-			RESOLUTION
-		};
-
 	public:
 		/*
 		* This creates a window inside an OpenGL context.
@@ -51,33 +35,63 @@ export namespace Uranium::Display {
 			return glWindow;
 		}
 
-		//bool isCurrent() const;
-		//bool shouldClose() const;
+		bool isCurrent() const;
+		bool shouldClose() const;
 	
 	public:
 		/*
-		* Public setters
+		* Public setter properties
 		*/
-		template<class T>
-		void setProperty(Properties property, T type);
 
-		//void setTitle(const std::string& title);
-		//void setOpacity(unsigned int opacity);
-		//void setPosition(const glm::ivec2& position);
-		//void setDimension(const glm::ivec2& dimension);
-		//void setResolution(const glm::ivec2& resolution);
+		// Sets the title at the top of the window
+		void setTitle(const std::string& title);
+
+		/*
+		* Sets the opacity of the window
+		* (This takes alot of resources for low-end devices)
+		*/
+		void setOpacity(unsigned int opacity);
+
+		// Sets the position of the window
+		void setPosition(const glm::ivec2& position);
+
+		// Sets the dimension of the window
+		void setDimension(const glm::ivec2& dimension);
+
+		// Sets the Resolution of the window
+		void setResolution(const glm::ivec2& resolution);
+
+	public:
+		/*
+		* Public setter modes
+		*/
+
+		// Changes the visibility of the window
+		void setVisible(bool visible);
+
+		// Changes if the window should be capable of resizing
+		void setResizable(bool resizable);
+
+		// Decorated flag that draws the border and top bar of the window
+		void setDecorated(bool decorated);
+
+		// Sets the window at the top of the app priority queue
+		void setAlwaysOnTop(bool alwaysOnTop);
+
+		// Changes the screen mode to fullscreen when provided with a monitor
+		//void setFullscreen(const Monitor& monitor);
 
 	public:
 		/*
 		* Public modifiers
 		*/
 
-		//void close();
-		//void focus();
-		//void restore();
-		//void maximize();
-		//void minimize();
-		//void requestAttention();
+		void close();
+		void focus();
+		void restore();
+		void maximize();
+		void minimize();
+		void requestAttention();
 
 		//void centerWindow(const Monitor& monitor);
 
@@ -85,8 +99,8 @@ export namespace Uranium::Display {
 		/*
 		* Private methods
 		*/
-		// void build();
-		// void dispose();
+		
+		void prepareDefaultHints() const;
 
 	private:
 		/*
@@ -95,7 +109,6 @@ export namespace Uranium::Display {
 		
 		// Volatile members
 		volatile bool hasCreated;
-		volatile bool hasDisposed;
 
 		/*
 		* Window properties
@@ -125,24 +138,4 @@ export namespace Uranium::Display {
 		bool maximized;
 		bool minimized;
 	};
-
-	template<class T>
-	void Window::setProperty(Window::Properties property, T type) {
-#ifdef _DEBUG
-		if constexpr (!std::is_same<T, glm::ivec2>::value)
-			throw std::exception("Type entered is not a glm::ivec2 type");
-#endif // _DEBUG
-
-		switch (property) {
-		case Properties::POSITION:
-			
-			break;
-		case Properties::DIMENSION:
-
-			break;
-		case Properties::RESOLUTION:
-
-			break;
-		}
-	}
 }

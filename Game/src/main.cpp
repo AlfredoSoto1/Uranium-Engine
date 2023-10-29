@@ -595,6 +595,7 @@ public:
 		
 		window = std::make_shared<Window>();
 
+
 	}
 
 	~MyGame() {
