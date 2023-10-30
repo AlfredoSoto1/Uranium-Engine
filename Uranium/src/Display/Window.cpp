@@ -59,22 +59,22 @@ namespace Uranium::Display {
 		prepareDefaultHints();
 
 		// Create a GLFW window with the given parameters
-		glWindow = glfwCreateWindow(dimension.x, dimension.y, title.c_str(), nullptr, nullptr);
+		//glWindow = glfwCreateWindow(dimension.x, dimension.y, title.c_str(), nullptr, nullptr);
 
 		if (!glWindow)
 			throw std::exception("[Exception]: Failed to create window display");
 
 		hasCreated = true;
 
-		glfwSetWindowUserPointer(glWindow, this);
+		//glfwSetWindowUserPointer(glWindow, this);
 
 		// Provide the corresponding values to the hints
 		// declared before window creation after the window
 		// has initialized correctly.
 
 		// set resize window limits if and only if its resizable
-		if (resizable)
-			glfwSetWindowSizeLimits(glWindow, Window::MIN_WIDTH, Window::MIN_HEIGHT, GLFW_DONT_CARE, GLFW_DONT_CARE);
+		//if (resizable)
+		//	glfwSetWindowSizeLimits(glWindow, Window::MIN_WIDTH, Window::MIN_HEIGHT, GLFW_DONT_CARE, GLFW_DONT_CARE);
 
 		// set window minimized / maximized if it was a Property setted before
 		if (minimized)
@@ -87,7 +87,7 @@ namespace Uranium::Display {
 		setOpacity(opacity);
 
 		// Display the window
-		glfwShowWindow(glWindow);
+		//glfwShowWindow(glWindow);
 	}
 
 	Window::~Window() {
@@ -96,8 +96,8 @@ namespace Uranium::Display {
 		// Hide the current visible window
 		// and free all resources used for
 		// generating *this* window instance
-		glfwHideWindow(glWindow);
-		glfwDestroyWindow(glWindow);
+		//glfwHideWindow(glWindow);
+		//glfwDestroyWindow(glWindow);
 	}
 
 	bool Window::isCurrent() const {
