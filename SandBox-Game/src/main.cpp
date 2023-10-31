@@ -610,7 +610,7 @@ public:
 	}
 };
 
-#include <GLFW/glfw3.h>
+#include <GL/glfw3.h>
 
 std::unique_ptr<Application> createApplication() {
 	

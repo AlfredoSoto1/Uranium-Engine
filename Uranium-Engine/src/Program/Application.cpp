@@ -1,6 +1,6 @@
 #define GLEW_STATIC
 #include <iostream>
-#include <GLFW/glfw3.h>
+#include <GL/glfw3.h>
 
 import Uranium.Program.Context;
 import Uranium.Program.Application;
