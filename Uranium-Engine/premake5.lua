@@ -4,8 +4,8 @@ project "Uranium-Engine"
     language "C++"
     cppdialect "C++20"
 
-    targetdir ("bin/%{prj.name}/" .. output_binaries)
-    objdir ("bin/%{prj.name}/" .. output_binaries .. "-int")
+    targetdir ("../bin/%{prj.name}/" .. output_binaries)
+    objdir ("../bin/%{prj.name}/" .. output_binaries .. "-int")
 
     files {
         "%{prj.name}/**.h",
@@ -20,7 +20,7 @@ project "Uranium-Engine"
         "$(SolutionDir)Uranium-Engine/vendor",
         "$(SolutionDir)dependencies/glfw/include",
         "$(SolutionDir)dependencies/glew/include",
-        "d$(SolutionDir)ependencies/openal/include"
+        "$(SolutionDir)dependencies/openal/include"
     }
 
     libdirs {
@@ -34,7 +34,7 @@ project "Uranium-Engine"
         systemversion "latest"
         
         defines {
-            "GLFW_STATIC",
+            "GLEW_STATIC",
             "UR_WINDOWS_PLATFORM",
         }
 
