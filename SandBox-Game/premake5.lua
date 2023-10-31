@@ -8,25 +8,26 @@ project "SandBox-Game"
     objdir ("../bin/%{prj.name}/" .. output_binaries .. "-int")
 
     files {
-        "%{prj.name}/**.h",
-        "%{prj.name}/**.hpp",
-        "%{prj.name}/**.cpp",
-        "%{prj.name}/**.ixx",
-        "%{prj.name}/**.cppm"
+        "./**.h",
+        "./**.hpp",
+        "./**.cpp",
+        "./**.ixx",
+        "./**.cppm",
+        "./**.glsl",
     }
 
     includedirs {
-        "$(SolutionDir)Uranium-Engine/src",
-        "$(SolutionDir)Uranium-Engine/vendor",
-        "$(SolutionDir)dependencies/glfw/include",
-        "$(SolutionDir)dependencies/glew/include",
-        "$(SolutionDir)dependencies/openal/include"
+        "../Uranium-Engine/src",
+        "../Uranium-Engine/vendor",
+        "../dependencies/glfw/include",
+        "../dependencies/glew/include",
+        "../dependencies/openal/include"
     }
 
     libdirs {
-        "$(SolutionDir)dependencies/glfw/lib",
-        "$(SolutionDir)dependencies/glew/lib",
-        "$(SolutionDir)dependencies/openal/lib"
+        "../dependencies/glfw/lib",
+        "../dependencies/glew/lib",
+        "../dependencies/openal/lib"
     }
 
     links {
@@ -48,7 +49,7 @@ project "SandBox-Game"
             "GLEW_STATIC",
             "UR_WINDOWS_PLATFORM",
         }
-
+        
     filter "configurations:Debug"
         runtime "Debug"
         symbols "on"
