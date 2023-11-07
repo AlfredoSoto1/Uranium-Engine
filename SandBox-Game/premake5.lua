@@ -32,13 +32,6 @@ project "SandBox-Game"
 
     links {
         "Uranium-Engine",
-        "glew32s",
-        "glfw3",
-        "opengl32",
-        "User32",
-        "Gdi32",
-        "Shell32",
-        "OpenAL32"
     }
 
     filter "system:windows"
@@ -50,6 +43,28 @@ project "SandBox-Game"
             "UR_WINDOWS_PLATFORM",
         }
         
+        links {
+            "glew32s",
+            "glfw3",
+            "opengl32",
+            "User32",
+            "Gdi32",
+            "Shell32",
+            "OpenAL32",
+            "kernel32",
+        }
+
+    filter "system:linux"
+        links {
+            "GLEW",   -- Without "lib" prefix and file extension
+            "glfw",
+            "GL",     -- The OpenGL library
+            "X11",    -- Required for X Window System (Linux)
+            "m",      -- Math library
+            "dl",     -- Dynamic Linking library
+            "pthread",  -- POSIX Threads library
+        }
+
     filter "configurations:Debug"
         runtime "Debug"
         symbols "on"
@@ -59,3 +74,23 @@ project "SandBox-Game"
         runtime "Release"
         optimize "on"
         defines "UR_RELEASE"
+
+    filter "configurations:VSCode"
+        system "windows"
+        toolset "gcc"  -- Specify that you want to use the GCC toolset
+        defines {
+            "GLEW_STATIC",
+            "UR_WINDOWS_PLATFORM_VSCODE",
+        }
+
+        links {
+            "Uranium-Engine",
+            "glew32s",
+            "glfw3",
+            "opengl32",
+            "User32",
+            "Gdi32",
+            "Shell32",
+            "OpenAL32",
+            "kernel32",
+        }

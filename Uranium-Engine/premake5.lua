@@ -37,7 +37,15 @@ project "Uranium-Engine"
             "GLEW_STATIC",
             "UR_WINDOWS_PLATFORM",
         }
-
+    
+    filter "configurations:VSCode"
+        system "windows"
+        toolset "gcc"  -- Specify that you want to use the GCC toolset
+        defines {
+            "GLEW_STATIC",
+            "UR_WINDOWS_PLATFORM_VSCODE",
+        }
+    
     filter "configurations:Debug"
         runtime "Debug"
         symbols "on"
