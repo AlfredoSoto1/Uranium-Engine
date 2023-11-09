@@ -1,12 +1,12 @@
-export module Uranium.Display.Window;
+#pragma once
 
-import <string>;
-import <type_traits>;
-import <glm/vec2.hpp>;
+#include <string>
+#include <type_traits>
+#include <glm/vec2.hpp>
 
 extern struct GLFWwindow;
 
-export namespace Uranium::Display {
+namespace Uranium::Display {
 
 	class Window final {
 	public:

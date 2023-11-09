@@ -1,6 +1,5 @@
-import <memory>;
 
-import Uranium.Program.Application;
+#include "Program/Application.h"
 
 /*
 * Define a custom entry point where

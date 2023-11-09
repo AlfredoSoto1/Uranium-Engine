@@ -574,12 +574,9 @@
 //	return new MyGame();
 //}
 
-#include <memory>
-#include <iostream>
-
-import Uranium.Display.Window;
-import Uranium.Program.Context;
-import Uranium.Program.Application;
+#include "Display/Window.h"
+#include "Program/Context.h"
+#include "Program/Application.h"
 
 using namespace Uranium::Display;
 using namespace Uranium::Program;

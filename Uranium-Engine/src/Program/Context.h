@@ -1,13 +1,13 @@
-export module Uranium.Program.Context;
+#pragma once
 
-import <memory>;
-import <thread>;
+#include <memory>
+#include <thread>
 
 namespace Uranium::Display {
 	extern class Window;
 }
 
-export namespace Uranium::Program {
+namespace Uranium::Program {
 	
 	class Context {
 	public:

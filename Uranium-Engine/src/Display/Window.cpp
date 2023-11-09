@@ -1,8 +1,8 @@
-#define GLEW_STATIC
+
 #include <GL/glew.h>
 #include <GL/glfw3.h>
 
-import Uranium.Display.Window;
+#include "Display/Window.h"
 
 namespace Uranium::Display {
 

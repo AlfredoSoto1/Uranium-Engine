@@ -1,9 +1,9 @@
-#define GLEW_STATIC
+
 #include <iostream>
 #include <GL/glfw3.h>
 
-import Uranium.Program.Context;
-import Uranium.Program.Application;
+#include "Program/Context.h"
+#include "Program/Application.h"
 
 namespace Uranium::Program {
 

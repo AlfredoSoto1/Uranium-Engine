@@ -1,11 +1,11 @@
-export module Uranium.Program.Application;
+#pragma once
 
-import <memory>;
-import <vector>;
-import <string>;
-import <stdexcept>;
+#include <memory>
+#include <vector>
+#include <string>
+#include <stdexcept>
 
-export namespace Uranium::Program {
+namespace Uranium::Program {
 
 	extern class Context;
 

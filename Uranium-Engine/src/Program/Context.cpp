@@ -1,10 +1,10 @@
-#define GLEW_STATIC
+
 #include <GL/glew.h>
 #include <GL/glfw3.h>
 #include <iostream>
 
-import Uranium.Display.Window;
-import Uranium.Program.Context;
+#include "Context.h"
+#include "Display/Window.h"
 
 namespace Uranium::Program {
 
