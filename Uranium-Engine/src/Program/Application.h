@@ -9,7 +9,7 @@ namespace Uranium::Program {
 
 	extern class Context;
 
-	class Application {
+	class Application final {
 	public:
 		/*
 		* static declarations
@@ -49,7 +49,7 @@ namespace Uranium::Program {
 			// serve to check conditions that should not
 			// happen ever, need to be later in the future
 			// turned into a macro so that in release this doesnt get evaluated
-#ifdef _DEBUG
+#ifdef UR_DEBUG
 			if (instanceReference != nullptr)
 				throw std::runtime_error("Instance of application already exists!");
 #endif // _DEBUG
@@ -71,17 +71,15 @@ namespace Uranium::Program {
 		* This does NOT frees memory allocated by OpenGL
 		* OpenGL disposal is done in its local thread context
 		*/
-		virtual ~Application();
+		~Application();
 
 		/*
-		* Delete all the moving/copying constructors
-		* since we dont want the client to create a copy
+		* Delete all the copy constructors since 
+		* we dont want the client to create a copy
 		* of the Application itself.
 		*/
 		Application(Application&) = delete;
-		Application(Application&&) = delete;
 		Application(const Application&) = delete;
-		Application(const Application&&) = delete;
 
 	public:
 		/*
@@ -92,6 +90,12 @@ namespace Uranium::Program {
 		* Forces the application to exit
 		*/
 		void exit();
+		
+		/*
+		* Returns true if the application
+		* has terminated
+		*/
+		inline bool hasTerminated() const;
 
 	private:
 		/*

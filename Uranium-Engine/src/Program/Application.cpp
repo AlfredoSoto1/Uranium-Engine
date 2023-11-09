@@ -47,6 +47,10 @@ namespace Uranium::Program {
 		exitRequested = true;
 	}
 
+	inline bool Application::hasTerminated() const {
+		return exitRequested;
+	}
+
 	void Application::addArgument(const std::string& arg) {
 		arguments.push_back(arg);
 	}
