@@ -583,16 +583,12 @@ using namespace Uranium::Program;
 
 class MyGame : public Context {
 public:
-	std::shared_ptr<Window> window;
 
 	MyGame() :
-		Context(ThreadType::VIRTUAL_THREAD) 
+		Context() 
 	{	
 		//std::unique_ptr<Monitor> monitor = Monitor::getPrimary();
 		
-		window = std::make_shared<Window>();
-
-
 	}
 
 	~MyGame() {
@@ -602,13 +598,12 @@ public:
 	/*
 	* 
 	*/
-	void run() override {
-
+	std::shared_ptr<Window> createWindow() override {
+		return nullptr;
 	}
 };
 
 std::unique_ptr<Application> createApplication() {
-	
 	/*
 	* Create the unique application
 	* 

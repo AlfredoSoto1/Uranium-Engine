@@ -7,13 +7,14 @@
 
 namespace Uranium::Program {
 
-	Application* Application::instanceReference = nullptr;
-
 	Application& Application::instance() {
-		return *instanceReference;
+		return *application;
 	}
 
-	void Application::build(int argc, char* argv[], std::unique_ptr<Application> application) {
+	void Application::build(int argc, char* argv[], std::unique_ptr<Application> createdApplication) {
+
+		// Move the created application to the static reference 
+		application = std::move(createdApplication);
 
 		// Pass all the arguments from the terminal
 		// to the application
@@ -28,7 +29,10 @@ namespace Uranium::Program {
 			e.what();
 		}
 
-		// Free application after it goes out of scope
+		// Move the unique reference of the application
+		// to be stack allocated so that when it goes out of
+		// scope it frees itself.
+		createdApplication = std::move(application);
 	}
 
 	void Application::diagnosticErrors(int error, const char* description) {
@@ -77,7 +81,7 @@ namespace Uranium::Program {
 
 		// End all the active contexts before ending application
 		for (const auto& context : contexts)
-			context->endContext();
+			context->end();
 
 		// Terminate the glfw application
 		// after all contexts are ended correctly

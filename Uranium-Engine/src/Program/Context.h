@@ -12,31 +12,20 @@ namespace Uranium::Program {
 	class Context {
 	public:
 		/*
-		* Context thread type
-		*/
-		enum class ThreadType {
-			OPENGL_THREAD = 0,
-			VIRTUAL_THREAD
-		};
-
-	public:
-		/*
 		* This constructs a context that references
 		* a virtual thread where an OpenGL context exists
 		*/
-		explicit Context(ThreadType type) noexcept;
+		explicit Context() noexcept;
 
 		virtual ~Context();
 
 		/*
-		* Delete the move and copy constructor,
+		* Delete the copy constructor,
 		* because we dont want more instances of
 		* a context that must be unique.
 		*/
 		Context(Context&) = delete;
-		Context(Context&&) = delete;
 		Context(const Context&) = delete;
-		Context(const Context&&) = delete;
 
 	private:
 		/*
@@ -49,7 +38,7 @@ namespace Uranium::Program {
 		* Getters and Setters
 		*/
 		bool isActive() const;
-		bool isExitRequested() const;
+		bool exitRequested() const;
 
 	public:
 		/*
@@ -63,13 +52,12 @@ namespace Uranium::Program {
 		*/
 
 		/*
-		* This method gets called every frame
-		* inside the defined contex thread.
-		* For virtual threads it runs once,
-		* but for the OpenGL context this method gets
-		* called every frame to update the display
+		* Creates a window inside the context.
+		* If the function returns nullptr, then
+		* no window will be created inside this context
+		* making it behave like a regular thread.
 		*/
-		virtual void run() = 0;
+		virtual std::shared_ptr<Display::Window> createWindow() = 0;
 
 	private:
 		/*
@@ -79,24 +67,22 @@ namespace Uranium::Program {
 		/*
 		* Starts *this* context in a thread
 		*/
-		void startContext();
+		void start();
 
 		/*
 		* Ends *this* context from virtual thread
 		*/
-		void endContext();
+		void end();
 
 	private:
 		/*
 		* Private members
 		*/
-		ThreadType type;
-
 		volatile mutable bool contextActive;
-		volatile mutable bool exitRequested;
+		volatile mutable bool hasExitRequested;
 
 		mutable std::thread contextThread;
 
-		std::shared_ptr<Display::Window> currentDisplay;
+		std::shared_ptr<Display::Window> display;
 	};
 }

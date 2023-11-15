@@ -20,13 +20,13 @@ namespace Uranium::Program {
 		* Build the application at the default
 		* entry point (main function).
 		*/
-		static void build(int argc, char* argv[], std::unique_ptr<Application> application);
+		static void build(int argc, char* argv[], std::unique_ptr<Application> createdApplication);
 
 	private:
 		/*
 		* private static declarations
 		*/
-		static Application* instanceReference;
+		static std::unique_ptr<Application> application;
 
 		/*
 		* Default method that logs any GL errors
@@ -50,13 +50,9 @@ namespace Uranium::Program {
 			// happen ever, need to be later in the future
 			// turned into a macro so that in release this doesnt get evaluated
 #ifdef UR_DEBUG
-			if (instanceReference != nullptr)
+			if (application != nullptr)
 				throw std::runtime_error("Instance of application already exists!");
 #endif // _DEBUG
-
-			// if the the application has not been created,
-			// make it remember that an instance of it already exist
-			instanceReference = this;
 
 			// Emplace the unique reference to the context
 			// as an rvalue first

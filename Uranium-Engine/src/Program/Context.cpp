@@ -8,19 +8,18 @@
 
 namespace Uranium::Program {
 
-	Context::Context(ThreadType type) noexcept :
+	Context::Context() noexcept :
 		/*
 		* Parameters
 		*/
-		type(type),
-		currentDisplay(nullptr),
+		display(nullptr),
 
 		/*
 		* Context-members
 		*/
-		exitRequested(false),
 		contextActive(false),
-		contextThread(&Context::startContext, this)
+		hasExitRequested(false),
+		contextThread(&Context::start, this)
 	{
 		std::cout << "Context Created" << std::endl;
 	}
@@ -33,15 +32,15 @@ namespace Uranium::Program {
 		return contextActive;
 	}
 
-	bool Context::isExitRequested() const {
-		return exitRequested;
+	bool Context::exitRequested() const {
+		return hasExitRequested;
 	}
 
 	void Context::exit() const {
-		exitRequested = true;
+		hasExitRequested = true;
 	}
 
-	void Context::endContext() {
+	void Context::end() {
 		// Join the thread and update
 		// contextActive flag to false to tell
 		// the client that the context has ended
@@ -49,13 +48,12 @@ namespace Uranium::Program {
 		contextActive = false;
 	}
 
-	void Context::startContext() {
+	void Context::start() {
 		// Context thread starts to be active
 		// when the thread starts running
 		contextActive = true;
 
 		// Run in context (thread)
-		run();
 
 		// Set the default context for 'this' thread.
 		//glfwMakeContextCurrent(*window);
