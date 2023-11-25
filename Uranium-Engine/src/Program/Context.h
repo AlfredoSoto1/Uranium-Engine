@@ -57,7 +57,7 @@ namespace Uranium::Program {
 		* no window will be created inside this context
 		* making it behave like a regular thread.
 		*/
-		virtual std::shared_ptr<Display::Window> createWindow() = 0;
+		//virtual std::shared_ptr<Display::Window> createWindow();
 
 	private:
 		/*

@@ -1,4 +1,3 @@
-
 #include "Program/Application.h"
 
 /*

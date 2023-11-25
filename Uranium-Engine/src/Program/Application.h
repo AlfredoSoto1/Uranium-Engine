@@ -12,15 +12,15 @@ namespace Uranium::Program {
 	class Application final {
 	public:
 		/*
-		* static declarations
-		*/
-		static Application& instance();
-
-		/*
 		* Build the application at the default
 		* entry point (main function).
 		*/
 		static void build(int argc, char* argv[], std::unique_ptr<Application> createdApplication);
+
+		/*
+		* Return the Application instance from singleton
+		*/
+		static Application& instance();
 
 	private:
 		/*
@@ -39,28 +39,7 @@ namespace Uranium::Program {
 		* This must not throw an exception since this
 		* is all what it must start from the application.
 		*/
-		template<class T, class... Args>
-		explicit Application(T first, Args... args) noexcept :
-			exitRequested(false),
-			arguments(),
-			contexts()
-		{
-			// These types of if statements that
-			// serve to check conditions that should not
-			// happen ever, need to be later in the future
-			// turned into a macro so that in release this doesnt get evaluated
-#ifdef UR_DEBUG
-			if (application != nullptr)
-				throw std::runtime_error("Instance of application already exists!");
-#endif // _DEBUG
-
-			// Emplace the unique reference to the context
-			// as an rvalue first
-			contexts.emplace_back(std::move(first));
-
-			// Then emplace the rest of the references parameters
-			(contexts.emplace_back(std::move(args)), ...);
-		}
+		explicit Application() noexcept;
 
 		/*
 		* Frees the memory created by the application.
@@ -81,6 +60,11 @@ namespace Uranium::Program {
 		/*
 		* public modifiers
 		*/
+		
+		/*
+		* Adds a new context reference to the application
+		*/
+		void addContext(std::unique_ptr<Context> context);
 
 		/*
 		* Forces the application to exit

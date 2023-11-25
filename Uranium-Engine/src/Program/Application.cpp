@@ -7,31 +7,26 @@
 
 namespace Uranium::Program {
 
+	// Initialize static variable
+	std::unique_ptr<Application> Application::application = nullptr;
+
 	Application& Application::instance() {
 		return *application;
 	}
 
 	void Application::build(int argc, char* argv[], std::unique_ptr<Application> createdApplication) {
 
-		// Move the created application to the static reference 
+		// move the created application to a global space
 		application = std::move(createdApplication);
 
-		// Pass all the arguments from the terminal
-		// to the application
+		// Pass all the arguments from the terminal to the application
 		for (int i = 0; i < argc; i++)
 			application->addArgument(argv[i]);
 
-		try {
-			// Run the application
-			application->run();
-		}
-		catch (const std::exception& e) {
-			e.what();
-		}
+		// Run the application
+		application->run();
 
-		// Move the unique reference of the application
-		// to be stack allocated so that when it goes out of
-		// scope it frees itself.
+		// Move the global application to local scope so that it can get released
 		createdApplication = std::move(application);
 	}
 
@@ -42,9 +37,20 @@ namespace Uranium::Program {
 		std::printf("Error [%i]: %s\n", error, description);
 	}
 
+	Application::Application() noexcept :
+		exitRequested(false),
+		arguments(),
+		contexts()
+	{
+	}
+
 	Application::~Application() {
 		contexts.clear();
 		arguments.clear();
+	}
+
+	void Application::addContext(std::unique_ptr<Context> context) {
+		contexts.emplace_back(std::move(context));
 	}
 
 	void Application::exit() {
@@ -71,6 +77,7 @@ namespace Uranium::Program {
 		// the lifetime of the glfw application
 		glfwSetErrorCallback(&Application::diagnosticErrors);
 
+		// temp variable, needs to be removed
 		volatile unsigned int points = 0;
 
 		while (!(contexts.empty() && exitRequested) && points < 1000) {

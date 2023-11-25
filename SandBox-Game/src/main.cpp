@@ -588,7 +588,6 @@ public:
 		Context() 
 	{	
 		//std::unique_ptr<Monitor> monitor = Monitor::getPrimary();
-		
 	}
 
 	~MyGame() {
@@ -598,9 +597,9 @@ public:
 	/*
 	* 
 	*/
-	std::shared_ptr<Window> createWindow() override {
-		return nullptr;
-	}
+	//std::shared_ptr<Window> createWindow() override {
+	//	return nullptr;
+	//}
 };
 
 std::unique_ptr<Application> createApplication() {
@@ -615,8 +614,10 @@ std::unique_ptr<Application> createApplication() {
 	* there are no OpenGL contexts, in OpenGL contexts
 	* same otherwise.
 	*/
-	return std::make_unique<Application>(
-		std::make_unique<MyGame>()
-		// Make more unique contexts separated by commas
-	);
+	auto application = std::make_unique<Application>();
+	
+	// Add a new context to the application
+	application->addContext(std::make_unique<Context>());
+
+	return application;
 }
