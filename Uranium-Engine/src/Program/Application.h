@@ -9,14 +9,9 @@ namespace Uranium::Program {
 
 	extern class Context;
 
+
 	class Application final {
 	public:
-		/*
-		* Build the application at the default
-		* entry point (main function).
-		*/
-		static void build(int argc, char* argv[], std::unique_ptr<Application> createdApplication);
-
 		/*
 		* Return the Application instance from singleton
 		*/
@@ -24,9 +19,21 @@ namespace Uranium::Program {
 
 	private:
 		/*
-		* private static declarations
+		* Extern friend to start application
+		* Located at: EntryPoint.cpp
+		*/
+		friend void startApplication(int argc, char* argv[]);
+
+		/*
+		* Unique static reference of the entire application
 		*/
 		static std::unique_ptr<Application> application;
+		
+		/*
+		* Build the application at the default
+		* entry point (main function).
+		*/
+		static void build(int argc, char* argv[], std::unique_ptr<Application> createdApplication);
 
 		/*
 		* Default method that logs any GL errors
@@ -58,10 +65,6 @@ namespace Uranium::Program {
 
 	public:
 		/*
-		* public modifiers
-		*/
-		
-		/*
 		* Adds a new context reference to the application
 		*/
 		void addContext(std::unique_ptr<Context> context);
@@ -71,26 +74,16 @@ namespace Uranium::Program {
 		*/
 		void exit();
 		
-		/*
-		* Returns true if the application
-		* has terminated
-		*/
-		inline bool hasTerminated() const;
-
 	private:
-		/*
-		* private methods
-		*/
-
-		/*
-		* Adds an argument from terminal when program starts
-		*/
-		void addArgument(const std::string& arg);
-
 		/*
 		* Runs the application content
 		*/
 		void run();
+		
+		/*
+		* Adds an argument from terminal when program starts
+		*/
+		void addArgument(const std::string& arg);
 
 	private:
 		/*

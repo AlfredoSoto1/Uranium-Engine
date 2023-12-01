@@ -10,6 +10,12 @@ namespace Uranium::Display {
 namespace Uranium::Program {
 	
 	class Context {
+	private:
+		/*
+		* Friend with other classes
+		*/
+		friend extern class Application;
+	
 	public:
 		/*
 		* This constructs a context that references
@@ -27,12 +33,6 @@ namespace Uranium::Program {
 		Context(Context&) = delete;
 		Context(const Context&) = delete;
 
-	private:
-		/*
-		* Friend with other classes
-		*/
-		friend extern class Application;
-
 	public:
 		/*
 		* Getters and Setters
@@ -42,28 +42,20 @@ namespace Uranium::Program {
 
 	public:
 		/*
-		* Public modifiers
+		* Exits *this* context
 		*/
 		void exit() const;
 
 	protected:
-		/*
-		* Protected modifiers
-		*/
-
 		/*
 		* Creates a window inside the context.
 		* If the function returns nullptr, then
 		* no window will be created inside this context
 		* making it behave like a regular thread.
 		*/
-		//virtual std::shared_ptr<Display::Window> createWindow();
-
+		virtual std::shared_ptr<Display::Window> createWindow() = 0;
+		
 	private:
-		/*
-		* Private modifiers
-		*/
-
 		/*
 		* Starts *this* context in a thread
 		*/

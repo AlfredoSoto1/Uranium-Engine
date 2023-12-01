@@ -8,19 +8,37 @@
 */
 extern std::unique_ptr<Uranium::Program::Application> createApplication();
 
+namespace Uranium::Program {
+	
+	/*
+	* Start application function
+	* The logic behind this design is for the Application
+	* singleton have access to all private members of the
+	* Application class members including static functions
+	* and declarations.
+	*/
+	void startApplication(int argc, char* argv[]) {
+
+		// Build the application
+		Application::build(
+			argc, // argument count
+			argv, // argument values as an array
+			std::move(createApplication())
+		);
+
+		// Application ends here
+	}
+}
+
 /*
 * Definition of the default main function
 */
 auto main(int argc, char* argv[]) -> int {
 
 	/*
-	* Build the Application
+	* Start application from global space
 	*/
-	Uranium::Program::Application::build(
-		argc, // argument count
-		argv, // argument values as an array
-		std::move(createApplication())
-	);
+	Uranium::Program::startApplication(argc, argv);
 
 	return 0; // Exit success
 }

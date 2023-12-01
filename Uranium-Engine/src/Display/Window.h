@@ -31,9 +31,9 @@ namespace Uranium::Display {
 		/*
 		* Public getters
 		*/
-		//operator GLFWwindow* () const {
-		//	return glWindow;
-		//}
+		operator GLFWwindow* () const {
+			return glWindow;
+		}
 
 		bool isCurrent() const;
 		bool shouldClose() const;

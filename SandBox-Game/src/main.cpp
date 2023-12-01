@@ -594,12 +594,10 @@ public:
 
 	}
 
-	/*
-	* 
-	*/
-	//std::shared_ptr<Window> createWindow() override {
-	//	return nullptr;
-	//}
+	std::shared_ptr<Window> createWindow() override {
+		return nullptr; // nullptr if no window in context
+	}
+
 };
 
 std::unique_ptr<Application> createApplication() {
@@ -617,7 +615,7 @@ std::unique_ptr<Application> createApplication() {
 	auto application = std::make_unique<Application>();
 	
 	// Add a new context to the application
-	application->addContext(std::make_unique<Context>());
+	application->addContext(std::make_unique<MyGame>());
 
 	return application;
 }
