@@ -1,47 +1,21 @@
-
 #include <GL/glew.h>
 #include <GL/glfw3.h>
 
-#include "Display/Window.h"
+#include "Window.h"
 
 namespace Uranium::Display {
 
 	Window::Window() :
-		/*
-		* Volatile members
-		*/
+		glWindow(nullptr),
 		hasCreated(false),
 
-		/*
-		* Window properties
-		*/
-		glWindow(nullptr),
-
-		title("Default Window"),
-
-		position(0, 0),
-		dimension(MIN_WIDTH, MIN_HEIGHT),
-		resolution(MIN_WIDTH, MIN_HEIGHT),
-
-		opacity(100),
-
-		// These are the minimum versions
-		// of OpenGL that this application can
-		// support by default
 		glMajor(3),
 		glMinor(3),
 
-		/*
-		* Window modes
-		*/
-		visible(true),
-		resizable(true),
-		decorated(true),
-		fullscreen(false),
-		alwaysOnTop(false),
-
-		maximized(false),
-		minimized(false)
+		modes(),
+		props(),
+		states(nullptr),
+		events()
 	{
 		// Prepare default GLFW window hints before creating
 		glfwDefaultWindowHints();
@@ -100,36 +74,8 @@ namespace Uranium::Display {
 		//glfwDestroyWindow(glWindow);
 	}
 
-	bool Window::isCurrent() const {
-		return false;
-	}
-
-	bool Window::shouldClose() const {
-		return false;
-	}
-
-	void Window::close() {
-
-	}
-
-	void Window::focus() {
-
-	}
-
-	void Window::restore() {
-
-	}
-
-	void Window::maximize() {
-
-	}
-
-	void Window::minimize() {
-
-	}
-
-	void Window::requestAttention() {
-
+	Window::operator GLFWwindow* () const {
+		return glWindow;
 	}
 
 	void Window::setTitle(const std::string& title) {

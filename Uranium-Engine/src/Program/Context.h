@@ -54,7 +54,7 @@ namespace Uranium::Program {
 		* making it behave like a regular thread.
 		*/
 		virtual std::shared_ptr<Display::Window> createWindow() = 0;
-		
+
 	private:
 		/*
 		* Starts *this* context in a thread

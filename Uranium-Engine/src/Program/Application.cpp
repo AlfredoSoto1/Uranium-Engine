@@ -49,7 +49,7 @@ namespace Uranium::Program {
 		arguments.clear();
 	}
 
-	void Application::addContext(std::unique_ptr<Context> context) {
+	void Application::appendContext(std::unique_ptr<Context> context) {
 		contexts.emplace_back(std::move(context));
 	}
 

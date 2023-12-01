@@ -67,7 +67,7 @@ namespace Uranium::Program {
 		/*
 		* Adds a new context reference to the application
 		*/
-		void addContext(std::unique_ptr<Context> context);
+		void appendContext(std::unique_ptr<Context> context);
 
 		/*
 		* Forces the application to exit

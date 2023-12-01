@@ -614,8 +614,8 @@ std::unique_ptr<Application> createApplication() {
 	*/
 	auto application = std::make_unique<Application>();
 	
-	// Add a new context to the application
-	application->addContext(std::make_unique<MyGame>());
+	// Append a new context to the application
+	application->appendContext(std::make_unique<MyGame>());
 
 	return application;
 }
