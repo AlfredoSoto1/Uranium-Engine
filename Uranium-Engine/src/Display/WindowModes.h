@@ -2,13 +2,15 @@
 
 namespace Uranium::Display {
 
+	extern class Window;
+
 	class WindowModes final {
 	public:
 		/*
 		* Constructs a WindowModes object with default values.
 		* Initializes the modes to a default.
 		*/
-		explicit WindowModes() noexcept;
+		explicit WindowModes(Window* window) noexcept;
 
 	public:
 		/*
@@ -17,7 +19,6 @@ namespace Uranium::Display {
 		auto isVisible()     const -> bool;
 		auto isResizable()   const -> bool;
 		auto isDecorated()   const -> bool;
-		auto isFullscreen()  const -> bool;
 		auto isAlwaysOnTop() const -> bool;
 		
 	public:
@@ -27,20 +28,20 @@ namespace Uranium::Display {
 		void setVisible(bool visible);
 		void setResizable(bool resizable);
 		void setDecorated(bool decorated);
-		void setFullscreen(bool fullscreen);
 		void setAlwaysOnTop(bool alwaysOnTop);
 
 	private:
+		/*
+		* Window reference
+		*/
+		Window* window;
+
 		/*
 		* General Modes
 		*/
 		bool visible;
 		bool resizable;
 		bool decorated;
-		bool fullscreen;
 		bool alwaysOnTop;
-
-		bool maximized;
-		bool minimized;
 	};
 }

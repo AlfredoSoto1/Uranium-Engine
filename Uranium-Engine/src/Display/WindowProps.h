@@ -8,6 +8,12 @@ extern struct GLFWwindow;
 namespace Uranium::Display {
 
 	class WindowProps final {
+	private:
+		/*
+		* Friends with other classes
+		*/
+		friend class WindowStates;
+
 	public:
 		/*
 		* Minimun and maximum default dimensions

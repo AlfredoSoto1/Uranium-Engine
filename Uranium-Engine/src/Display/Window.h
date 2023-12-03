@@ -14,6 +14,7 @@ namespace Uranium::Display {
 		/*
 		* Friends with other classes
 		*/
+		friend class WindowModes;
 		friend class WindowStates;
 
 	public:

@@ -20,6 +20,7 @@ namespace Uranium::Display {
 		void restore();
 		void maximize();
 		void minimize();
+		void setFullscreen(bool fullscreen);
 
 	public:
 		/*
@@ -28,6 +29,7 @@ namespace Uranium::Display {
 		bool isRestored()  const;
 		bool isMaximized() const;
 		bool isMinimized() const;
+		bool isFullscreen() const;
 
 	private:
 		/*
@@ -41,5 +43,6 @@ namespace Uranium::Display {
 		bool restored;
 		bool maximized;
 		bool minimized;
+		bool fullscreen;
 	};
 }
