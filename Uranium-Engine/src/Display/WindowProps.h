@@ -7,6 +7,8 @@ extern struct GLFWwindow;
 
 namespace Uranium::Display {
 
+	extern class Window;
+
 	class WindowProps final {
 	private:
 		/*
@@ -27,7 +29,7 @@ namespace Uranium::Display {
 		* Constructs a WindowProps object with default values.
 		* Initializes the properties to default.
 		*/
-		explicit WindowProps() noexcept;
+		explicit WindowProps(Window* window) noexcept;
 
 	public:
 		/*
@@ -52,6 +54,11 @@ namespace Uranium::Display {
 		void setOpacity(unsigned int opacity);
 	
 	private:
+		/*
+		* Window reference
+		*/
+		Window* window;
+
 		/*
 		* General Properties
 		*/
