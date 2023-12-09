@@ -1,6 +1,8 @@
 #include <GL/glfw3.h>
+#include <stdexcept>
 
 #include "Window.h"
+#include "Monitor.h"
 #include "WindowProps.h"
 
 namespace Uranium::Display {
@@ -50,6 +52,7 @@ namespace Uranium::Display {
 		if (!window->glWindow)
 			throw std::exception("GLFW window is not initialized");
 #endif
+		glfwSetWindowPos(window->glWindow, position.x, position.y);
 	}
 
 	void WindowProps::setDimension(const glm::ivec2& dimension) {
@@ -57,6 +60,7 @@ namespace Uranium::Display {
 		if (!window->glWindow)
 			throw std::exception("GLFW window is not initialized");
 #endif
+		glfwSetWindowSize(window->glWindow, dimension.x, dimension.y);
 	}
 
 	void WindowProps::setResolution(const glm::ivec2& resolution) {
@@ -64,6 +68,7 @@ namespace Uranium::Display {
 		if (!window->glWindow)
 			throw std::exception("GLFW window is not initialized");
 #endif
+		this->resolution = resolution;
 	}
 
 	void WindowProps::setOpacity(unsigned int opacity) {
@@ -87,5 +92,30 @@ namespace Uranium::Display {
 
 		// Set the opacity of the window to be in a scale of [0, 100]
 		glfwSetWindowOpacity(window->glWindow, opacity / 100.0f);
+	}
+
+	void WindowProps::center(std::unique_ptr<Monitor> monitor) {
+#ifdef UR_DEBUG
+		if (!window->glWindow)
+			throw std::exception("GLFW window is not initialized");
+#endif
+		// if no monitor connected, throw exception
+		if (!monitor->isConnected())
+			throw std::invalid_argument("Provided monitor is not connected!");
+
+		// If monitor is present but is maximized, minimized or fullscreen
+		// there is no need to update the window position since
+		// there is not going to be visible if any of these conditions happen
+		if (window->states.isMaximized() || window->states.isMinimized() || window->states.isFullscreen())
+			return;
+
+		// calculate relative position retlative to center
+		int newPositionX = (resolution.x - dimension.x) / 2;
+		int newPositionY = (resolution.y - dimension.y) / 2;
+
+		// set new position to Props. and update GLFW window
+		position.x = newPositionX;
+		position.y = newPositionY;
+		glfwSetWindowPos(window->glWindow, newPositionX, newPositionY);
 	}
 }

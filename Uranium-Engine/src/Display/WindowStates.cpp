@@ -1,11 +1,13 @@
 #include <GL/glfw3.h>
+#include <stdexcept>
 
 #include "Window.h"
+#include "Monitor.h"
 #include "WindowStates.h"
 
 namespace Uranium::Display {
 
-	explicit WindowStates::WindowStates(Window* window) noexcept :
+	WindowStates::WindowStates(Window* window) noexcept :
 		window(window),
 		restored(false),
 		maximized(false),
@@ -100,16 +102,16 @@ namespace Uranium::Display {
 		//window.getCallback().setHasResized(true);
 	}
 
-	void WindowStates::setFullscreen(bool fullscreen) {
+	void WindowStates::setFullscreen(std::unique_ptr<Monitor> monitor) {
 #ifdef UR_DEBUG
 		if (!window->glWindow)
 			throw std::exception("GLFW window is not initialized");
 #endif
+		if (!monitor->isConnected())
+			throw std::invalid_argument("Provided monitor is not connected!");
+
 		// Set the window mode flag to fullscreen
 		fullscreen = true;
-
-		if (not monitor.isConnected())
-			throw std::invalid_argument(NO_MONITOR_CONNECTED);
 		
 		// Update resize callback
 		//window.getCallback().setHasResized(true);
@@ -117,7 +119,7 @@ namespace Uranium::Display {
 		// make window fullscreen with:
 		glfwSetWindowMonitor(
 			window->glWindow,
-			monitor,                                  // current active monitor
+			*monitor,                                 // current active monitor
 			0, 0,                                     // position of the extended window
 			window->props.resolution.x,               // width of the window
 			window->props.resolution.y,               // height of the window
@@ -140,4 +142,5 @@ namespace Uranium::Display {
 	bool WindowStates::isFullscreen() const {
 		return fullscreen;
 	}
+
 }

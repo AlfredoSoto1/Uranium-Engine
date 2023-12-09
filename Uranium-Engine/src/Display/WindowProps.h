@@ -1,5 +1,6 @@
 #pragma once
 
+#include <memory>
 #include <string>
 #include <glm/vec2.hpp>
 
@@ -8,6 +9,7 @@ extern struct GLFWwindow;
 namespace Uranium::Display {
 
 	extern class Window;
+	extern class Monitor;
 
 	class WindowProps final {
 	private:
@@ -30,6 +32,12 @@ namespace Uranium::Display {
 		* Initializes the properties to default.
 		*/
 		explicit WindowProps(Window* window) noexcept;
+
+	public:
+		/*
+		* Center window on a monitor
+		*/
+		void center(std::unique_ptr<Monitor> monitor);
 
 	public:
 		/*

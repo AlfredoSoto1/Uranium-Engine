@@ -17,6 +17,7 @@ namespace Uranium::Display {
 		friend class WindowProps;
 		friend class WindowModes;
 		friend class WindowStates;
+		friend class WindowEvents;
 
 	public:
 		/*
@@ -24,28 +25,41 @@ namespace Uranium::Display {
 		* The distructor is not added to the virtual table
 		* since no class should inherit from *this* class.
 		*/
-		explicit Window();
+		explicit Window() noexcept;
 
 		~Window();
-
 	
 	public:
-		//void centerWindow(const Monitor& monitor);
+		/*
+		* 
+		*/
+		operator GLFWwindow* () const;
+
+		/*
+		* 
+		*/
+		bool isCurrent() const;
 
 	private:
 		void prepareDefaultHints() const;
 
 	private:
 		/*
-		* Window members
+		* GLFW window reference
 		*/
 		GLFWwindow* glWindow;
 		
+		/*
+		* Window content members
+		*/
 		WindowModes modes;
 		WindowProps props;
 		WindowStates states;
 		WindowEvents events;
 
+		/*
+		* GL - context version
+		*/
 		unsigned int glMajor;
 		unsigned int glMinor;
 

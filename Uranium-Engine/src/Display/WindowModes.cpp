@@ -77,4 +77,5 @@ namespace Uranium::Display {
 
 		glfwSetWindowAttrib(window->glWindow, GLFW_FLOATING, alwaysOnTop ? GLFW_TRUE : GLFW_FALSE);
 	}
+
 }

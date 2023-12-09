@@ -1,9 +1,11 @@
 #pragma once
 
+#include <memory>
 
 namespace Uranium::Display {
 
 	extern class Window;
+	extern class Monitor;
 	
 	class WindowStates final {
 	public:
@@ -20,7 +22,7 @@ namespace Uranium::Display {
 		void restore();
 		void maximize();
 		void minimize();
-		void setFullscreen(bool fullscreen);
+		void setFullscreen(std::unique_ptr<Monitor> monitor);
 
 	public:
 		/*
