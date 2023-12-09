@@ -16,6 +16,7 @@ namespace Uranium::Display {
 		/*
 		* Friends with other classes
 		*/
+		friend Window;
 		friend class WindowStates;
 
 	public:
@@ -28,10 +29,9 @@ namespace Uranium::Display {
 
 	public:
 		/*
-		* Constructs a WindowProps object with default values.
-		* Initializes the properties to default.
+		* No need of default constructor
 		*/
-		explicit WindowProps(Window* window) noexcept;
+		WindowProps() = delete;
 
 	public:
 		/*
@@ -61,6 +61,13 @@ namespace Uranium::Display {
 
 		void setOpacity(unsigned int opacity);
 	
+	private:
+		/*
+		* Constructs a WindowProps object with default values.
+		* Initializes the properties to default.
+		*/
+		explicit WindowProps(Window* window) noexcept;
+
 	private:
 		/*
 		* Window reference

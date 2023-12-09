@@ -5,12 +5,17 @@ namespace Uranium::Display {
 	extern class Window;
 
 	class WindowModes final {
+	private:
+		/*
+		* Friends with other classes
+		*/
+		friend Window;
+
 	public:
 		/*
-		* Constructs a WindowModes object with default values.
-		* Initializes the modes to a default.
+		* No need of default constructor
 		*/
-		explicit WindowModes(Window* window) noexcept;
+		WindowModes() = delete;
 
 	public:
 		/*
@@ -29,6 +34,13 @@ namespace Uranium::Display {
 		void setResizable(bool resizable);
 		void setDecorated(bool decorated);
 		void setAlwaysOnTop(bool alwaysOnTop);
+
+	private:
+		/*
+		* Constructs a WindowModes object with default values.
+		* Initializes the modes to a default.
+		*/
+		explicit WindowModes(Window* window) noexcept;
 
 	private:
 		/*

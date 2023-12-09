@@ -5,12 +5,17 @@ namespace Uranium::Display {
 	extern class Window;
 
 	class WindowEvents final {
+	private:
+		/*
+		* Friends with other classes
+		*/
+		friend Window;
+
 	public:
 		/*
-		* Constructs a WindowEvent object with default values.
-		* Initializes the events to default.
+		* No need of default constructor
 		*/
-		explicit WindowEvents(Window* window) noexcept;
+		WindowEvents() = delete;
 
 	public:
 		/*
@@ -25,6 +30,13 @@ namespace Uranium::Display {
 		* Get current events
 		*/
 		bool shouldClose() const;
+
+	private:
+		/*
+		* Constructs a WindowEvent object with default values.
+		* Initializes the events to default.
+		*/
+		explicit WindowEvents(Window* window) noexcept;
 
 	private:
 		/*

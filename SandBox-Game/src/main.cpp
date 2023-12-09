@@ -595,6 +595,9 @@ public:
 	}
 
 	std::shared_ptr<Window> createWindow() override {
+
+		std::shared_ptr<Window> window = std::make_shared<Window>();
+
 		return nullptr; // nullptr if no window in context
 	}
 

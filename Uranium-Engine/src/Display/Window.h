@@ -31,17 +31,23 @@ namespace Uranium::Display {
 	
 	public:
 		/*
-		* 
+		* Returns a raw reference of the GLFWwindow
 		*/
 		operator GLFWwindow* () const;
 
 		/*
-		* 
+		* Returns true if the window's context is current
 		*/
 		bool isCurrent() const;
 
-	private:
-		void prepareDefaultHints() const;
+		/*
+		* Returns a reference of the members
+		* that define the window itself
+		*/
+		auto getModes()  -> WindowModes&;
+		auto getStates() -> WindowStates&;
+		auto getEvents() -> WindowEvents&;
+		auto getProperties() -> WindowProps&;
 
 	private:
 		/*
@@ -62,7 +68,5 @@ namespace Uranium::Display {
 		*/
 		unsigned int glMajor;
 		unsigned int glMinor;
-
-		volatile bool hasCreated;
 	};
 }

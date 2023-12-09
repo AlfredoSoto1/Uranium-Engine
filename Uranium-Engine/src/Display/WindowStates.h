@@ -7,13 +7,19 @@ namespace Uranium::Display {
 	extern class Window;
 	extern class Monitor;
 	
+
 	class WindowStates final {
+	private:
+		/*
+		* Friends with other classes
+		*/
+		friend Window;
+
 	public:
 		/*
-		* Constructs a WindowState object with default values.
-		* Initializes the state to a restored window.
+		* No need of default constructor
 		*/
-		explicit WindowStates(Window* window) noexcept;
+		WindowStates() = delete;
 
 	public:
 		/*
@@ -32,6 +38,13 @@ namespace Uranium::Display {
 		bool isMaximized() const;
 		bool isMinimized() const;
 		bool isFullscreen() const;
+
+	private:
+		/*
+		* Constructs a WindowState object with default values.
+		* Initializes the state to a restored window.
+		*/
+		explicit WindowStates(Window* window) noexcept;
 
 	private:
 		/*
