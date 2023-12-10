@@ -1,4 +1,5 @@
-#include "Program/Application.h"
+#include "Services/Application.h"
+#include "Services/BaseEngine.h"
 
 /*
 * Define a custom entry point where
@@ -6,9 +7,9 @@
 * a main function. With this the application can handle
 * efficiently the lifetime of the Application.
 */
-extern std::unique_ptr<Uranium::Program::Application> createApplication();
+extern std::unique_ptr<Uranium::Services::BaseEngine> createApplication();
 
-namespace Uranium::Program {
+namespace Uranium::Services {
 	
 	/*
 	* Start application function
@@ -38,7 +39,7 @@ auto main(int argc, char* argv[]) -> int {
 	/*
 	* Start application from global space
 	*/
-	Uranium::Program::startApplication(argc, argv);
+	Uranium::Services::startApplication(argc, argv);
 
 	return 0; // Exit success
 }

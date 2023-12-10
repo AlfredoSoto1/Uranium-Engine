@@ -5,18 +5,10 @@
 #include <string>
 
 namespace Uranium::Services {
-	extern class ThreadService;
-}
 
-namespace Uranium::Program {
+	class BaseEngine;
 
 	class Application final {
-	public:
-		/*
-		* Return the Application instance from singleton
-		*/
-		static Application& instance();
-
 	private:
 		/*
 		* Extern friend to start application
@@ -25,15 +17,10 @@ namespace Uranium::Program {
 		friend void startApplication(int argc, char* argv[]);
 
 		/*
-		* Unique static reference of the entire application
-		*/
-		static std::unique_ptr<Application> application;
-		
-		/*
 		* Build the application at the default
 		* entry point (main function).
 		*/
-		static void build(int argc, char* argv[], std::unique_ptr<Application> createdApplication);
+		static void build(int argc, char* argv[], std::unique_ptr<BaseEngine> baseEngine);
 
 		/*
 		* Default method that logs any GL errors
@@ -63,12 +50,6 @@ namespace Uranium::Program {
 		Application(Application&) = delete;
 		Application(const Application&) = delete;
 
-	public:
-		/*
-		* Registers a new service reference to the application
-		*/
-		void registerService(std::unique_ptr<Services::ThreadService> service);
-
 	private:
 		/*
 		* Runs the application content
@@ -81,14 +62,7 @@ namespace Uranium::Program {
 		void addArgument(const std::string& arg);
 
 	private:
-		/*
-		* In-Terminal arguments
-		*/
 		std::vector<std::string> arguments;
-
-		/*
-		* Current registered services
-		*/
-		std::vector<std::unique_ptr<Services::ThreadService>> services;
+		std::unique_ptr<BaseEngine> baseEngine;
 	};
 }

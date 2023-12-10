@@ -1,22 +1,16 @@
 #include <iostream>
 #include <GL/glfw3.h>
 
-#include "Program/Application.h"
-#include "Services/ThreadService.h"
+#include "Services/BaseEngine.h"
+#include "Services/Application.h"
 
-namespace Uranium::Program {
+namespace Uranium::Services {
 
-	// Initialize static variable
-	std::unique_ptr<Application> Application::application = nullptr;
+	void Application::build(int argc, char* argv[], std::unique_ptr<BaseEngine> baseEngine) {
 
-	Application& Application::instance() {
-		return *application;
-	}
+		std::unique_ptr<Application> application = std::make_unique<Application>();
 
-	void Application::build(int argc, char* argv[], std::unique_ptr<Application> createdApplication) {
-
-		// move the created application to a global space
-		application = std::move(createdApplication);
+		application->baseEngine = std::move(baseEngine);
 
 		// Pass all the arguments from the terminal to the application
 		for (int i = 0; i < argc; i++)
@@ -24,9 +18,6 @@ namespace Uranium::Program {
 
 		// Run the application
 		application->run();
-
-		// Move the global application to local scope so that it can get released
-		createdApplication = std::move(application);
 	}
 
 	void Application::diagnosticErrors(int error, const char* description) {
@@ -38,17 +29,12 @@ namespace Uranium::Program {
 
 	Application::Application() noexcept :
 		arguments(),
-		services()
+		baseEngine(nullptr)
 	{
 	}
 
 	Application::~Application() {
-		services.clear();
 		arguments.clear();
-	}
-
-	void Application::registerService(std::unique_ptr<Services::ThreadService> service) {
-		services.emplace_back(std::move(service));
 	}
 
 	void Application::addArgument(const std::string& arg) {
@@ -61,23 +47,12 @@ namespace Uranium::Program {
 		if (glfwInit() == GLFW_FALSE)
 			throw std::exception("Application could not initiate GLFW.");
 
-		// Initiate all the services
-		for (auto& service : services)
-			service->init();
-
 		// Set the custom error callback
 		// to diagnostic any possible error in 
 		// the lifetime of the glfw application
 		glfwSetErrorCallback(&Application::diagnosticErrors);
 
-		while (!services.empty() && Services::ThreadService::activeThreadCount() != 0) {
-			// Update glfw callbacks
-			glfwPollEvents();
-		}
-
-		// End all the active contexts before ending application
-		for (auto& service : services)
-			service->prune();
+		baseEngine->start();
 
 		glfwTerminate();
 	}

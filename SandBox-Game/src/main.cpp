@@ -576,20 +576,19 @@
 
 #include "Display/Window.h"
 #include "Display/Monitor.h"
-#include "Services/ThreadService.h"
-#include "Program/Application.h"
+#include "Services/BaseEngine.h"
+#include "Services/Application.h"
 
 using namespace Uranium::Display;
-using namespace Uranium::Program;
 using namespace Uranium::Services;
 
-class MyGame : public ThreadService {
+class MyGame : public BaseEngine {
 public:
 
 	MyGame() noexcept:
-		ThreadService() 
+		BaseEngine()
 	{	
-		//std::unique_ptr<Monitor> monitor = Monitor::getPrimary();
+		
 	}
 
 	~MyGame() {
@@ -597,27 +596,19 @@ public:
 	}
 
 	std::shared_ptr<Window> createWindow() override {
-		return std::make_shared<Window>(); // nullptr if no window in context
+		return std::make_shared<Window>();
+	}
+
+	std::shared_ptr<int> createScenes() override {
+		return nullptr;
 	}
 
 };
 
-std::unique_ptr<Application> createApplication() {
+std::unique_ptr<BaseEngine> createApplication() {
 	/*
 	* Create the unique application
-	* 
-	* This application must contain atleast *one*
-	* Context to be able to compile and run.
-	* 
-	* These contexts define the type of virtual thread
-	* the application must handle. In a virtual thread
-	* there are no OpenGL contexts, in OpenGL contexts
-	* same otherwise.
+	* with the base engine containing all features
 	*/
-	auto application = std::make_unique<Application>();
-	
-	// Append a new context to the application
-	application->registerService(std::make_unique<MyGame>());
-
-	return application;
+	return std::make_unique<MyGame>();
 }
