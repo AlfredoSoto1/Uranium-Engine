@@ -1,9 +1,8 @@
-
 #include <iostream>
 #include <GL/glfw3.h>
 
-#include "Program/Context.h"
 #include "Program/Application.h"
+#include "Services/ThreadService.h"
 
 namespace Uranium::Program {
 
@@ -38,23 +37,18 @@ namespace Uranium::Program {
 	}
 
 	Application::Application() noexcept :
-		exitRequested(false),
 		arguments(),
-		contexts()
+		services()
 	{
 	}
 
 	Application::~Application() {
-		contexts.clear();
+		services.clear();
 		arguments.clear();
 	}
 
-	void Application::appendContext(std::unique_ptr<Context> context) {
-		contexts.emplace_back(std::move(context));
-	}
-
-	void Application::exit() {
-		exitRequested = true;
+	void Application::registerService(std::unique_ptr<Services::ThreadService> service) {
+		services.emplace_back(std::move(service));
 	}
 
 	void Application::addArgument(const std::string& arg) {
@@ -62,32 +56,29 @@ namespace Uranium::Program {
 	}
 
 	void Application::run() {
-
 		// Initialize GLFW and check it did it correctly
 		// If the application doesn't initiate, exit the application
 		if (glfwInit() == GLFW_FALSE)
 			throw std::exception("Application could not initiate GLFW.");
+
+		// Initiate all the services
+		for (auto& service : services)
+			service->init();
 
 		// Set the custom error callback
 		// to diagnostic any possible error in 
 		// the lifetime of the glfw application
 		glfwSetErrorCallback(&Application::diagnosticErrors);
 
-		// temp variable, needs to be removed
-		volatile unsigned int points = 0;
-
-		while (!(contexts.empty() && exitRequested) && points < 1000) {
+		while (!services.empty() && Services::ThreadService::activeThreadCount() != 0) {
 			// Update glfw callbacks
 			glfwPollEvents();
-			points++;
 		}
 
 		// End all the active contexts before ending application
-		for (const auto& context : contexts)
-			context->end();
+		for (auto& service : services)
+			service->prune();
 
-		// Terminate the glfw application
-		// after all contexts are ended correctly
 		glfwTerminate();
 	}
 }

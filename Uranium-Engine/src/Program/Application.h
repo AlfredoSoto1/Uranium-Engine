@@ -3,12 +3,12 @@
 #include <memory>
 #include <vector>
 #include <string>
-#include <stdexcept>
+
+namespace Uranium::Services {
+	extern class ThreadService;
+}
 
 namespace Uranium::Program {
-
-	extern class Context;
-
 
 	class Application final {
 	public:
@@ -65,15 +65,10 @@ namespace Uranium::Program {
 
 	public:
 		/*
-		* Adds a new context reference to the application
+		* Registers a new service reference to the application
 		*/
-		void appendContext(std::unique_ptr<Context> context);
+		void registerService(std::unique_ptr<Services::ThreadService> service);
 
-		/*
-		* Forces the application to exit
-		*/
-		void exit();
-		
 	private:
 		/*
 		* Runs the application content
@@ -87,11 +82,13 @@ namespace Uranium::Program {
 
 	private:
 		/*
-		* private members
+		* In-Terminal arguments
 		*/
-		volatile bool exitRequested;
-
 		std::vector<std::string> arguments;
-		std::vector<std::unique_ptr<Context>> contexts;
+
+		/*
+		* Current registered services
+		*/
+		std::vector<std::unique_ptr<Services::ThreadService>> services;
 	};
 }

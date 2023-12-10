@@ -575,17 +575,19 @@
 //}
 
 #include "Display/Window.h"
-#include "Program/Context.h"
+#include "Display/Monitor.h"
+#include "Services/ThreadService.h"
 #include "Program/Application.h"
 
 using namespace Uranium::Display;
 using namespace Uranium::Program;
+using namespace Uranium::Services;
 
-class MyGame : public Context {
+class MyGame : public ThreadService {
 public:
 
-	MyGame() :
-		Context() 
+	MyGame() noexcept:
+		ThreadService() 
 	{	
 		//std::unique_ptr<Monitor> monitor = Monitor::getPrimary();
 	}
@@ -595,10 +597,7 @@ public:
 	}
 
 	std::shared_ptr<Window> createWindow() override {
-
-		std::shared_ptr<Window> window = std::make_shared<Window>();
-
-		return nullptr; // nullptr if no window in context
+		return std::make_shared<Window>(); // nullptr if no window in context
 	}
 
 };
@@ -618,7 +617,7 @@ std::unique_ptr<Application> createApplication() {
 	auto application = std::make_unique<Application>();
 	
 	// Append a new context to the application
-	application->appendContext(std::make_unique<MyGame>());
+	application->registerService(std::make_unique<MyGame>());
 
 	return application;
 }

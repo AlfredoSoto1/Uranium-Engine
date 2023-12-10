@@ -7,7 +7,7 @@
 
 namespace Uranium::Display {
 
-	explicit WindowProps::WindowProps(Window* window) noexcept :
+	WindowProps::WindowProps(Window* window) noexcept :
 		window(window),
 		title("Uranium-Engine Display"),
 		position(0, 0),   

@@ -5,7 +5,7 @@
 
 namespace Uranium::Display {
 
-	explicit WindowModes::WindowModes(Window* window) noexcept :
+	WindowModes::WindowModes(Window* window) noexcept :
 		window(window),
 		visible(true),
 		resizable(true),

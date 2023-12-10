@@ -26,6 +26,7 @@ namespace Uranium::Display {
 		* since no class should inherit from *this* class.
 		*/
 		explicit Window() noexcept;
+		explicit Window(unsigned int mayor, unsigned int minor) noexcept;
 
 		~Window();
 	

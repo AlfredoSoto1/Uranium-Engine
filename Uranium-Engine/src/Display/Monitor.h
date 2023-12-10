@@ -15,15 +15,21 @@ namespace Uranium::Display {
 		* Returns the primary connected monitor.
 		* If monitor is not connected it will return nullptr.
 		*/
-		static std::unique_ptr<Monitor> getPrimary();
+		static std::shared_ptr<Monitor> getPrimary();
 		
 		/*
 		* Returns a vector of unique references to
 		* all the monitors that are connected.
 		*/
-		static std::vector<std::unique_ptr<Monitor>> getConnectedMonitors();
+		static std::vector<std::shared_ptr<Monitor>> getConnectedMonitors();
 
 	public:
+		/*
+		* This constructor used to create
+		* a new unique instance of the connected monitors.
+		*/
+		explicit Monitor(GLFWmonitor* monitor) noexcept;
+		
 		/*
 		* The Monitor() constructor is deleted
 		* because we dont want the client to create
@@ -53,13 +59,6 @@ namespace Uranium::Display {
 		* Returns the resolution of the connected monitor
 		*/
 		glm::ivec2 getResolution() const;
-
-	private:
-		/*
-		* Private monitor constructor used to create
-		* a new unique instance of the connected monitors.
-		*/
-		explicit Monitor(GLFWmonitor* monitor) noexcept;
 
 	private:
 		/*
