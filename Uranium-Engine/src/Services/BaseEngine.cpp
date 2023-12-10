@@ -49,5 +49,7 @@ namespace Uranium::Services {
 			glfwSwapBuffers(*display);
 			glfwPollEvents();
 		}
+
+		display.reset();
 	}
 }
