@@ -1,4 +1,3 @@
-#include <iostream>
 #include <GL/glfw3.h>
 
 #include "Services/BaseEngine.h"
