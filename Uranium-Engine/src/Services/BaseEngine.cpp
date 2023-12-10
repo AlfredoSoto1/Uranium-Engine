@@ -6,7 +6,6 @@
 namespace Uranium::Services {
 
 	BaseEngine::BaseEngine() noexcept :
-		thread(),
 		display(nullptr)
 	{
 	}
@@ -15,18 +14,19 @@ namespace Uranium::Services {
 
 	}
 
-	void BaseEngine::start() {
+	std::shared_ptr<Display::Window> BaseEngine::getWindow() const {
+		return display;
+	}
 
+	void BaseEngine::run() {
 		display = createWindow();
 
-		if (display == nullptr) {
-			// do something else
-		}
+		if (display == nullptr)
+			throw std::exception("Engine could not start due to an error generating the GLFW window.");
 
 		// Set the default context for 'this' thread.
 		glfwMakeContextCurrent(*display);
-
-		// Run context here
+		
 		while (!display->getEvents().shouldClose()) {
 			// check if window has resized
 			int width, height;
@@ -49,7 +49,8 @@ namespace Uranium::Services {
 			glfwSwapBuffers(*display);
 			glfwPollEvents();
 		}
-
+		
+		// release the window reference
 		display.reset();
 	}
 }

@@ -34,6 +34,16 @@ namespace Uranium::Services {
 
 	protected:
 		/*
+		* Initiates custom engine content
+		*/
+		virtual void init() = 0;
+
+		/*
+		* Disposes the initialized content
+		*/
+		virtual void dispose() = 0;
+		
+		/*
 		* Creates a window inside the context.
 		* If the function returns nullptr, then
 		* no window will be created inside this context
@@ -47,15 +57,20 @@ namespace Uranium::Services {
 		*/
 		virtual std::shared_ptr<int> createScenes() = 0;
 
-	private:
+	public:
 		/*
-		* Starts the engine will all the contents
+		* Returns a reference to window
 		*/
-		void start();
+		std::shared_ptr<Display::Window> getWindow() const;
 
 	private:
-		std::thread thread;
-		std::shared_ptr<Display::Window> display;
+		/*
+		* Runs the engine
+		*/
+		void run();
+
+	private:
 		std::shared_ptr<int> scenes; // TEMP
+		std::shared_ptr<Display::Window> display;
 	};
 }

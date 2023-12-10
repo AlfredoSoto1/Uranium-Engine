@@ -5,9 +5,15 @@
 
 namespace Uranium::Services {
 
+	std::unique_ptr<Application> Application::application = nullptr;
+
+	Application& Application::instance() {
+		return *application;
+	}
+
 	void Application::build(int argc, char* argv[], std::unique_ptr<BaseEngine> baseEngine) {
 
-		std::unique_ptr<Application> application = std::make_unique<Application>();
+		Application::application = std::make_unique<Application>();
 
 		application->baseEngine = std::move(baseEngine);
 
@@ -17,6 +23,10 @@ namespace Uranium::Services {
 
 		// Run the application
 		application->run();
+
+		// move the staic application reference
+		// to local scope to free from memory once the application ends
+		std::unique_ptr<Application> lastReference = std::move(application);
 	}
 
 	void Application::diagnosticErrors(int error, const char* description) {
@@ -50,9 +60,10 @@ namespace Uranium::Services {
 		// to diagnostic any possible error in 
 		// the lifetime of the glfw application
 		glfwSetErrorCallback(&Application::diagnosticErrors);
+		
+		baseEngine->run();
 
-		baseEngine->start();
-
+		// Terminates the GLFW content
 		glfwTerminate();
 	}
 }

@@ -9,7 +9,18 @@ namespace Uranium::Services {
 	class BaseEngine;
 
 	class Application final {
+	public:
+		/*
+		* Returns an instance of the application
+		*/
+		static Application& instance();
+
 	private:
+		/*
+		* Unique application reference
+		*/
+		static std::unique_ptr<Application> application;
+		
 		/*
 		* Extern friend to start application
 		* Located at: EntryPoint.cpp
