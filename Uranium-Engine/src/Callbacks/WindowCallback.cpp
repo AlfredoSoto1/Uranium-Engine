@@ -3,8 +3,11 @@
 #include <memory>
 #include "WindowCallback.h"
 #include "Display/Window.h"
+#include "Services/BaseEngine.h"
+#include "Services/Application.h"
 
 using namespace Uranium::Display;
+using namespace Uranium::Services;
 
 namespace Uranium::Callbacks {
 
@@ -36,6 +39,8 @@ namespace Uranium::Callbacks {
 	}
 
 	void WindowCallback::windowClose(GLFWwindow* glWindow) {
+
+		std::shared_ptr<Window> window = Application::instance().getBaseEngine().getWindow();
 		Window& window = *static_cast<Window*>(glfwGetWindowUserPointer(glWindow));
 
 		if (window.getWindowListener() == nullptr)

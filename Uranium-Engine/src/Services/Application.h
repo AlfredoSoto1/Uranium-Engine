@@ -61,6 +61,12 @@ namespace Uranium::Services {
 		Application(Application&) = delete;
 		Application(const Application&) = delete;
 
+	public:
+		/*
+		* Returns a reference to the base engine
+		*/
+		BaseEngine& getBaseEngine();
+
 	private:
 		/*
 		* Runs the application content

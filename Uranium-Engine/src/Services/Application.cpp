@@ -50,6 +50,10 @@ namespace Uranium::Services {
 		arguments.push_back(arg);
 	}
 
+	BaseEngine& Application::getBaseEngine() {
+		return *baseEngine;
+	}
+
 	void Application::run() {
 		// Initialize GLFW and check it did it correctly
 		// If the application doesn't initiate, exit the application
