@@ -49,6 +49,7 @@ namespace Uranium::Services {
 		// the lifetime of the glfw application
 		glfwSetErrorCallback(&Application::diagnosticErrors);
 
+		// Initiate the monitor handler
 		Display::Monitor::initMonitors();
 	}
 

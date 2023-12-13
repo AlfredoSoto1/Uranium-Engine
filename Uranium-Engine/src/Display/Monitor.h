@@ -50,6 +50,12 @@ namespace Uranium::Display {
 
 	public:
 		/*
+		* This constructor used to create
+		* a new unique instance of the connected monitors.
+		*/
+		explicit Monitor(GLFWmonitor* monitor) noexcept;
+
+		/*
 		* Prepare the default monitor destructor
 		*/
 		~Monitor() = default;
@@ -75,13 +81,6 @@ namespace Uranium::Display {
 		*/
 		glm::ivec2 getResolution() const;
 
-	private:
-		/*
-		* This constructor used to create
-		* a new unique instance of the connected monitors.
-		*/
-		explicit Monitor(GLFWmonitor* monitor) noexcept;
-		
 	private:
 		/*
 		* Monitor reference and video mode
