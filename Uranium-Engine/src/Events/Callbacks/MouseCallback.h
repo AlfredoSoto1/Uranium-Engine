@@ -2,18 +2,18 @@
 
 struct GLFWwindow;
 
-namespace Uranium::Services {
+namespace Uranium::Core {
 	extern class BaseEngine;
 }
 
-namespace Uranium::Input::Callbacks {
+namespace Uranium::Events::Callbacks {
 
 	class MouseCallback final {
 	private:
 		/*
 		* Friends with other classes
 		*/
-		friend class Services::BaseEngine;
+		friend class Core::BaseEngine;
 
 	public:
 		/*

@@ -1,8 +1,8 @@
 #include <GL/glfw3.h>
 
-#include "Display/Monitor.h"
-#include "Services/BaseEngine.h"
+#include "Core/BaseEngine.h"
 #include "Services/Application.h"
+#include "Display/MonitorHandler.h"
 
 namespace Uranium::Services {
 
@@ -30,7 +30,7 @@ namespace Uranium::Services {
 		baseEngine.reset();
 	}
 
-	BaseEngine& Application::getBaseEngine() {
+	Core::BaseEngine& Application::getBaseEngine() {
 		return *baseEngine;
 	}
 
@@ -50,7 +50,7 @@ namespace Uranium::Services {
 		glfwSetErrorCallback(&Application::diagnosticErrors);
 
 		// Initiate the monitor handler
-		Display::Monitor::initMonitors();
+		Display::MonitorHandler::initMonitors();
 	}
 
 	void Application::run() {
@@ -59,7 +59,7 @@ namespace Uranium::Services {
 		baseEngine->run();
 
 		// Dispose all monitors
-		Display::Monitor::disposeMonitors();
+		Display::MonitorHandler::disposeMonitors();
 
 		// Terminates the GLFW content
 		glfwTerminate();

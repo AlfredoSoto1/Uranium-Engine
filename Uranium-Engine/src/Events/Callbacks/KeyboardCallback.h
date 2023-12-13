@@ -2,18 +2,18 @@
 
 struct GLFWwindow;
 
-namespace Uranium::Services {
+namespace Uranium::Core {
 	extern class BaseEngine;
 }
 
-namespace Uranium::Input::Callbacks {
+namespace Uranium::Events::Callbacks {
 
 	class KeyboardCallback final {
 	private:
 		/*
 		* Friends with other classes
 		*/
-		friend Services::BaseEngine;
+		friend Core::BaseEngine;
 	
 	public:
 		bool isKeyDown(int key);

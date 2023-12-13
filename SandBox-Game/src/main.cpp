@@ -576,9 +576,10 @@
 
 #include "Display/Window.h"
 #include "Display/Monitor.h"
-#include "Services/BaseEngine.h"
+#include "Core/BaseEngine.h"
 #include "Services/Application.h"
 
+using namespace Uranium::Core;
 using namespace Uranium::Display;
 using namespace Uranium::Services;
 

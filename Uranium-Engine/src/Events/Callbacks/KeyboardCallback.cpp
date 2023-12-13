@@ -2,14 +2,16 @@
 
 #include <memory>
 #include "KeyboardCallback.h"
+
 #include "Display/Window.h"
-#include "Services/BaseEngine.h"
+#include "Core/BaseEngine.h"
 #include "Services/Application.h"
 
+using namespace Uranium::Core;
 using namespace Uranium::Display;
 using namespace Uranium::Services;
 
-namespace Uranium::Input::Callbacks {
+namespace Uranium::Events::Callbacks {
 
 	KeyboardCallback::KeyboardCallback() noexcept :
 		keys(nullptr),

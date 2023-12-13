@@ -102,7 +102,7 @@ namespace Uranium::Display {
 		//window.getCallback().setHasResized(true);
 	}
 
-	void WindowStates::setFullscreen(std::unique_ptr<Monitor> monitor) {
+	void WindowStates::setFullscreen(std::shared_ptr<Monitor> monitor) {
 #ifdef UR_DEBUG
 		if (!window->glWindow)
 			throw std::exception("GLFW window is not initialized");

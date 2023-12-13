@@ -6,43 +6,6 @@
 
 namespace Uranium::Display {
 
-	std::unique_ptr<std::vector<std::shared_ptr<Monitor>>> Monitor::availableMonitors = nullptr;
-
-	void Monitor::initMonitors() {
-		// Initialize the vector of available monitors
-		Monitor::availableMonitors = std::make_unique<std::vector<std::shared_ptr<Monitor>>>();
-
-		// Obtain the monitor count that GLFW provides
-		int monitorCount;
-		// Retrieve a C array from GLFW 
-		// with the returned monitor count
-		GLFWmonitor** monitors = glfwGetMonitors(&monitorCount);
-
-		// Store the monitors obtained by GLFW
-		for (int i = 0; i < monitorCount; i++)
-			if (monitors[i] != nullptr)
-				Monitor::availableMonitors->push_back(std::make_shared<Monitor>(monitors[i]));
-	}
-
-	void Monitor::disposeMonitors() {
-		// Release the pointer
-		std::vector<std::shared_ptr<Monitor>>* allMonitors = Monitor::availableMonitors.release();
-		// Clear the vector
-		allMonitors->clear();
-		// Free all monitors
-		delete allMonitors;
-	}
-
-	std::shared_ptr<Monitor> Monitor::getPrimary() {
-		if (Monitor::availableMonitors->empty())
-			return nullptr;
-		return Monitor::availableMonitors->at(0);
-	}
-
-	std::vector<std::shared_ptr<Monitor>> Monitor::getConnectedMonitors() {
-		return *Monitor::availableMonitors;
-	}
-
 	Monitor::Monitor(GLFWmonitor* monitor) noexcept :
 		monitor(monitor),
 		vidmode(nullptr)

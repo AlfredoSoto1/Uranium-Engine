@@ -2,16 +2,21 @@
 
 #include "BaseEngine.h"
 #include "Display/Window.h"
-#include "Input/Callbacks/WindowCallback.h"
-#include "Input/Callbacks/MonitorCallback.h"
-#include "Input/Callbacks/MouseCallback.h"
-#include "Input/Callbacks/CursorCallback.h"
-#include "Input/Callbacks/KeyboardCallback.h"
+#include "Events/Callbacks/WindowCallback.h"
+#include "Events/Callbacks/MonitorCallback.h"
+#include "Events/Callbacks/MouseCallback.h"
+#include "Events/Callbacks/CursorCallback.h"
+#include "Events/Callbacks/KeyboardCallback.h"
 
-namespace Uranium::Services {
+namespace Uranium::Core {
 
 	BaseEngine::BaseEngine() noexcept :
-		display(nullptr)
+		display(nullptr),
+		mouseCallback(nullptr),
+		cursorCallback(nullptr),
+		windowCallback(nullptr),
+		monitorCallback(nullptr),
+		keyboardCallback(nullptr)
 	{
 	}
 
@@ -60,9 +65,9 @@ namespace Uranium::Services {
 	}
 
 	void BaseEngine::createCallbacks() {
+		using namespace Events::Callbacks;
 
-		using namespace Input::Callbacks;
-
+		// Create and initiate all the callbacks
 		mouseCallback    = new MouseCallback();
 		cursorCallback   = new CursorCallback();
 		windowCallback   = new WindowCallback();
@@ -71,6 +76,7 @@ namespace Uranium::Services {
 	}
 
 	void BaseEngine::disposeCallbacks() {
+		// free all the created callbacks
 		delete mouseCallback;
 		delete cursorCallback;
 		delete windowCallback;

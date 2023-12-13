@@ -4,13 +4,15 @@
 #include <vector>
 #include <string>
 
+namespace Uranium::Core {
+	extern class BaseEngine;
+}
+
 namespace Uranium::Display {
-	extern class Monitor;
+	extern class MonitorHandler;
 }
 
 namespace Uranium::Services {
-
-	class BaseEngine;
 
 	class Application final {
 	public:
@@ -22,7 +24,7 @@ namespace Uranium::Services {
 		/*
 		* Returns a reference to the base engine
 		*/
-		BaseEngine& getBaseEngine();
+		Core::BaseEngine& getBaseEngine();
 
 	private:
 		/*
@@ -85,6 +87,6 @@ namespace Uranium::Services {
 		std::vector<std::string> arguments;
 
 		// reference to the base engine
-		std::unique_ptr<BaseEngine> baseEngine;
+		std::unique_ptr<Core::BaseEngine> baseEngine;
 	};
 }

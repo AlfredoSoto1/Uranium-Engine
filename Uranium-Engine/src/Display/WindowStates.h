@@ -6,7 +6,6 @@ namespace Uranium::Display {
 
 	extern class Window;
 	extern class Monitor;
-	
 
 	class WindowStates final {
 	private:
@@ -28,7 +27,7 @@ namespace Uranium::Display {
 		void restore();
 		void maximize();
 		void minimize();
-		void setFullscreen(std::unique_ptr<Monitor> monitor);
+		void setFullscreen(std::shared_ptr<Monitor> monitor);
 
 	public:
 		/*

@@ -3,8 +3,8 @@
 #include <iostream>
 #endif
 
+#include "Core/BaseEngine.h"
 #include "Services/Application.h"
-#include "Services/BaseEngine.h"
 
 /*
 * Define a custom entry point where
@@ -12,7 +12,7 @@
 * a main function. With this the application can handle
 * efficiently the lifetime of the Application.
 */
-extern std::unique_ptr<Uranium::Services::BaseEngine> createApplication();
+extern std::unique_ptr<Uranium::Core::BaseEngine> createApplication();
 
 namespace Uranium::Services {
 	

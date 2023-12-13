@@ -3,11 +3,15 @@
 #include <memory>
 #include <thread>
 
+namespace Uranium::Services {
+	extern class Application;
+}
+
 namespace Uranium::Display {
 	extern class Window;
 }
 
-namespace Uranium::Input::Callbacks {
+namespace Uranium::Events::Callbacks {
 	extern class WindowCallback;
 	extern class MonitorCallback;
 	extern class MouseCallback;
@@ -15,14 +19,14 @@ namespace Uranium::Input::Callbacks {
 	extern class KeyboardCallback;
 }
 
-namespace Uranium::Services {
+namespace Uranium::Core {
 
 	class BaseEngine {
 	private:
 		/*
 		* Friend with other classes
 		*/
-		friend class Application;
+		friend Services::Application;
 
 	public:
 		/*
@@ -83,10 +87,10 @@ namespace Uranium::Services {
 		/*
 		* Engine callbacks
 		*/
-		Input::Callbacks::MouseCallback*    mouseCallback;
-		Input::Callbacks::CursorCallback*   cursorCallback;
-		Input::Callbacks::WindowCallback*   windowCallback;
-		Input::Callbacks::MonitorCallback*  monitorCallback;
-		Input::Callbacks::KeyboardCallback* keyboardCallback;
+		Events::Callbacks::MouseCallback*    mouseCallback;
+		Events::Callbacks::CursorCallback*   cursorCallback;
+		Events::Callbacks::WindowCallback*   windowCallback;
+		Events::Callbacks::MonitorCallback*  monitorCallback;
+		Events::Callbacks::KeyboardCallback* keyboardCallback;
 	};
 }

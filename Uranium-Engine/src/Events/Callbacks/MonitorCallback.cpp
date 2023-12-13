@@ -1,9 +1,10 @@
 #include <GL/glfw3.h>
 
 #include "MonitorCallback.h"
+
 #include "Display/Window.h"
 
-namespace Uranium::Input::Callbacks {
+namespace Uranium::Events::Callbacks {
 
 	MonitorCallback::MonitorCallback() noexcept {
         // Set the monitor callback        
