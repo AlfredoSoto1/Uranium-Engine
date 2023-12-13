@@ -1,40 +1,41 @@
-#include <GLFW/glfw3.h>
+#include <GL/glfw3.h>
 
-#include <iostream>
 #include <memory>
-
 #include "WindowCallback.h"
-#include "Input/Listeners/WindowListener.h"
+#include "Display/Window.h"
+#include "Services/BaseEngine.h"
+#include "Services/Application.h"
 
-#include "Graphics/Display/Window.h"
-#include "Graphics/Display/WindowProps.h"
+using namespace Uranium::Display;
+using namespace Uranium::Services;
 
 namespace Uranium::Input::Callbacks {
+	
+	WindowCallback::WindowCallback() noexcept {	
+		// Obtain the window reference from the application's engine
+		std::shared_ptr<Window> window = Application::instance().getBaseEngine().getWindow();
 
-	// 
-	// Create all the corresponding callbacks
-	// related to window events
-	//
-	WindowCallback::WindowCallback(Window* window) :
-		window(window),
-
-		focused(false),
-		resized(false)
-	{
-		glfwSetWindowPosCallback(*window,       WindowCallback::positionChange);
-		glfwSetWindowSizeCallback(*window,      WindowCallback::sizeChange);
-		glfwSetWindowCloseCallback(*window,     WindowCallback::windowClose);
-		glfwSetWindowFocusCallback(*window,     WindowCallback::onFocus);
-		glfwSetWindowIconifyCallback(*window,   WindowCallback::minimize);
-		glfwSetWindowRefreshCallback(*window,   WindowCallback::canvasRefresh);
-		glfwSetWindowMaximizeCallback(*window,  WindowCallback::maximize);
-		glfwSetFramebufferSizeCallback(*window, WindowCallback::frameBufferSize);
+		// On position and size callbacks
+		glfwSetWindowPosCallback(*window,       WindowCallback::movedEvent);
+		glfwSetWindowSizeCallback(*window,      WindowCallback::resizedEvent);
+		
+		// On window mode callbacks
+		glfwSetWindowFocusCallback(*window,     WindowCallback::focusEvent);
+		glfwSetWindowIconifyCallback(*window,   WindowCallback::minimizeEvent);
+		glfwSetWindowMaximizeCallback(*window,  WindowCallback::maximizeEvent);
+		
+		// On refresh buffer callbacks
+		glfwSetWindowRefreshCallback(*window,   WindowCallback::refreshEvent);
+		glfwSetFramebufferSizeCallback(*window, WindowCallback::frameBufferSizeEvent);
+		
+		// On window closing event
+		glfwSetWindowCloseCallback(*window,     WindowCallback::closeEvent);
 	}
 
-	// 
-	// Free all the window callbacks created
-	//
 	WindowCallback::~WindowCallback() {
+		// Obtain the window reference from the application's engine
+		std::shared_ptr<Window> window = Application::instance().getBaseEngine().getWindow();
+
 		glfwSetWindowPosCallback(*window,       nullptr);
 		glfwSetWindowSizeCallback(*window,      nullptr);
 		glfwSetWindowCloseCallback(*window,     nullptr);
@@ -45,99 +46,39 @@ namespace Uranium::Input::Callbacks {
 		glfwSetFramebufferSizeCallback(*window, nullptr);
 	}
 
-	void WindowCallback::windowClose(GLFWwindow* glWindow) {
-		Window& window = *static_cast<Window*>(glfwGetWindowUserPointer(glWindow));
-
-		if (window.getWindowListener() == nullptr)
-			return;
-
-		window.getWindowListener()->onClose();
+	void WindowCallback::closeEvent(GLFWwindow* glWindow) {
+		BaseEngine& engine = Application::instance().getBaseEngine();
 	}
 
-	void WindowCallback::sizeChange(GLFWwindow* glWindow, int width, int height) {
-		Window& window = *static_cast<Window*>(glfwGetWindowUserPointer(glWindow));
-
-		// Update resized flag to true
-		window.callback->resized = true;
-
-		if (window.getWindowListener() == nullptr)
-			return;
-
-		window.getWindowListener()->onResize(width, height);
+	void WindowCallback::resizedEvent(GLFWwindow* glWindow, int width, int height) {
+		BaseEngine& engine = Application::instance().getBaseEngine();
+		// set resize flag to true and update the window size
 	}
 
-	void WindowCallback::positionChange(GLFWwindow* glWindow, int xpos, int ypos) {
-		Window& window = *static_cast<Window*>(glfwGetWindowUserPointer(glWindow));
-
-		if (window.getWindowListener() == nullptr)
-			return;
-
-		window.getWindowListener()->onMoved(xpos, ypos);
+	void WindowCallback::movedEvent(GLFWwindow* glWindow, int xpos, int ypos) {
+		BaseEngine& engine = Application::instance().getBaseEngine();
+		// update the window position
 	}
 
-	void WindowCallback::onFocus(GLFWwindow* glWindow, int isFocused) {
-		Window& window = *static_cast<Window*>(glfwGetWindowUserPointer(glWindow));
-	
-		//std::cout << window.getProps().getTitle() << " " << isFocused << std::endl;
-
-		window.callback->focused = (bool)isFocused;
-
-		if (window.getWindowListener() == nullptr)
-			return;
-
-		if (isFocused)
-			window.getWindowListener()->onFocus();
-		else
-			window.getWindowListener()->offFocus();
+	void WindowCallback::focusEvent(GLFWwindow* glWindow, int isFocused) {
+		BaseEngine& engine = Application::instance().getBaseEngine();
+		// update the window focused flag
 	}
 
-	void WindowCallback::minimize(GLFWwindow* glWindow, int isMinimized) {
-		Window& window = *static_cast<Window*>(glfwGetWindowUserPointer(glWindow));
-
-		if (window.getWindowListener() == nullptr)
-			return;
-
-		if (isMinimized)
-			window.getWindowListener()->onMinimized();
+	void WindowCallback::minimizeEvent(GLFWwindow* glWindow, int isMinimized) {
+		BaseEngine& engine = Application::instance().getBaseEngine();
 	}
 
-	void WindowCallback::maximize(GLFWwindow* glWindow, int isMaximized) {
-		Window& window = *static_cast<Window*>(glfwGetWindowUserPointer(glWindow));
-		
-		if (window.getWindowListener() == nullptr)
-			return;
-
-		if (isMaximized)
-			window.getWindowListener()->onMaximized();
+	void WindowCallback::maximizeEvent(GLFWwindow* glWindow, int isMaximized) {
+		BaseEngine& engine = Application::instance().getBaseEngine();
 	}
 
-	void WindowCallback::canvasRefresh(GLFWwindow* glWindow) {
-		Window& window = *static_cast<Window*>(glfwGetWindowUserPointer(glWindow));
-
-		if (window.getWindowListener() == nullptr)
-			return;
-
-		window.getWindowListener()->onCanvasRefresh();
+	void WindowCallback::refreshEvent(GLFWwindow* glWindow) {
+		BaseEngine& engine = Application::instance().getBaseEngine();
 	}
 
-	void WindowCallback::frameBufferSize(GLFWwindow* glWindow, int width, int height) {
-		Window& window = *static_cast<Window*>(glfwGetWindowUserPointer(glWindow));
-
-		if (window.getWindowListener() == nullptr)
-			return;
-
-		window.getWindowListener()->onFramebufferResize(width, height);
-	}
-
-	auto WindowCallback::hasFocused() const -> volatile bool {
-		return focused;
-	}
-
-	auto WindowCallback::hasResized() const -> volatile bool {
-		return resized;
-	}
-
-	void WindowCallback::setHasResized(bool resized) {
-		this->resized = resized;
+	void WindowCallback::frameBufferSizeEvent(GLFWwindow* glWindow, int width, int height) {
+		BaseEngine& engine = Application::instance().getBaseEngine();
+		// update the buffer size
 	}
 }

@@ -1,59 +1,43 @@
 #pragma once
 
-namespace Uranium::Core {
-	class UnitProgram;
-}
-
-namespace Uranium::Graphics::Display {
-	class Window;
+namespace Uranium::Services {
+	extern class BaseEngine;
 }
 
 namespace Uranium::Input::Callbacks {
 
-	/*
-	* Monitor callback blueprint
-	* 
-	*/
-	class MonitorCallback {
-	public:
-		/*
-		* Custom alias
-		*/
-		using Window = Graphics::Display::Window;
-
-	public:
-		/*
-		* Delete the move/copy constructors
-		* since we dont want the client to instantiate this class
-		*/
-		MonitorCallback(MonitorCallback& copy) = delete;
-		MonitorCallback(MonitorCallback&& move) = delete;
-		MonitorCallback(const MonitorCallback& copy) = delete;
-		MonitorCallback(const MonitorCallback&& move) = delete;
-
+	class MonitorCallback final {
 	private:
 		/*
 		* Friends with other classes
 		*/
-		friend Core::UnitProgram;
+		friend Services::BaseEngine;
 
 	private:
 		/*
-		* Private static methods
+		* it gets called when a monitor gets created
 		*/
-		static void monitorCallback(GLFWmonitor* monitor, int event);
+		static void monitorEvent(GLFWmonitor* monitor, int event);
 
 	private:
 		/*
-		* Private modifiers
+		* Monitor Callback constructor
+		* creates all the monitor related callbacks
 		*/
-		explicit MonitorCallback(Window* window);
+		explicit MonitorCallback() noexcept;
 
-	private:
+		~MonitorCallback();
+
 		/*
-		* Private members
+		* Copy and move constructor deleted
+		* this is beacause we dont want the client
+		* to move or copy this class by accident since
+		* the one who must have ownership of this class
+		* instance is the engine only.
 		*/
-		Window* window;
-
+		MonitorCallback(MonitorCallback&) = delete;
+		MonitorCallback(MonitorCallback&&) = delete;
+		MonitorCallback(const MonitorCallback&) = delete;
+		MonitorCallback(const MonitorCallback&&) = delete;
 	};
 }

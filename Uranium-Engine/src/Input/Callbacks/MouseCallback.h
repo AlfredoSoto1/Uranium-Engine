@@ -2,68 +2,66 @@
 
 struct GLFWwindow;
 
-namespace Uranium::Core {
-	class UnitProgram;
-}
-
-namespace Uranium::Graphics::Display {
-	class Window;
+namespace Uranium::Services {
+	extern class BaseEngine;
 }
 
 namespace Uranium::Input::Callbacks {
 
-	/*
-	* Mouse Callback blueprint
-	* 
-	*/
-	class MouseCallback {
-	public:
+	class MouseCallback final {
+	private:
 		/*
-		* custom alias
+		* Friends with other classes
 		*/
-		using Window = Uranium::Graphics::Display::Window;
+		friend class Services::BaseEngine;
 
 	public:
+		/*
+		* Returns true if a mouse button is being hold down
+		*/
 		bool isButtonDown(int button);
-		int isMouseToggled(int button);
 	
 	private:
 		/*
-		* Friend with other classes
+		* It gets called when the mouse gets clicked
 		*/
-		friend Core::UnitProgram;
+		static void clickEvent(GLFWwindow* window, int button, int action, int mods);
+		
+		/*
+		* It gets called when the mouse gets moved
+		*/
+		static void movedEvent(GLFWwindow* window, double xpos, double ypos);
+		
+		/*
+		* It gets called when the mouse uses the scroll wheel
+		*/
+		static void scrollEvent(GLFWwindow* window, double xOffset, double yOffset);
 
 	private:
 		/*
-		* Callback constructors
+		* Mouse Callback constructor
+		* creates all the mouse related callbacks
 		*/
-		MouseCallback(MouseCallback& copy) = delete;
-		MouseCallback(MouseCallback&& move) = delete;
-		MouseCallback(const MouseCallback& copy) = delete;
-		MouseCallback(const MouseCallback&& move) = delete;
-
-		explicit MouseCallback(Window* window);
+		explicit MouseCallback() noexcept;
 		
 		~MouseCallback();
 
-	private:
 		/*
-		* Private static callbacks
+		* Copy and move constructor deleted
+		* this is beacause we dont want the client
+		* to move or copy this class by accident since
+		* the one who must have ownership of this class
+		* instance is the engine only.
 		*/
-		static void clickDetected(GLFWwindow* window, int button, int action, int mods);
-		static void scrollDetected(GLFWwindow* window, double xOffset, double yOffset);
-		static void positionDetected(GLFWwindow* window, double xpos, double ypos);
+		MouseCallback(MouseCallback&) = delete;
+		MouseCallback(MouseCallback&&) = delete;
+		MouseCallback(const MouseCallback&) = delete;
+		MouseCallback(const MouseCallback&&) = delete;
 
 	private:
 		/*
-		* Private members
+		* Array of all mouse buttons available by GLFW
 		*/
-		// Use a raw pointer type since this class
-		// will only be created once inside the parent Window
-		// class. Meaning that this class cannot have a copy 
-		// or can be moved out of the Window scope instance.
-		Window* window;
-
 		bool* mouseButtons;
 	};
 }

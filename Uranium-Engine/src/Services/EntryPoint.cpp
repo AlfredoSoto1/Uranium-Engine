@@ -1,3 +1,8 @@
+
+#ifdef UR_DEBUG
+#include <iostream>
+#endif
+
 #include "Services/Application.h"
 #include "Services/BaseEngine.h"
 
@@ -18,16 +23,37 @@ namespace Uranium::Services {
 	* Application class members including static functions
 	* and declarations.
 	*/
-	void startApplication(int argc, char* argv[]) {
+	void buildApplication(int argc, char* argv[]) {
 
-		// Build the application
-		Application::build(
-			argc, // argument count
-			argv, // argument values as an array
-			std::move(createApplication())
-		);
+		// Create a new application instance
+		Application::application = new Application();
 
-		// Application ends here
+		// Pass all the arguments from the terminal to the application
+		for (int i = 0; i < argc; i++)
+			Application::application->addArgument(argv[i]);
+
+		// Set the new base engine
+		Application::application->baseEngine = std::move(createApplication());
+
+		try {
+			// Initiate GLFW
+			Application::application->init();
+		} catch (std::exception& e) {
+#ifdef UR_DEBUG
+			std::cout << e.what() << std::endl;
+#endif
+			// Delete the application once the program ends
+			delete Application::application;
+			
+			// exit the application
+			return;
+		}
+		
+		// Run the base engine
+		Application::application->run();
+
+		// Delete the application once the program ends
+		delete Application::application;
 	}
 }
 
@@ -39,7 +65,7 @@ auto main(int argc, char* argv[]) -> int {
 	/*
 	* Start application from global space
 	*/
-	Uranium::Services::startApplication(argc, argv);
+	Uranium::Services::buildApplication(argc, argv);
 
 	return 0; // Exit success
 }

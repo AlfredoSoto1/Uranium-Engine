@@ -2,6 +2,11 @@
 
 #include "BaseEngine.h"
 #include "Display/Window.h"
+#include "Input/Callbacks/WindowCallback.h"
+#include "Input/Callbacks/MonitorCallback.h"
+#include "Input/Callbacks/MouseCallback.h"
+#include "Input/Callbacks/CursorCallback.h"
+#include "Input/Callbacks/KeyboardCallback.h"
 
 namespace Uranium::Services {
 
@@ -52,5 +57,24 @@ namespace Uranium::Services {
 		
 		// release the window reference
 		display.reset();
+	}
+
+	void BaseEngine::createCallbacks() {
+
+		using namespace Input::Callbacks;
+
+		mouseCallback    = new MouseCallback();
+		cursorCallback   = new CursorCallback();
+		windowCallback   = new WindowCallback();
+		monitorCallback  = new MonitorCallback();
+		keyboardCallback = new KeyboardCallback();
+	}
+
+	void BaseEngine::disposeCallbacks() {
+		delete mouseCallback;
+		delete cursorCallback;
+		delete windowCallback;
+		delete monitorCallback;
+		delete keyboardCallback;
 	}
 }

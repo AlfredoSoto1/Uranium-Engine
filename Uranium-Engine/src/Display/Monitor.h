@@ -7,38 +7,53 @@
 extern struct GLFWmonitor;
 extern struct GLFWvidmode;
 
+namespace Uranium::Services {
+	extern class Application;
+}
+
 namespace Uranium::Display {
 
 	class Monitor final {
+	public:
+		/*
+		* Friend with other instances
+		*/
+		friend Services::Application;
+		friend std::shared_ptr<Monitor>;
+
 	public:
 		/*
 		* Returns the primary connected monitor.
 		* If monitor is not connected it will return nullptr.
 		*/
 		static std::shared_ptr<Monitor> getPrimary();
-		
+
 		/*
 		* Returns a vector of unique references to
 		* all the monitors that are connected.
 		*/
 		static std::vector<std::shared_ptr<Monitor>> getConnectedMonitors();
 
-	public:
+	private:
 		/*
-		* This constructor used to create
-		* a new unique instance of the connected monitors.
+		* Initializes and creates all avaliable monitors
 		*/
-		explicit Monitor(GLFWmonitor* monitor) noexcept;
-		
+		static void initMonitors();
+
 		/*
-		* The Monitor() constructor is deleted
-		* because we dont want the client to create
-		* new monitor objects. All monitors should exist
-		* before the actual application starts running.
+		* Disposes all created monitors
 		*/
-		Monitor() = delete;
+		static void disposeMonitors();
+
+		// list of all available monitors connected
+		static std::unique_ptr<std::vector<std::shared_ptr<Monitor>>> availableMonitors;
 
 	public:
+		/*
+		* Prepare the default monitor destructor
+		*/
+		~Monitor() = default;
+
 		/*
 		* Returns the GLFWmonitor reference
 		* for the overloaded-dereference operator
@@ -62,9 +77,17 @@ namespace Uranium::Display {
 
 	private:
 		/*
+		* This constructor used to create
+		* a new unique instance of the connected monitors.
+		*/
+		explicit Monitor(GLFWmonitor* monitor) noexcept;
+		
+	private:
+		/*
 		* Monitor reference and video mode
 		*/
 		GLFWmonitor* monitor;
 		const GLFWvidmode* vidmode;
 	};
+
 }

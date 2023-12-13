@@ -2,60 +2,49 @@
 
 struct GLFWwindow;
 
-namespace Uranium::Core {
-	class UnitProgram;
-}
-
-namespace Uranium::Graphics::Display {
-	class Window;
+namespace Uranium::Services {
+	extern class BaseEngine;
 }
 
 namespace Uranium::Input::Callbacks {
 
-	/*
-	* Cursor Callback
-	*/
-	class CursorCallback {
-	public:
+	class CursorCallback final {
+	private:
 		/*
-		* custom alias
+		* Friend with other classes
 		*/
-		using Window = Uranium::Graphics::Display::Window;
+		friend Services::BaseEngine;
 
 	private:
 		/*
-		* Mutual friend classes
+		* Gets called when a link or file is dropped in window
 		*/
-		friend Core::UnitProgram;
+		static void dropEvent(GLFWwindow* window, int pathCount, const char** paths);
+
+		/*
+		* Gets called if the cursor is inside the window
+		*/
+		static void enteredEvent(GLFWwindow* window, int isInside);
 
 	private:
 		/*
-		* Private methods
+		* Cursor Callback constructor
+		* creates all the monitor related callbacks
 		*/
-		CursorCallback(CursorCallback& copy) = delete;
-		CursorCallback(CursorCallback&& move) = delete;
-		CursorCallback(const CursorCallback& copy) = delete;
-		CursorCallback(const CursorCallback&& move) = delete;
-
-		explicit CursorCallback(Window* window);
+		explicit CursorCallback() noexcept;
 
 		~CursorCallback();
 
-	private:
 		/*
-		* Private static callbacks
+		* Copy and move constructor deleted
+		* this is beacause we dont want the client
+		* to move or copy this class by accident since
+		* the one who must have ownership of this class
+		* instance is the engine only.
 		*/
-		static void dropDetected(GLFWwindow* window, int pathCount, const char** paths);
-		static void enteredDetected(GLFWwindow* window, int isInside);
-
-	private:
-		/*
-		* Private members
-		*/
-		// Use a raw pointer type since this class
-		// will only be created once inside the parent Window
-		// class. Meaning that this class cannot have a copy 
-		// or can be moved out of the Window scope instance.
-		Window* window;
+		CursorCallback(CursorCallback&) = delete;
+		CursorCallback(CursorCallback&&) = delete;
+		CursorCallback(const CursorCallback&) = delete;
+		CursorCallback(const CursorCallback&&) = delete;
 	};
 }

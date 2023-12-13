@@ -2,26 +2,19 @@
 
 struct GLFWwindow;
 
-namespace Uranium::Core {
-	class UnitProgram;
-}
-
-namespace Uranium::Graphics::Display {
-	class Window;
+namespace Uranium::Services {
+	extern class BaseEngine;
 }
 
 namespace Uranium::Input::Callbacks {
 
-	/*
-	* Keyboard Callback
-	*/
-	class KeyboardCallback {
-	public:
+	class KeyboardCallback final {
+	private:
 		/*
-		* Custom alias
+		* Friends with other classes
 		*/
-		using Window = Uranium::Graphics::Display::Window;
-
+		friend Services::BaseEngine;
+	
 	public:
 		bool isKeyDown(int key);
 		bool isKeyToggled(int key);
@@ -29,40 +22,37 @@ namespace Uranium::Input::Callbacks {
 
 	private:
 		/*
-		* Mutual friend classes
+		* Gets called when a key event happened
 		*/
-		friend Core::UnitProgram;
+		static void keyEvent(GLFWwindow* window, int key, int scancode, int action, int mods);
+		
+		/*
+		* Gets called when a char event happened
+		*/
+		static void charEvent(GLFWwindow* window, unsigned int codePoint);
 
 	private:
 		/*
-		* Private methods
+		* Keyboard Callback constructor
+		* creates all the monitor related callbacks
 		*/
-		KeyboardCallback(KeyboardCallback& copy) = delete;
-		KeyboardCallback(KeyboardCallback&& move) = delete;
-		KeyboardCallback(const KeyboardCallback& copy) = delete;
-		KeyboardCallback(const KeyboardCallback&& move) = delete;
-
-		explicit KeyboardCallback(Window* window);
+		explicit KeyboardCallback() noexcept;
 
 		~KeyboardCallback();
 
-	private:
 		/*
-		* Private static callbacks
+		* Copy and move constructor deleted
+		* this is beacause we dont want the client
+		* to move or copy this class by accident since
+		* the one who must have ownership of this class
+		* instance is the engine only.
 		*/
-		static void keyDetected(GLFWwindow* window, int key, int scancode, int action, int mods);
-		static void charDetected(GLFWwindow* window, unsigned int codePoint);
+		KeyboardCallback(KeyboardCallback&) = delete;
+		KeyboardCallback(KeyboardCallback&&) = delete;
+		KeyboardCallback(const KeyboardCallback&) = delete;
+		KeyboardCallback(const KeyboardCallback&&) = delete;
 
 	private:
-		/*
-		* Private members
-		*/
-		// Use a raw pointer type since this class
-		// will only be created once inside the parent Window
-		// class. Meaning that this class cannot have a copy 
-		// or can be moved out of the Window scope instance.
-		Window* window;
-
 		bool* keys;
 		bool toggled;
 		bool released;

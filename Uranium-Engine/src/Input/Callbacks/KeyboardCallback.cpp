@@ -1,13 +1,17 @@
-#include <GLFW/glfw3.h>
+#include <GL/glfw3.h>
 
+#include <memory>
 #include "KeyboardCallback.h"
-#include "Graphics/Display/Window.h"
+#include "Display/Window.h"
+#include "Services/BaseEngine.h"
+#include "Services/Application.h"
+
+using namespace Uranium::Display;
+using namespace Uranium::Services;
 
 namespace Uranium::Input::Callbacks {
 
-	KeyboardCallback::KeyboardCallback(Window* window) :
-		window(window),
-
+	KeyboardCallback::KeyboardCallback() noexcept :
 		keys(nullptr),
 		toggled(false),
 		released(false)
@@ -17,18 +21,26 @@ namespace Uranium::Input::Callbacks {
 		for (int i = 0; i < GLFW_KEY_LAST; i++)
 			keys[i] = false;
 
-		glfwSetKeyCallback(*window,  KeyboardCallback::keyDetected);
-		glfwSetCharCallback(*window, KeyboardCallback::charDetected);
+		// Obtain the window reference from the application's engine
+		std::shared_ptr<Window> window = Application::instance().getBaseEngine().getWindow();
+
+		glfwSetKeyCallback(*window,  KeyboardCallback::keyEvent);
+		glfwSetCharCallback(*window, KeyboardCallback::charEvent);
 	}
 
 	KeyboardCallback::~KeyboardCallback() {
+		// delete the key buffer
 		delete[] keys;
+
+		// Obtain the window reference from the application's engine
+		std::shared_ptr<Window> window = Application::instance().getBaseEngine().getWindow();
 
 		glfwSetKeyCallback(*window,  nullptr);
 		glfwSetCharCallback(*window, nullptr);
 	}
 
-	void KeyboardCallback::keyDetected(GLFWwindow* window, int key, int scancode, int action, int mods) {
+	void KeyboardCallback::keyEvent(GLFWwindow* window, int key, int scancode, int action, int mods) {
+		BaseEngine& engine = Application::instance().getBaseEngine();
 		//// obtain Application-program reference via glfw user pointer
 		//ApplicationProgram* program = static_cast<ApplicationProgram*>(glfwGetWindowUserPointer(window));
 		//if (program == nullptr)
@@ -38,7 +50,8 @@ namespace Uranium::Input::Callbacks {
 		//program->getKeyboardCallback()->keys[key] = action != GLFW_RELEASE;
 	}
 
-	void KeyboardCallback::charDetected(GLFWwindow* window, unsigned int codePoint) {
+	void KeyboardCallback::charEvent(GLFWwindow* window, unsigned int codePoint) {
+		BaseEngine& engine = Application::instance().getBaseEngine();
 		// TODO
 	}
 

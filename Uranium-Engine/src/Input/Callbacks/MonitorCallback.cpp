@@ -1,19 +1,21 @@
-#include <GLFW/glfw3.h>
+#include <GL/glfw3.h>
 
 #include "MonitorCallback.h"
-#include "Graphics/Display/Monitor.h"
+#include "Display/Window.h"
 
 namespace Uranium::Input::Callbacks {
 
-	MonitorCallback::MonitorCallback(Window* window) :
-        window(window)
-    {
-
+	MonitorCallback::MonitorCallback() noexcept {
+        // Set the monitor callback        
+        glfwSetMonitorCallback(MonitorCallback::monitorEvent);
 	}
 
-    void MonitorCallback::monitorCallback(GLFWmonitor* monitor, int event) {
+    MonitorCallback::~MonitorCallback() {
+        // Free the monitor callback
+        glfwSetMonitorCallback(nullptr);
+    }
 
-        using Graphics::Display::Monitor;
+    void MonitorCallback::monitorEvent(GLFWmonitor* monitor, int event) {
 
         if (event == GLFW_CONNECTED) {
             // The monitor was connected

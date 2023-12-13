@@ -595,14 +595,6 @@ public:
 
 	}
 
-	void init() override {
-		
-	}
-
-	void dispose() override {
-		
-	}
-
 	std::shared_ptr<Window> createWindow() override {
 		return std::make_shared<Window>();
 	}

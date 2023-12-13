@@ -2,57 +2,30 @@
 
 #include <memory>
 
-namespace Uranium::Graphics::Display {
-	class Window;
-}
-
 namespace Uranium::Scenes {
 
 	class Scene;
 
-	class SceneMaster {
-	public:
-		/*
-		* custom alias
-		*/
-		using Window = Graphics::Display::Window;
-
-	public:
-		virtual ~SceneMaster();
-
-	public:
-		/*
-		* public methods
-		*/
-		const std::shared_ptr<Scene>& getCurrentScene();
-
-		void setCurrentScene(std::shared_ptr<Scene> scene);
-
+	class SceneMaster final {
 	private:
 		/*
-		* Friends with other classes
+		* Creates center crontrol that manages
+		* all scenes in our Application program
 		*/
+		explicit SceneMaster() noexcept;
 
-	private:
+		~SceneMaster();
+		
 		/*
-		* private methods
-		*/
-		/*
-		* copy and move constructors are 
+		* copy and move constructors are
 		* deleted because we don't need them
 		*/
 		SceneMaster(const SceneMaster&) = delete;
 		SceneMaster(const SceneMaster&&) = delete;
 
+	private:
 		/*
-		* Creates center crontrol that manages
-		* all scenes in our Application program
-		*/
-		SceneMaster(const std::shared_ptr<Window>& window);
-		
-		/*
-		* handles render and update of
-		* current scene
+		* handles render and update of current scene
 		*/
 		void render();
 		void update();
@@ -81,9 +54,6 @@ namespace Uranium::Scenes {
 		void updateOutTime();
 
 	private:
-		/*
-		* private members
-		*/
 		volatile unsigned int frameCount;
 		volatile unsigned int updateCount;
 
@@ -93,8 +63,6 @@ namespace Uranium::Scenes {
 		volatile double renderTimer;
 		volatile double updateTimer;
 
-		std::shared_ptr<Window> window;
 		std::shared_ptr<Scene> currentScene;
-
 	};
 }

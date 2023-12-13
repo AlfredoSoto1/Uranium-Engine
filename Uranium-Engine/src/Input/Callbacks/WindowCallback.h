@@ -2,81 +2,67 @@
 
 struct GLFWwindow;
 
-namespace Uranium::Core {
-	class UnitProgram;
-}
-
-namespace Uranium::Graphics::Display {
-	class Window;
+namespace Uranium::Services {
+	extern class BaseEngine;
 }
 
 namespace Uranium::Input::Callbacks {
 
-	/*
-	* Window Callback blueprint
-	* 
-	*/
-	class WindowCallback {
+	class WindowCallback final {
 	public:
 		/*
-		* Custom alias
+		* Friends with other classes
 		*/
-		using Window = Graphics::Display::Window;
-
-	public:
-		/*
-		* Public modifiers
-		*/
-		auto hasFocused() const -> volatile bool;
-		auto hasResized() const -> volatile bool;
-	
-		void setHasResized(bool resized);
+		friend class Services::BaseEngine;
 
 	private:
 		/*
-		* Friend with other classes
+		* Called when window close is requested
 		*/
-		friend Core::UnitProgram;
-		
+		static void closeEvent(GLFWwindow* glWindow);
+
+		/*
+		* Called when window is moved or resized
+		*/
+		static void movedEvent(GLFWwindow* glWindow, int xpos, int ypos);
+		static void resizedEvent(GLFWwindow* glWindow, int width, int height);
+
+		/*
+		* Called when the window is on or out of focus
+		*/
+		static void focusEvent(GLFWwindow* glWindow, int isFocused);
+
+		/*
+		* Called when the window gets minimized, maximized or fullscreen
+		*/
+		static void minimizeEvent(GLFWwindow* glWindow, int isMinimized);
+		static void maximizeEvent(GLFWwindow* glWindow, int isMaximized);
+
+		/*
+		* Called when the window canvas gets refreshed
+		*/
+		static void refreshEvent(GLFWwindow* glWindow);
+		static void frameBufferSizeEvent(GLFWwindow* glWindow, int width, int height);
+
 	private:
 		/*
-		* Callback constructor
+		* Window Callback constructor
+		* creates all the window related callbacks
 		*/
-		WindowCallback(WindowCallback& copy) = delete;
-		WindowCallback(WindowCallback&& move) = delete;
-		WindowCallback(const WindowCallback& copy) = delete;
-		WindowCallback(const WindowCallback&& move) = delete;
-
-		explicit WindowCallback(Window* window);
+		explicit WindowCallback() noexcept;
 		
 		~WindowCallback();
 
-	private:
 		/*
-		* Private static callbacks
+		* Copy and move constructor deleted
+		* this is beacause we dont want the client
+		* to move or copy this class by accident since
+		* the one who must have ownership of this class
+		* instance is the engine only.
 		*/
-		static void windowClose(GLFWwindow* glWindow);
-		static void sizeChange(GLFWwindow* glWindow, int width, int height);
-		static void positionChange(GLFWwindow* glWindow, int xpos, int ypos);
-
-		static void onFocus(GLFWwindow* glWindow, int isFocused);
-		static void minimize(GLFWwindow* glWindow, int isMinimized);
-		static void maximize(GLFWwindow* glWindow, int isMaximized);
-
-		static void canvasRefresh(GLFWwindow* glWindow);
-		static void frameBufferSize(GLFWwindow* glWindow, int width, int height);
-
-	private:
-		/*
-		* Private members
-		*/
-		// Use a raw pointer type since this class
-		// will only be created once inside the parent Window
-		// class. Meaning that this class cannot have a copy 
-		// or can be moved out of the Window scope instance.
-		Window* window;
-
-		volatile bool focused;
-		volatile bool resized;
+		WindowCallback(WindowCallback&) = delete;
+		WindowCallback(WindowCallback&&) = delete;
+		WindowCallback(const WindowCallback&) = delete;
+		WindowCallback(const WindowCallback&&) = delete;
 	};
 }

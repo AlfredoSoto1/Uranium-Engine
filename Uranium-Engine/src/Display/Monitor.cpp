@@ -1,10 +1,17 @@
 #include <GL/glfw3.h>
 
+#include <memory>
+#include <vector>
 #include "Monitor.h"
 
 namespace Uranium::Display {
 
-	std::vector<std::shared_ptr<Monitor>> Monitor::getConnectedMonitors() {
+	std::unique_ptr<std::vector<std::shared_ptr<Monitor>>> Monitor::availableMonitors = nullptr;
+
+	void Monitor::initMonitors() {
+		// Initialize the vector of available monitors
+		Monitor::availableMonitors = std::make_unique<std::vector<std::shared_ptr<Monitor>>>();
+
 		// Obtain the monitor count that GLFW provides
 		int monitorCount;
 		// Retrieve a C array from GLFW 
@@ -12,20 +19,28 @@ namespace Uranium::Display {
 		GLFWmonitor** monitors = glfwGetMonitors(&monitorCount);
 
 		// Store the monitors obtained by GLFW
-		// into an std::vector
-		std::vector<std::shared_ptr<Monitor>> connectedMonitors;
 		for (int i = 0; i < monitorCount; i++)
-			if(monitors[i] != nullptr)
-				connectedMonitors.push_back(std::make_shared<Monitor>(monitors[i]));
-		return connectedMonitors;
+			if (monitors[i] != nullptr)
+				Monitor::availableMonitors->push_back(std::make_shared<Monitor>(monitors[i]));
+	}
+
+	void Monitor::disposeMonitors() {
+		// Release the pointer
+		std::vector<std::shared_ptr<Monitor>>* allMonitors = Monitor::availableMonitors.release();
+		// Clear the vector
+		allMonitors->clear();
+		// Free all monitors
+		delete allMonitors;
 	}
 
 	std::shared_ptr<Monitor> Monitor::getPrimary() {
-		GLFWmonitor* monitor = glfwGetPrimaryMonitor();
+		if (Monitor::availableMonitors->empty())
+			return nullptr;
+		return Monitor::availableMonitors->at(0);
+	}
 
-		if(monitor != nullptr)
-			return std::make_shared<Monitor>(monitor);
-		return nullptr;
+	std::vector<std::shared_ptr<Monitor>> Monitor::getConnectedMonitors() {
+		return *Monitor::availableMonitors;
 	}
 
 	Monitor::Monitor(GLFWmonitor* monitor) noexcept :

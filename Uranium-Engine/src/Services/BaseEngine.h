@@ -7,6 +7,14 @@ namespace Uranium::Display {
 	extern class Window;
 }
 
+namespace Uranium::Input::Callbacks {
+	extern class WindowCallback;
+	extern class MonitorCallback;
+	extern class MouseCallback;
+	extern class CursorCallback;
+	extern class KeyboardCallback;
+}
+
 namespace Uranium::Services {
 
 	class BaseEngine {
@@ -32,17 +40,13 @@ namespace Uranium::Services {
 		BaseEngine(BaseEngine&) = delete;
 		BaseEngine(const BaseEngine&) = delete;
 
-	protected:
+	public:
 		/*
-		* Initiates custom engine content
+		* Returns a reference to window
 		*/
-		virtual void init() = 0;
+		std::shared_ptr<Display::Window> getWindow() const;
 
-		/*
-		* Disposes the initialized content
-		*/
-		virtual void dispose() = 0;
-		
+	protected:
 		/*
 		* Creates a window inside the context.
 		* If the function returns nullptr, then
@@ -57,20 +61,32 @@ namespace Uranium::Services {
 		*/
 		virtual std::shared_ptr<int> createScenes() = 0;
 
-	public:
-		/*
-		* Returns a reference to window
-		*/
-		std::shared_ptr<Display::Window> getWindow() const;
-
 	private:
 		/*
 		* Runs the engine
 		*/
 		void run();
 
+		void createCallbacks();
+		void disposeCallbacks();
+
 	private:
+		/*
+		* Engine threads
+		*/
+		std::thread updateThread;
+		std::thread renderingThread;
+		
 		std::shared_ptr<int> scenes; // TEMP
 		std::shared_ptr<Display::Window> display;
+
+		/*
+		* Engine callbacks
+		*/
+		Input::Callbacks::MouseCallback*    mouseCallback;
+		Input::Callbacks::CursorCallback*   cursorCallback;
+		Input::Callbacks::WindowCallback*   windowCallback;
+		Input::Callbacks::MonitorCallback*  monitorCallback;
+		Input::Callbacks::KeyboardCallback* keyboardCallback;
 	};
 }

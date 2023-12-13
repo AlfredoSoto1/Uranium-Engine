@@ -5,10 +5,13 @@ namespace Uranium::Input::Listeners {
 	class WindowListener {
 	public:
 		/*
-		* Public abstract listeners
+		* 
 		*/
 		virtual void onClose() = 0;
 
+		/*
+		* 
+		*/
 		virtual void onMoved(int xpos, int ypos) = 0;
 		virtual void onResize(unsigned int width, unsigned int height) = 0;
 

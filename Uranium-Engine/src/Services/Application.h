@@ -4,6 +4,10 @@
 #include <vector>
 #include <string>
 
+namespace Uranium::Display {
+	extern class Monitor;
+}
+
 namespace Uranium::Services {
 
 	class BaseEngine;
@@ -15,30 +19,29 @@ namespace Uranium::Services {
 		*/
 		static Application& instance();
 
+		/*
+		* Returns a reference to the base engine
+		*/
+		BaseEngine& getBaseEngine();
+
 	private:
 		/*
 		* Unique application reference
 		*/
-		static std::unique_ptr<Application> application;
+		static Application* application;
 		
 		/*
 		* Extern friend to start application
 		* Located at: EntryPoint.cpp
 		*/
-		friend void startApplication(int argc, char* argv[]);
-
-		/*
-		* Build the application at the default
-		* entry point (main function).
-		*/
-		static void build(int argc, char* argv[], std::unique_ptr<BaseEngine> baseEngine);
+		friend void buildApplication(int argc, char* argv[]);
 
 		/*
 		* Default method that logs any GL errors
 		*/
 		static void diagnosticErrors(int error, const char* description);
-
-	public:
+		
+	private:
 		/*
 		* Application main constructor.
 		* This must not throw an exception since this
@@ -61,13 +64,12 @@ namespace Uranium::Services {
 		Application(Application&) = delete;
 		Application(const Application&) = delete;
 
-	public:
-		/*
-		* Returns a reference to the base engine
-		*/
-		BaseEngine& getBaseEngine();
-
 	private:
+		/*
+		* Initiates application
+		*/
+		void init() const;
+		
 		/*
 		* Runs the application content
 		*/
@@ -79,7 +81,10 @@ namespace Uranium::Services {
 		void addArgument(const std::string& arg);
 
 	private:
+		// These are the passed arguments from terminal
 		std::vector<std::string> arguments;
+
+		// reference to the base engine
 		std::unique_ptr<BaseEngine> baseEngine;
 	};
 }

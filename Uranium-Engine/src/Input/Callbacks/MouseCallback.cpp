@@ -1,30 +1,36 @@
-#include <iostream>
-#include <GLFW/glfw3.h>
+#include <GL/glfw3.h>
 
+#include <memory>
 #include "MouseCallback.h"
+#include "Display/Window.h"
+#include "Services/BaseEngine.h"
+#include "Services/Application.h"
 
-#include "Graphics/UI/Cursor.h"
-#include "Graphics/Display/Window.h"
-#include "Graphics/Display/WindowProps.h"
+using namespace Uranium::Display;
+using namespace Uranium::Services;
 
 namespace Uranium::Input::Callbacks {
 
-	MouseCallback::MouseCallback(Window* window) :
-		window(window), 
-
+	MouseCallback::MouseCallback() noexcept:
 		mouseButtons(nullptr)
 	{
+		// Obtain the window reference from the application's engine
+		std::shared_ptr<Window> window = Application::instance().getBaseEngine().getWindow();
+
 		// create bool array containing
 		// mouse button activation flag
 		// for each button when being interacted with
 		mouseButtons = new bool[GLFW_MOUSE_BUTTON_LAST];
 
-		glfwSetScrollCallback(*window,      MouseCallback::scrollDetected);
-		glfwSetCursorPosCallback(*window,   MouseCallback::positionDetected);
-		glfwSetMouseButtonCallback(*window, MouseCallback::clickDetected);
+		glfwSetScrollCallback(*window,      MouseCallback::scrollEvent);
+		glfwSetCursorPosCallback(*window,   MouseCallback::movedEvent);
+		glfwSetMouseButtonCallback(*window, MouseCallback::clickEvent);
 	}
 
 	MouseCallback::~MouseCallback() {
+		// Obtain the window reference from the application's engine
+		std::shared_ptr<Window> window = Application::instance().getBaseEngine().getWindow();
+
 		delete[] mouseButtons;
 
 		glfwSetScrollCallback(*window,      nullptr);
@@ -32,7 +38,9 @@ namespace Uranium::Input::Callbacks {
 		glfwSetMouseButtonCallback(*window, nullptr);
 	}
 
-	void MouseCallback::clickDetected(GLFWwindow* window, int button, int action, int mods) {
+	void MouseCallback::clickEvent(GLFWwindow* window, int button, int action, int mods) {
+		BaseEngine& engine = Application::instance().getBaseEngine();
+
 		//// obtain Application-program reference via glfw user pointer
 		//ApplicationProgram* program = static_cast<ApplicationProgram*>(glfwGetWindowUserPointer(window));
 		//if (program == nullptr)
@@ -42,14 +50,16 @@ namespace Uranium::Input::Callbacks {
 		//program->getMouseCallback()->mouseButtons[button] = action != GLFW_RELEASE;
 	}
 
-	void MouseCallback::scrollDetected(GLFWwindow* window, double xOffset, double yOffset) {
+	void MouseCallback::scrollEvent(GLFWwindow* window, double xOffset, double yOffset) {
+		BaseEngine& engine = Application::instance().getBaseEngine();
 		//// obtain Application-program reference via glfw user pointer
 		//ApplicationProgram* program = static_cast<ApplicationProgram*>(glfwGetWindowUserPointer(window));
 		//if (program == nullptr)
 		//	return;
 	}
 
-	void MouseCallback::positionDetected(GLFWwindow* window, double xpos, double ypos) {
+	void MouseCallback::movedEvent(GLFWwindow* window, double xpos, double ypos) {
+		BaseEngine& engine = Application::instance().getBaseEngine();
 		//// obtain Application-program reference via glfw user pointer
 		//ApplicationProgram* program = static_cast<ApplicationProgram*>(glfwGetWindowUserPointer(window));
 		//if (program == nullptr)
@@ -71,9 +81,5 @@ namespace Uranium::Input::Callbacks {
 		if (button < 0)
 			return false;
 		return mouseButtons[button] ? true : false;
-	}
-
-	int MouseCallback::isMouseToggled(int button) {
-		return 0;
 	}
 }
