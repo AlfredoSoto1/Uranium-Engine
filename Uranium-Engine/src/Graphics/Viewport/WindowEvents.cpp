@@ -3,7 +3,7 @@
 #include "Window.h"
 #include "WindowEvents.h"
 
-namespace Uranium::Display {
+namespace Uranium::Graphics::Viewport {
 
 	WindowEvents::WindowEvents(Window* window) noexcept :
 		window(window)

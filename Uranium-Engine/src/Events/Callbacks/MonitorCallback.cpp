@@ -1,8 +1,7 @@
 #include <GL/glfw3.h>
 
 #include "MonitorCallback.h"
-
-#include "Display/Window.h"
+#include "Graphics/Viewport/Window.h"
 
 namespace Uranium::Events::Callbacks {
 

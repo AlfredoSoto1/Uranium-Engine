@@ -4,12 +4,16 @@
 #include <string>
 #include <glm/vec2.hpp>
 
-extern struct GLFWwindow;
+struct GLFWwindow;
 
-namespace Uranium::Display {
+namespace Uranium::Graphics::Display {
+	class Monitor;
+}
 
-	extern class Window;
-	extern class Monitor;
+namespace Uranium::Graphics::Viewport {
+
+	class Window;
+	class WindowStates;
 
 	class WindowProps final {
 	private:
@@ -17,7 +21,7 @@ namespace Uranium::Display {
 		* Friends with other classes
 		*/
 		friend Window;
-		friend class WindowStates;
+		friend WindowStates;
 
 	public:
 		/*
@@ -37,7 +41,7 @@ namespace Uranium::Display {
 		/*
 		* Center window on a monitor
 		*/
-		void center(std::unique_ptr<Monitor> monitor);
+		void center(std::unique_ptr<Display::Monitor> monitor);
 
 	public:
 		/*

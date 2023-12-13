@@ -1,12 +1,18 @@
 #include <GL/glfw3.h>
 
 #include "BaseEngine.h"
-#include "Display/Window.h"
+#include "Graphics/Viewport/Window.h"
 #include "Events/Callbacks/WindowCallback.h"
 #include "Events/Callbacks/MonitorCallback.h"
 #include "Events/Callbacks/MouseCallback.h"
 #include "Events/Callbacks/CursorCallback.h"
 #include "Events/Callbacks/KeyboardCallback.h"
+
+using namespace Uranium::Core;
+using namespace Uranium::Services;
+using namespace Uranium::Events::Callbacks;
+using namespace Uranium::Graphics::Display;
+using namespace Uranium::Graphics::Viewport;
 
 namespace Uranium::Core {
 
@@ -24,7 +30,7 @@ namespace Uranium::Core {
 
 	}
 
-	std::shared_ptr<Display::Window> BaseEngine::getWindow() const {
+	std::shared_ptr<Window> BaseEngine::getWindow() const {
 		return display;
 	}
 
@@ -65,8 +71,6 @@ namespace Uranium::Core {
 	}
 
 	void BaseEngine::createCallbacks() {
-		using namespace Events::Callbacks;
-
 		// Create and initiate all the callbacks
 		mouseCallback    = new MouseCallback();
 		cursorCallback   = new CursorCallback();

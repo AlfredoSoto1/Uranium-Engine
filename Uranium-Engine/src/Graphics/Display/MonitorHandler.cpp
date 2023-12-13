@@ -3,7 +3,7 @@
 #include "Monitor.h"
 #include "MonitorHandler.h"
 
-namespace Uranium::Display {
+namespace Uranium::Graphics::Display {
 	
 	std::unique_ptr<std::vector<std::shared_ptr<Monitor>>> MonitorHandler::availableMonitors = nullptr;
 

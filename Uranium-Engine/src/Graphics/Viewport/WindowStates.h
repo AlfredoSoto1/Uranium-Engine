@@ -2,10 +2,13 @@
 
 #include <memory>
 
-namespace Uranium::Display {
+namespace Uranium::Graphics::Display {
+	class Monitor;
+}
 
-	extern class Window;
-	extern class Monitor;
+namespace Uranium::Graphics::Viewport {
+
+	class Window;
 
 	class WindowStates final {
 	private:
@@ -13,7 +16,7 @@ namespace Uranium::Display {
 		* Friends with other classes
 		*/
 		friend Window;
-
+		
 	public:
 		/*
 		* No need of default constructor
@@ -27,7 +30,7 @@ namespace Uranium::Display {
 		void restore();
 		void maximize();
 		void minimize();
-		void setFullscreen(std::shared_ptr<Monitor> monitor);
+		void setFullscreen(std::shared_ptr<Display::Monitor> monitor);
 
 	public:
 		/*

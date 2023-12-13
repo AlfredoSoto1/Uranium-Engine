@@ -1,7 +1,7 @@
 #pragma once
 
 namespace Uranium::Core {
-	extern class BaseEngine;
+	class BaseEngine;
 }
 
 namespace Uranium::Events::Callbacks {

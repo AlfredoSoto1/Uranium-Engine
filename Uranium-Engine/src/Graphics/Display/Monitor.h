@@ -1,65 +1,59 @@
 #pragma once
 
-#include <vector>
+#include <glm/vec2.hpp>
 
 struct GLFWmonitor;
 struct GLFWvidmode;
 
-namespace Uranium::Utils {
-	struct Dimension;
-}
-
 namespace Uranium::Graphics::Display {
 
-	/*
-	* Monitor class
-	* 
-	*/
-	class Monitor {
+	class Monitor final {
 	public:
 		/*
-		* custom alias
+		* Friend with other instances
 		*/
-		using Dimension = Utils::Dimension;
+		friend class MonitorHandler;
 
 	public:
-
-		static Monitor getPrimary();
-
-		static std::vector<Monitor> allConnected();
-
-	public:
-		// Delete the Monitor() constructor
-		// since we dont want the client to
-		// be creating hollow monitor objects
-		Monitor() = delete;
-
-		// Convert an instance to a
-		// GLFWmonitor pointer
+		/*
+		* Returns the GLFWmonitor reference
+		* for the overloaded-dereference operator
+		*/
 		operator GLFWmonitor* () const;
 
-		// Returns true if the current
-		// instance is connected.
+		/*
+		* Returns true if the current monitor is connected
+		*/
 		bool isConnected() const;
 
-		// Returns the monitor refreshrate in hz
-		int getRefreshRate() const;
-
-		// Returns the resolution of
-		// the connected monitor
-		Dimension getResolution() const;
-
-	private:
 		/*
-		* private methods
+		* Returns the monitor's refreshrate in hz
 		*/
-		Monitor(GLFWmonitor* monitor);
+		unsigned int gerRefreshRate() const;
+
+		/*
+		* Returns the resolution of the connected monitor
+		*/
+		glm::ivec2 getResolution() const;
+
+	public:
+		/*
+		* This constructor used to create
+		* a new unique instance of the connected monitors.
+		*/
+		explicit Monitor(GLFWmonitor* monitor) noexcept;
+
+		/*
+		* Prepare the default monitor destructor
+		*/
+		~Monitor() = default;
 
 	private:
 		/*
-		* private members
+		* Monitor reference and video mode
 		*/
 		GLFWmonitor* monitor;
 		const GLFWvidmode* vidmode;
 	};
+
 }

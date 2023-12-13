@@ -1,8 +1,8 @@
 #pragma once
 
-namespace Uranium::Display {
+namespace Uranium::Graphics::Viewport {
 
-	extern class Window;
+	class Window;
 
 	class WindowEvents final {
 	private:

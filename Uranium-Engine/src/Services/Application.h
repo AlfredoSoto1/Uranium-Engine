@@ -5,11 +5,11 @@
 #include <string>
 
 namespace Uranium::Core {
-	extern class BaseEngine;
+	class BaseEngine;
 }
 
-namespace Uranium::Display {
-	extern class MonitorHandler;
+namespace Uranium::Graphics::Display {
+	class MonitorHandler;
 }
 
 namespace Uranium::Services {

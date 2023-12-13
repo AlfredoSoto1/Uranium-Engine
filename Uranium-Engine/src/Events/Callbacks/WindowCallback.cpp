@@ -3,13 +3,14 @@
 #include <memory>
 #include "WindowCallback.h"
 
-#include "Display/Window.h"
 #include "Core/BaseEngine.h"
 #include "Services/Application.h"
+#include "Graphics/Viewport/Window.h"
 
 using namespace Uranium::Core;
-using namespace Uranium::Display;
 using namespace Uranium::Services;
+using namespace Uranium::Graphics::Display;
+using namespace Uranium::Graphics::Viewport;
 
 namespace Uranium::Events::Callbacks {
 	

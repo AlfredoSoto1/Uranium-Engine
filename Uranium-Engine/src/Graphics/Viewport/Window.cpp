@@ -3,7 +3,7 @@
 
 #include "Window.h"
 
-namespace Uranium::Display {
+namespace Uranium::Graphics::Viewport {
 
 	Window::Window() noexcept :
 		glWindow(nullptr),

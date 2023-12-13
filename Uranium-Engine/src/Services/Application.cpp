@@ -2,7 +2,11 @@
 
 #include "Core/BaseEngine.h"
 #include "Services/Application.h"
-#include "Display/MonitorHandler.h"
+#include "Graphics/Display/MonitorHandler.h"
+
+using namespace Uranium::Core;
+using namespace Uranium::Graphics::Display;
+using namespace Uranium::Graphics::Viewport;
 
 namespace Uranium::Services {
 
@@ -30,7 +34,7 @@ namespace Uranium::Services {
 		baseEngine.reset();
 	}
 
-	Core::BaseEngine& Application::getBaseEngine() {
+	BaseEngine& Application::getBaseEngine() {
 		return *baseEngine;
 	}
 
@@ -50,7 +54,7 @@ namespace Uranium::Services {
 		glfwSetErrorCallback(&Application::diagnosticErrors);
 
 		// Initiate the monitor handler
-		Display::MonitorHandler::initMonitors();
+		MonitorHandler::initMonitors();
 	}
 
 	void Application::run() {
@@ -59,7 +63,7 @@ namespace Uranium::Services {
 		baseEngine->run();
 
 		// Dispose all monitors
-		Display::MonitorHandler::disposeMonitors();
+		MonitorHandler::disposeMonitors();
 
 		// Terminates the GLFW content
 		glfwTerminate();

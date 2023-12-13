@@ -4,19 +4,19 @@
 #include <thread>
 
 namespace Uranium::Services {
-	extern class Application;
+	class Application;
 }
 
-namespace Uranium::Display {
-	extern class Window;
+namespace Uranium::Graphics::Viewport {
+	class Window;
 }
 
 namespace Uranium::Events::Callbacks {
-	extern class WindowCallback;
-	extern class MonitorCallback;
-	extern class MouseCallback;
-	extern class CursorCallback;
-	extern class KeyboardCallback;
+	class WindowCallback;
+	class MonitorCallback;
+	class MouseCallback;
+	class CursorCallback;
+	class KeyboardCallback;
 }
 
 namespace Uranium::Core {
@@ -48,7 +48,7 @@ namespace Uranium::Core {
 		/*
 		* Returns a reference to window
 		*/
-		std::shared_ptr<Display::Window> getWindow() const;
+		std::shared_ptr<Graphics::Viewport::Window> getWindow() const;
 
 	protected:
 		/*
@@ -57,7 +57,7 @@ namespace Uranium::Core {
 		* no window will be created inside this context
 		* making it behave like a regular thread.
 		*/
-		virtual std::shared_ptr<Display::Window> createWindow() = 0;
+		virtual std::shared_ptr<Graphics::Viewport::Window> createWindow() = 0;
 	
 		/*
 		* Creates a set of scenes that influence the
@@ -82,7 +82,7 @@ namespace Uranium::Core {
 		std::thread renderingThread;
 		
 		std::shared_ptr<int> scenes; // TEMP
-		std::shared_ptr<Display::Window> display;
+		std::shared_ptr<Graphics::Viewport::Window> display;
 
 		/*
 		* Engine callbacks

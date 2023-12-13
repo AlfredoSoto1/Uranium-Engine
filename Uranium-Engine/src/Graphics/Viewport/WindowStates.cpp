@@ -2,10 +2,13 @@
 #include <stdexcept>
 
 #include "Window.h"
-#include "Monitor.h"
 #include "WindowStates.h"
 
-namespace Uranium::Display {
+#include "Graphics/Display/Monitor.h"
+
+namespace Uranium::Graphics::Viewport {
+
+	using namespace Display;
 
 	WindowStates::WindowStates(Window* window) noexcept :
 		window(window),

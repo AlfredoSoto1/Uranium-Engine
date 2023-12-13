@@ -3,7 +3,7 @@
 #include "Window.h"
 #include "WindowModes.h"
 
-namespace Uranium::Display {
+namespace Uranium::Graphics::Viewport {
 
 	WindowModes::WindowModes(Window* window) noexcept :
 		window(window),

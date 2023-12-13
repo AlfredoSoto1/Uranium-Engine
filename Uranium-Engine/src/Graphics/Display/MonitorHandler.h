@@ -4,10 +4,10 @@
 #include <vector>
 
 namespace Uranium::Services {
-	extern class Application;
+	class Application;
 }
 
-namespace Uranium::Display {
+namespace Uranium::Graphics::Display {
 
 	class Monitor;
 

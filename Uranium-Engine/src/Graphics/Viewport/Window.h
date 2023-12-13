@@ -5,9 +5,9 @@
 #include "WindowStates.h"
 #include "WindowEvents.h"
 
-extern struct GLFWwindow;
+struct GLFWwindow;
 
-namespace Uranium::Display {
+namespace Uranium::Graphics::Viewport {
 
 	class Window final {
 	private:
