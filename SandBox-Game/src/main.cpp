@@ -574,15 +574,13 @@
 //	return new MyGame();
 //}
 
-#include "Core/BaseEngine.h"
-#include "Services/Application.h"
-#include "Graphics/Display/Monitor.h"
-#include "Graphics/Viewport/Window.h"
+#include "Core/Application.h"
+#include "Core/Engine/BaseEngine.h"
+#include "Platform/Display/Window.h"
 
 using namespace Uranium::Core;
-using namespace Uranium::Services;
-using namespace Uranium::Graphics::Display;
-using namespace Uranium::Graphics::Viewport;
+using namespace Uranium::Core::Engine;
+using namespace Uranium::Platform::Display;
 
 class MyGame : public BaseEngine {
 public:
