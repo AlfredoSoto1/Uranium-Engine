@@ -7,7 +7,7 @@
 #include "Scene.h"
 #include "SceneManager.h"
 
-namespace Uranium::Scenes {
+namespace Uranium::Scene {
 
 	SceneManager::SceneManager() noexcept:
 		frameCount(0),
@@ -98,19 +98,19 @@ namespace Uranium::Scenes {
 			// unload the scene content
 			currentScene->unload();
 			// update flag
-			currentScene->is_loaded = false;
+			//currentScene->is_loaded = false;
 
 			// change scene
 			currentScene = next;
 		}
 
 		// check if it needs to load the scene
-		if (!currentScene->is_loaded) {
-			// load new current scene
-			currentScene->load();
-			// update flag
-			currentScene->is_loaded = true;
-		}
+		//if (!currentScene->is_loaded) {
+		//	// load new current scene
+		//	currentScene->load();
+		//	// update flag
+		//	currentScene->is_loaded = true;
+		//}
 	}
 
 	void SceneManager::updateInTime() {
@@ -185,7 +185,7 @@ namespace Uranium::Scenes {
 		// unload the scene content
 		currentScene->unload();
 		// update flag
-		currentScene->is_loaded = false;
+		//currentScene->is_loaded = false;
 	}
 }
 

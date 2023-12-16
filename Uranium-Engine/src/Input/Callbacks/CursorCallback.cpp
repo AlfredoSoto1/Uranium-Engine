@@ -15,18 +15,18 @@ namespace Uranium::Input::Callbacks {
 
 	CursorCallback::CursorCallback() noexcept {
 		// Obtain the window reference from the application's engine
-		std::shared_ptr<Window> window = Application::instance().getBaseEngine().getWindow();
+		//std::shared_ptr<Window> window = Application::instance().getBaseEngine().getWindow();
 
-		glfwSetDropCallback(*window,        CursorCallback::dropEvent);
-		glfwSetCursorEnterCallback(*window, CursorCallback::enteredEvent);
+		//glfwSetDropCallback(*window,        CursorCallback::dropEvent);
+		//glfwSetCursorEnterCallback(*window, CursorCallback::enteredEvent);
 	}
 
 	CursorCallback::~CursorCallback() {
 		// Obtain the window reference from the application's engine
-		std::shared_ptr<Window> window = Application::instance().getBaseEngine().getWindow();
+		//std::shared_ptr<Window> window = Application::instance().getBaseEngine().getWindow();
 
-		glfwSetDropCallback(*window,        nullptr);
-		glfwSetCursorEnterCallback(*window, nullptr);
+		//glfwSetDropCallback(*window,        nullptr);
+		//glfwSetCursorEnterCallback(*window, nullptr);
 	}
 
 	void CursorCallback::dropEvent(GLFWwindow* window, int pathCount, const char** paths) {

@@ -23,11 +23,11 @@ namespace Uranium::Input::Callbacks {
 		for (int i = 0; i < GLFW_KEY_LAST; i++)
 			keys[i] = false;
 
-		// Obtain the window reference from the application's engine
-		std::shared_ptr<Window> window = Application::instance().getBaseEngine().getWindow();
+		//// Obtain the window reference from the application's engine
+		//std::shared_ptr<Window> window = Application::instance().getBaseEngine().getWindow();
 
-		glfwSetKeyCallback(*window,  KeyboardCallback::keyEvent);
-		glfwSetCharCallback(*window, KeyboardCallback::charEvent);
+		//glfwSetKeyCallback(*window,  KeyboardCallback::keyEvent);
+		//glfwSetCharCallback(*window, KeyboardCallback::charEvent);
 	}
 
 	KeyboardCallback::~KeyboardCallback() {
@@ -35,10 +35,10 @@ namespace Uranium::Input::Callbacks {
 		delete[] keys;
 
 		// Obtain the window reference from the application's engine
-		std::shared_ptr<Window> window = Application::instance().getBaseEngine().getWindow();
+		//std::shared_ptr<Window> window = Application::instance().getBaseEngine().getWindow();
 
-		glfwSetKeyCallback(*window,  nullptr);
-		glfwSetCharCallback(*window, nullptr);
+		//glfwSetKeyCallback(*window,  nullptr);
+		//glfwSetCharCallback(*window, nullptr);
 	}
 
 	void KeyboardCallback::keyEvent(GLFWwindow* window, int key, int scancode, int action, int mods) {

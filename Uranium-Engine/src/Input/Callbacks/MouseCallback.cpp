@@ -17,27 +17,27 @@ namespace Uranium::Input::Callbacks {
 		mouseButtons(nullptr)
 	{
 		// Obtain the window reference from the application's engine
-		std::shared_ptr<Window> window = Application::instance().getBaseEngine().getWindow();
+		//std::shared_ptr<Window> window = Application::instance().getBaseEngine().getWindow();
 
-		// create bool array containing
-		// mouse button activation flag
-		// for each button when being interacted with
-		mouseButtons = new bool[GLFW_MOUSE_BUTTON_LAST];
+		//// create bool array containing
+		//// mouse button activation flag
+		//// for each button when being interacted with
+		//mouseButtons = new bool[GLFW_MOUSE_BUTTON_LAST];
 
-		glfwSetScrollCallback(*window,      MouseCallback::scrollEvent);
-		glfwSetCursorPosCallback(*window,   MouseCallback::movedEvent);
-		glfwSetMouseButtonCallback(*window, MouseCallback::clickEvent);
+		//glfwSetScrollCallback(*window,      MouseCallback::scrollEvent);
+		//glfwSetCursorPosCallback(*window,   MouseCallback::movedEvent);
+		//glfwSetMouseButtonCallback(*window, MouseCallback::clickEvent);
 	}
 
 	MouseCallback::~MouseCallback() {
 		// Obtain the window reference from the application's engine
-		std::shared_ptr<Window> window = Application::instance().getBaseEngine().getWindow();
+		//std::shared_ptr<Window> window = Application::instance().getBaseEngine().getWindow();
 
-		delete[] mouseButtons;
+		//delete[] mouseButtons;
 
-		glfwSetScrollCallback(*window,      nullptr);
-		glfwSetCursorPosCallback(*window,   nullptr);
-		glfwSetMouseButtonCallback(*window, nullptr);
+		//glfwSetScrollCallback(*window,      nullptr);
+		//glfwSetCursorPosCallback(*window,   nullptr);
+		//glfwSetMouseButtonCallback(*window, nullptr);
 	}
 
 	void MouseCallback::clickEvent(GLFWwindow* window, int button, int action, int mods) {

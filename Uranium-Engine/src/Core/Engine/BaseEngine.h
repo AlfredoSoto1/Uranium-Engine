@@ -7,8 +7,12 @@ namespace Uranium::Core {
 	class Application;
 }
 
+namespace Uranium::Scene {
+	class SceneManager;
+}
+
 namespace Uranium::Platform::Display {
-	class Window;
+	class WindowManager;
 }
 
 namespace Uranium::Input::Callbacks {
@@ -22,11 +26,17 @@ namespace Uranium::Input::Callbacks {
 namespace Uranium::Core::Engine {
 
 	class BaseEngine {
-	private:
-		/*
-		* Friend with other classes
-		*/
+	public:
 		friend Core::Application;
+
+		using SceneManager = Scene::SceneManager;
+		using WindowManager = Platform::Display::WindowManager;
+
+		using MouseCallback = Input::Callbacks::MouseCallback;
+		using CursorCallback = Input::Callbacks::CursorCallback;
+		using WindowCallback = Input::Callbacks::WindowCallback;
+		using MonitorCallback = Input::Callbacks::MonitorCallback;
+		using KeyboardCallback = Input::Callbacks::KeyboardCallback;
 
 	public:
 		/*
@@ -44,53 +54,34 @@ namespace Uranium::Core::Engine {
 		BaseEngine(BaseEngine&) = delete;
 		BaseEngine(const BaseEngine&) = delete;
 
-	public:
-		/*
-		* Returns a reference to window
-		*/
-		std::shared_ptr<Platform::Display::Window> getWindow() const;
-
-	protected:
-		/*
-		* Creates a window inside the context.
-		* If the function returns nullptr, then
-		* no window will be created inside this context
-		* making it behave like a regular thread.
-		*/
-		virtual std::shared_ptr<Platform::Display::Window> createWindow() = 0;
-	
-		/*
-		* Creates a set of scenes that influence the
-		* flow of events inside the application.
-		*/
-		virtual std::shared_ptr<int> createScenes() = 0;
-
 	private:
 		/*
 		* Runs the engine
 		*/
 		void run();
 
-		void createCallbacks();
-		void disposeCallbacks();
+		void initManagers();
+		void disposeManagers();
 
 	private:
 		/*
-		* Engine threads
+		* Base engine working unit
 		*/
-		std::thread updateThread;
-		std::thread renderingThread;
-		
-		std::shared_ptr<int> scenes; // TEMP
-		std::shared_ptr<Platform::Display::Window> display;
+		//std::unique_ptr<class WorkingUnit> workingUnit;
+
+		/*
+		* Engine Managers
+		*/
+		//std::unique_ptr<SceneManager> sceneManager;
+		//std::unique_ptr<WindowManager> windowManager;
 
 		/*
 		* Engine callbacks
 		*/
-		Input::Callbacks::MouseCallback*    mouseCallback;
-		Input::Callbacks::CursorCallback*   cursorCallback;
-		Input::Callbacks::WindowCallback*   windowCallback;
-		Input::Callbacks::MonitorCallback*  monitorCallback;
-		Input::Callbacks::KeyboardCallback* keyboardCallback;
+		MouseCallback*    mouseCallback;
+		CursorCallback*   cursorCallback;
+		WindowCallback*   windowCallback;
+		MonitorCallback*  monitorCallback;
+		KeyboardCallback* keyboardCallback;
 	};
 }

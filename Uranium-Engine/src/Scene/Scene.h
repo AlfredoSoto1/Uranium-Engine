@@ -1,72 +1,24 @@
 #pragma once
 
 #include <memory>
-#include <string>
 #include <vector>
 
-namespace Uranium::Graphics::Renderer {
-	class SceneRenderer;
-}
-
-namespace Uranium::Scenes {
-
-	class SceneManager;
+namespace Uranium::Scene {
 
 	class Scene {
-	public:
-		/*
-		* custom alias
-		*/
-		using SceneRenderer = Graphics::Renderer::SceneRenderer;
+	private:
+		friend class SceneManager;
 
 	public:
-		/*
-		* Public static declarations
-		*/
 		static constexpr unsigned int DEFAULT_60 = 60;
 		static constexpr unsigned int UNLIMITED_FPS = 0;
 		static constexpr unsigned int UNLIMITED_UPS = 0;
-
+	
 	public:
 		/*
-		* Default constructor
+		* Returns a reference of the next scene to be changed
 		*/
-		Scene();
-
-		/*
-		* default destructor
-		*/
-		virtual ~Scene();
-
-	public:
-		/*
-		* getters
-		*/
-		/*
-		* Returns the name of the scene
-		*/
-		std::string getName() const;
-
-		/*
-		* Returns the renderer asociated
-		* with 'this' scene
-		*/
-		SceneRenderer& getRenderer() const;
-
-		/*
-		* Returns a list containing a reference
-		* to the scenes that 'this' scene instance
-		* is awear of and its capable of switching to
-		*/
-		const std::vector<std::shared_ptr<Scene>>& getLinkedScenes() const;
-
-		/*
-		* Returns a boolean returning true
-		* if 'this' scene is either paused or loaded.
-		* False will be returned otherwise
-		*/
-		bool isPaused() const;
-		bool isLoaded() const;
+		std::shared_ptr<Scene> getNextScene() const;
 
 		/*
 		* Returns the time it takes a 
@@ -84,18 +36,9 @@ namespace Uranium::Scenes {
 
 	public:
 		/*
-		* setters
+		* Sets the next scene to be changed after event
 		*/
-
-		/*
-		* Sets the name of 'this' scene instance
-		*/
-		void setName(const std::string& name);
-
-		/*
-		* Links the scene to another
-		*/
-		void linkScene(const std::shared_ptr<Scene>& scene);
+		void setNextScene(std::shared_ptr<Scene> next);
 
 		/*
 		* Sets the prefered target update/frames
@@ -106,8 +49,13 @@ namespace Uranium::Scenes {
 
 	protected:
 		/*
-		* abstract methods
+		* Construct an abstract Scene
 		*/
+		explicit Scene() noexcept;
+
+		virtual ~Scene();
+
+	protected:
 		/*
 		* These methods get called in context
 		* when updating / rendering the scene
@@ -122,45 +70,10 @@ namespace Uranium::Scenes {
 		virtual void load() = 0;
 		virtual void unload() = 0;
 
-	protected:
-		/*
-		* protected methods
-		*/
-
-		/*
-		* Pauses/resumes 'this' scene instance
-		*/
-		void pause();
-		void resume();
-
-		/*
-		* Tells the SceneManager to which scene change to
-		*/
-		void changeScene(const std::shared_ptr<Scene>& scene);
-	
 	private:
-		/*
-		* Friends with other classes
-		*/
-		friend SceneManager;
-
-	private:
-		/*
-		* Private members
-		*/
 		unsigned int targetFrames;
 		unsigned int targetUpdates;
-
-		bool is_paused;
-		bool is_loaded;
-
-		SceneRenderer* renderer;
-
-		std::string sceneName;
-
+		
 		std::shared_ptr<Scene> nextScene;
-
-		std::vector<std::shared_ptr<Scene>> linkedScenes;
-
 	};
 }

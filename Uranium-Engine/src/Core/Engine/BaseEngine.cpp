@@ -16,7 +16,6 @@ namespace Uranium::Core::Engine {
 	using namespace Uranium::Input::Callbacks;
 
 	BaseEngine::BaseEngine() noexcept :
-		display(nullptr),
 		mouseCallback(nullptr),
 		cursorCallback(nullptr),
 		windowCallback(nullptr),
@@ -29,47 +28,49 @@ namespace Uranium::Core::Engine {
 
 	}
 
-	std::shared_ptr<Window> BaseEngine::getWindow() const {
-		return display;
-	}
-
 	void BaseEngine::run() {
-		display = createWindow();
+		auto display1 = std::make_shared<Window>();
+		auto display2 = std::make_shared<Window>();
 
-		if (display == nullptr)
-			throw std::exception("Engine could not start due to an error generating the GLFW window.");
-
-		// Set the default context for 'this' thread.
-		glfwMakeContextCurrent(*display);
 		
-		while (!display->getEvents().shouldClose()) {
+		while (!display1->getEvents().shouldClose() && !display2->getEvents().shouldClose()) {
+
+			glfwMakeContextCurrent(*display1);
+
 			// check if window has resized
 			int width, height;
-			glfwGetFramebufferSize(*display, &width, &height);
+			glfwGetFramebufferSize(*display1, &width, &height);
 			glViewport(0, 0, width, height);
 
 			// render scene here
 			glClear(GL_COLOR_BUFFER_BIT);
 			glClearColor(1.0, 0.0, 0.0, 1.0);
 
-			// TODO - Make swap buffers only
-			// if its focused.. also make it so
-			// that a thread finishes, it joins it automatically
-			//if (window->getCallback().hasFocused()) {
-				 //Swap front and back buffers
-				//glfwSwapBuffers(*display);
-			//}
+			// TODO: fix when multi-threaded
+			glfwSwapBuffers(*display1);
+
+
+			glfwMakeContextCurrent(*display2);
+
+			glfwGetFramebufferSize(*display2, &width, &height);
+			glViewport(0, 0, width, height);
+
+			// render scene here
+			glClear(GL_COLOR_BUFFER_BIT);
+			glClearColor(0.0, 1.0, 0.0, 1.0);
 
 			// TODO: fix when multi-threaded
-			glfwSwapBuffers(*display);
+			glfwSwapBuffers(*display2);
+
 			glfwPollEvents();
 		}
 		
 		// release the window reference
-		display.reset();
+		display1.reset();
+		display2.reset();
 	}
 
-	void BaseEngine::createCallbacks() {
+	void BaseEngine::initManagers() {
 		// Create and initiate all the callbacks
 		mouseCallback    = new MouseCallback();
 		cursorCallback   = new CursorCallback();
@@ -78,7 +79,7 @@ namespace Uranium::Core::Engine {
 		keyboardCallback = new KeyboardCallback();
 	}
 
-	void BaseEngine::disposeCallbacks() {
+	void BaseEngine::disposeManagers() {
 		// free all the created callbacks
 		delete mouseCallback;
 		delete cursorCallback;

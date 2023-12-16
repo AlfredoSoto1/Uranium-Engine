@@ -2,7 +2,7 @@
 
 #include <memory>
 
-namespace Uranium::Scenes {
+namespace Uranium::Scene {
 
 	class Scene;
 

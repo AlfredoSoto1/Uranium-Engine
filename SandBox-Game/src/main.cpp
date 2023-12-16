@@ -588,21 +588,12 @@ public:
 	MyGame() noexcept:
 		BaseEngine()
 	{	
-		
+		// Initialize members here
 	}
 
 	~MyGame() {
-
+		// Delete members here
 	}
-
-	std::shared_ptr<Window> createWindow() override {
-		return std::make_shared<Window>();
-	}
-
-	std::shared_ptr<int> createScenes() override {
-		return nullptr;
-	}
-
 };
 
 std::unique_ptr<BaseEngine> createApplication() {
