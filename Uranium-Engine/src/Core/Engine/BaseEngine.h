@@ -1,7 +1,9 @@
 #pragma once
 
 #include <memory>
+#include <vector>
 #include <thread>
+#include <functional>
 
 namespace Uranium::Core {
 	class Application;
@@ -12,31 +14,21 @@ namespace Uranium::Scene {
 }
 
 namespace Uranium::Platform::Display {
+	class Window;
 	class WindowManager;
 }
 
 namespace Uranium::Input::Callbacks {
-	class WindowCallback;
-	class MonitorCallback;
-	class MouseCallback;
-	class CursorCallback;
-	class KeyboardCallback;
+	class CallbackManager;
 }
 
 namespace Uranium::Core::Engine {
 
+	class ThreadContext;
+
 	class BaseEngine {
 	public:
 		friend Core::Application;
-
-		using SceneManager = Scene::SceneManager;
-		using WindowManager = Platform::Display::WindowManager;
-
-		using MouseCallback = Input::Callbacks::MouseCallback;
-		using CursorCallback = Input::Callbacks::CursorCallback;
-		using WindowCallback = Input::Callbacks::WindowCallback;
-		using MonitorCallback = Input::Callbacks::MonitorCallback;
-		using KeyboardCallback = Input::Callbacks::KeyboardCallback;
 
 	public:
 		/*
@@ -65,23 +57,17 @@ namespace Uranium::Core::Engine {
 
 	private:
 		/*
-		* Base engine working unit
+		* Engine Threads
 		*/
-		//std::unique_ptr<class WorkingUnit> workingUnit;
+		std::vector<ThreadContext> renderThreads;
+		std::vector<ThreadContext> updateThreads;
+
+		std::vector<std::shared_ptr<Platform::Display::Window>> windows;
 
 		/*
 		* Engine Managers
 		*/
-		//std::unique_ptr<SceneManager> sceneManager;
-		//std::unique_ptr<WindowManager> windowManager;
-
-		/*
-		* Engine callbacks
-		*/
-		MouseCallback*    mouseCallback;
-		CursorCallback*   cursorCallback;
-		WindowCallback*   windowCallback;
-		MonitorCallback*  monitorCallback;
-		KeyboardCallback* keyboardCallback;
+		Platform::Display::WindowManager* windowManager;
+		Input::Callbacks::CallbackManager* callbackManager;
 	};
 }

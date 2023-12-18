@@ -2,6 +2,7 @@
 
 #include <memory>
 #include <vector>
+#include <functional>
 
 namespace Uranium::Core::Engine {
 	class BaseEngine;
@@ -29,11 +30,13 @@ namespace Uranium::Platform::Display {
 
 		bool allWindowsClosed() const;
 
-		void run();
+		void update();
 
 		//void dispose();
 
 	private:
+		std::vector<std::function<void()>> renderCallFunctions;
+
 		std::vector<std::shared_ptr<Window>> windows;
 	};
 }
