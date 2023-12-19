@@ -129,4 +129,14 @@ namespace Uranium::Platform::Display {
 	auto Window::getProperties() -> WindowProps& {
 		return props;
 	}
+
+	inline void Window::updateDisplay() const {
+		// Swap buffers to update the content of the window
+		glfwSwapBuffers(glWindow);
+	}
+
+	inline void Window::lockWindowOnThread() const {
+		// Set current context on thread
+		glfwMakeContextCurrent(glWindow);
+	}
 }

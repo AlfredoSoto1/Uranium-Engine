@@ -1,7 +1,7 @@
 #pragma once
 
+#include <mutex>
 #include <memory>
-#include <vector>
 #include <functional>
 
 namespace Uranium::Core::Engine {
@@ -26,17 +26,34 @@ namespace Uranium::Platform::Display {
 		~WindowManager();
 
 	private:
-		//void init();
+		/*
+		* Waits for the current thread to finish render
+		*/
+		bool waitToRender() const;
 
+		/*
+		* Returns true if all windows are closed
+		*/
 		bool allWindowsClosed() const;
 
-		void update();
-
-		//void dispose();
+		/*
+		* Runs and updates the window
+		*/
+		void runWindow(std::shared_ptr<Window> window, std::function<void()>& render);
 
 	private:
-		std::vector<std::function<void()>> renderCallFunctions;
+		/*
+		* Render control flags
+		*/
+		volatile bool canRender;
+		volatile bool isFirstThreadTurn;
 
-		std::vector<std::shared_ptr<Window>> windows;
+		unsigned int openedWindowCount;
+
+		/*
+		* Mutex to control the swapbuffer of each window
+		*/
+		std::mutex swapBufferControl;
+		std::condition_variable allowBufferSwap;
 	};
 }

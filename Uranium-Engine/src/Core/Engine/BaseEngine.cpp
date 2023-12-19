@@ -13,6 +13,11 @@
 namespace Uranium::Core::Engine {
 
 	BaseEngine::BaseEngine() noexcept :
+		renderThreads(),
+		updateThreads(),
+
+		windows(),
+		windowManager(nullptr),
 		callbackManager(nullptr)
 	{
 	}
@@ -25,9 +30,13 @@ namespace Uranium::Core::Engine {
 
 		using namespace Platform::Display;
 
+		// Obtain list of windows
 		auto display1 = std::make_shared<Window>();
 		auto display2 = std::make_shared<Window>();
 
+		/*
+		* Create the renderer
+		*/
 		std::function<void()> render1 = [&display1] () {
 			// check if window has resized
 			int width, height;
@@ -50,6 +59,9 @@ namespace Uranium::Core::Engine {
 			glClearColor(0.0, 1.0, 0.0, 1.0);
 		};
 
+		/*
+		* Window manager update events and Callbacks
+		*/
 		std::mutex swapBufferControl;
 		std::condition_variable allowBufferSwap;
 		bool canRender = true;
@@ -75,6 +87,9 @@ namespace Uranium::Core::Engine {
 			}
 		};
 
+		/*
+		* Create Rendering threads
+		*/
 		std::vector<std::thread> renderThreads;
 
 		renderThreads.push_back(std::thread([&display1, &render1, &updateWindow]() {
@@ -96,7 +111,9 @@ namespace Uranium::Core::Engine {
 			return !display1->getEvents().shouldClose() || !display2->getEvents().shouldClose();
 		};
 		
-		// update callbacks from each window
+		/*
+		*  Update callbacks from each window
+		*/
 		while (isAnyActive()) {
 			glfwPollEvents();
 		}
@@ -150,9 +167,13 @@ namespace Uranium::Core::Engine {
 	}
 
 	void BaseEngine::initManagers() {
+		using namespace Platform::Display;
 
+		windowManager = new WindowManager();
 	}
 
 	void BaseEngine::disposeManagers() {
+
+		delete windowManager;
 	}
 }

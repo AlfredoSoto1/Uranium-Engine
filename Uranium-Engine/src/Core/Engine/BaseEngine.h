@@ -24,8 +24,6 @@ namespace Uranium::Input::Callbacks {
 
 namespace Uranium::Core::Engine {
 
-	class ThreadContext;
-
 	class BaseEngine {
 	public:
 		friend Core::Application;
@@ -59,8 +57,8 @@ namespace Uranium::Core::Engine {
 		/*
 		* Engine Threads
 		*/
-		std::vector<ThreadContext> renderThreads;
-		std::vector<ThreadContext> updateThreads;
+		std::vector<std::thread> renderThreads;
+		std::vector<std::thread> updateThreads;
 
 		std::vector<std::shared_ptr<Platform::Display::Window>> windows;
 
