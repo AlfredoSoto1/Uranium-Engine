@@ -2,18 +2,15 @@
 
 struct GLFWwindow;
 
-namespace Uranium::Core::Engine {
-	class BaseEngine;
+namespace Uranium::Engine {
+	class CallbackManager;
 }
 
 namespace Uranium::Input::Callbacks {
 
 	class MouseCallback final {
 	private:
-		/*
-		* Friends with other classes
-		*/
-		friend Core::Engine::BaseEngine;
+		friend Engine::CallbackManager;
 
 	public:
 		/*
@@ -37,13 +34,7 @@ namespace Uranium::Input::Callbacks {
 		*/
 		static void scrollEvent(GLFWwindow* window, double xOffset, double yOffset);
 
-	private:
-		/*
-		* Mouse Callback constructor
-		* creates all the mouse related callbacks
-		*/
-		explicit MouseCallback() noexcept;
-		
+	public:
 		~MouseCallback();
 
 		/*
@@ -55,9 +46,15 @@ namespace Uranium::Input::Callbacks {
 		*/
 		MouseCallback(MouseCallback&) = delete;
 		MouseCallback(MouseCallback&&) = delete;
-		MouseCallback(const MouseCallback&) = delete;
-		MouseCallback(const MouseCallback&&) = delete;
+		MouseCallback& operator=(const MouseCallback&) = delete;
 
+	private:
+		/*
+		* Mouse Callback constructor
+		* creates all the mouse related callbacks
+		*/
+		explicit MouseCallback() noexcept;
+		
 	private:
 		/*
 		* Array of all mouse buttons available by GLFW

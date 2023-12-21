@@ -4,31 +4,51 @@
 #include <vector>
 #include <string>
 
-namespace Uranium::Core::Engine {
+namespace Uranium::Engine {
 	class BaseEngine;
-}
-
-namespace Uranium::Platform::Monitor {
-	class MonitorHandler;
 }
 
 namespace Uranium::Core {
 
 	class Application final {
 	public:
+		~Application();
+
 		/*
-		* Returns an instance of the application
+		* Deletes the copy/move constructors because
+		* we dont want to accidently create instances or move
+		* the application singleton
+		*/
+		Application(Application&) = delete;
+		Application(Application&&) = delete;
+		Application& operator=(const Application&) = delete;
+		
+	public:
+		/*
+		* Returns the instance of the currently active application
 		*/
 		static Application& instance();
 
 		/*
-		* Returns a reference to the base engine
+		* Returns a reference of the base engine
 		*/
 		Engine::BaseEngine& getBaseEngine();
 
 	private:
 		/*
-		* Unique application reference
+		* Creates a unique instance of application
+		*/
+		explicit Application() noexcept;
+
+		/*
+		* Starts the application
+		*/
+		void start() noexcept;
+
+	private:
+		/*
+		* Holds a reference to the unique application instance
+		* throughout the life time of the program
 		*/
 		static Application* application;
 		
@@ -44,49 +64,8 @@ namespace Uranium::Core {
 		static void diagnosticErrors(int error, const char* description);
 		
 	private:
-		/*
-		* Application main constructor.
-		* This must not throw an exception since this
-		* is all what it must start from the application.
-		*/
-		explicit Application() noexcept;
+		std::vector<std::string> terminalArguments;
 
-		/*
-		* Frees the memory created by the application.
-		* This does NOT frees memory allocated by OpenGL
-		* OpenGL disposal is done in its local thread context
-		*/
-		~Application();
-
-		/*
-		* Delete all the copy constructors since 
-		* we dont want the client to create a copy
-		* of the Application itself.
-		*/
-		Application(Application&) = delete;
-		Application(const Application&) = delete;
-
-	private:
-		/*
-		* Initiates application
-		*/
-		void init() const;
-		
-		/*
-		* Runs the application content
-		*/
-		void run();
-		
-		/*
-		* Adds an argument from terminal when program starts
-		*/
-		void addArgument(const std::string& arg);
-
-	private:
-		// These are the passed arguments from terminal
-		std::vector<std::string> arguments;
-
-		// reference to the base engine
 		std::unique_ptr<Engine::BaseEngine> baseEngine;
 	};
 }

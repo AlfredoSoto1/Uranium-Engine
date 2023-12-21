@@ -2,18 +2,15 @@
 
 struct GLFWwindow;
 
-namespace Uranium::Core::Engine {
-	class BaseEngine;
+namespace Uranium::Engine {
+	class CallbackManager;
 }
 
 namespace Uranium::Input::Callbacks {
 
 	class KeyboardCallback final {
 	private:
-		/*
-		* Friends with other classes
-		*/
-		friend Core::Engine::BaseEngine;
+		friend Engine::CallbackManager;
 	
 	public:
 		bool isKeyDown(int key);
@@ -31,13 +28,7 @@ namespace Uranium::Input::Callbacks {
 		*/
 		static void charEvent(GLFWwindow* window, unsigned int codePoint);
 
-	private:
-		/*
-		* Keyboard Callback constructor
-		* creates all the monitor related callbacks
-		*/
-		explicit KeyboardCallback() noexcept;
-
+	public:
 		~KeyboardCallback();
 
 		/*
@@ -49,8 +40,14 @@ namespace Uranium::Input::Callbacks {
 		*/
 		KeyboardCallback(KeyboardCallback&) = delete;
 		KeyboardCallback(KeyboardCallback&&) = delete;
-		KeyboardCallback(const KeyboardCallback&) = delete;
-		KeyboardCallback(const KeyboardCallback&&) = delete;
+		KeyboardCallback& operator=(const KeyboardCallback&) = delete;
+
+	private:
+		/*
+		* Keyboard Callback constructor
+		* creates all the monitor related callbacks
+		*/
+		explicit KeyboardCallback() noexcept;
 
 	private:
 		bool* keys;

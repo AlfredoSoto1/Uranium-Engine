@@ -4,14 +4,10 @@
 #include "KeyboardCallback.h"
 
 #include "Core/Application.h"
-#include "Core/Engine/BaseEngine.h"
+#include "Engine/BaseEngine.h"
 #include "Platform/Display/Window.h"
 
 namespace Uranium::Input::Callbacks {
-
-	using namespace Core;
-	using namespace Engine;
-	using namespace Platform::Display;
 
 	KeyboardCallback::KeyboardCallback() noexcept :
 		keys(nullptr),
@@ -42,7 +38,6 @@ namespace Uranium::Input::Callbacks {
 	}
 
 	void KeyboardCallback::keyEvent(GLFWwindow* window, int key, int scancode, int action, int mods) {
-		BaseEngine& engine = Application::instance().getBaseEngine();
 		//// obtain Application-program reference via glfw user pointer
 		//ApplicationProgram* program = static_cast<ApplicationProgram*>(glfwGetWindowUserPointer(window));
 		//if (program == nullptr)
@@ -53,7 +48,6 @@ namespace Uranium::Input::Callbacks {
 	}
 
 	void KeyboardCallback::charEvent(GLFWwindow* window, unsigned int codePoint) {
-		BaseEngine& engine = Application::instance().getBaseEngine();
 		// TODO
 	}
 

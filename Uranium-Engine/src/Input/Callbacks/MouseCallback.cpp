@@ -4,14 +4,10 @@
 #include "MouseCallback.h"
 
 #include "Core/Application.h"
-#include "Core/Engine/BaseEngine.h"
+#include "Engine/BaseEngine.h"
 #include "Platform/Display/Window.h"
 
 namespace Uranium::Input::Callbacks {
-
-	using namespace Core;
-	using namespace Engine;
-	using namespace Platform::Display;
 
 	MouseCallback::MouseCallback() noexcept:
 		mouseButtons(nullptr)
@@ -41,8 +37,6 @@ namespace Uranium::Input::Callbacks {
 	}
 
 	void MouseCallback::clickEvent(GLFWwindow* window, int button, int action, int mods) {
-		BaseEngine& engine = Application::instance().getBaseEngine();
-
 		//// obtain Application-program reference via glfw user pointer
 		//ApplicationProgram* program = static_cast<ApplicationProgram*>(glfwGetWindowUserPointer(window));
 		//if (program == nullptr)
@@ -53,7 +47,6 @@ namespace Uranium::Input::Callbacks {
 	}
 
 	void MouseCallback::scrollEvent(GLFWwindow* window, double xOffset, double yOffset) {
-		BaseEngine& engine = Application::instance().getBaseEngine();
 		//// obtain Application-program reference via glfw user pointer
 		//ApplicationProgram* program = static_cast<ApplicationProgram*>(glfwGetWindowUserPointer(window));
 		//if (program == nullptr)
@@ -61,7 +54,6 @@ namespace Uranium::Input::Callbacks {
 	}
 
 	void MouseCallback::movedEvent(GLFWwindow* window, double xpos, double ypos) {
-		BaseEngine& engine = Application::instance().getBaseEngine();
 		//// obtain Application-program reference via glfw user pointer
 		//ApplicationProgram* program = static_cast<ApplicationProgram*>(glfwGetWindowUserPointer(window));
 		//if (program == nullptr)

@@ -4,15 +4,11 @@
 #include "WindowCallback.h"
 
 #include "Core/Application.h"
-#include "Core/Engine/BaseEngine.h"
+#include "Engine/BaseEngine.h"
 #include "Platform/Display/Window.h"
 
 namespace Uranium::Input::Callbacks {
 
-	using namespace Core;
-	using namespace Engine;
-	using namespace Platform::Display;
-	
 	WindowCallback::WindowCallback() noexcept {	
 		// Obtain the window reference from the application's engine
 		//std::shared_ptr<Window> window = Application::instance().getBaseEngine().getWindow();
@@ -49,38 +45,30 @@ namespace Uranium::Input::Callbacks {
 	}
 
 	void WindowCallback::closeEvent(GLFWwindow* glWindow) {
-		BaseEngine& engine = Application::instance().getBaseEngine();
 	}
 
 	void WindowCallback::resizedEvent(GLFWwindow* glWindow, int width, int height) {
-		BaseEngine& engine = Application::instance().getBaseEngine();
 		// set resize flag to true and update the window size
 	}
 
 	void WindowCallback::movedEvent(GLFWwindow* glWindow, int xpos, int ypos) {
-		BaseEngine& engine = Application::instance().getBaseEngine();
 		// update the window position
 	}
 
 	void WindowCallback::focusEvent(GLFWwindow* glWindow, int isFocused) {
-		BaseEngine& engine = Application::instance().getBaseEngine();
 		// update the window focused flag
 	}
 
 	void WindowCallback::minimizeEvent(GLFWwindow* glWindow, int isMinimized) {
-		BaseEngine& engine = Application::instance().getBaseEngine();
 	}
 
 	void WindowCallback::maximizeEvent(GLFWwindow* glWindow, int isMaximized) {
-		BaseEngine& engine = Application::instance().getBaseEngine();
 	}
 
 	void WindowCallback::refreshEvent(GLFWwindow* glWindow) {
-		BaseEngine& engine = Application::instance().getBaseEngine();
 	}
 
 	void WindowCallback::frameBufferSizeEvent(GLFWwindow* glWindow, int width, int height) {
-		BaseEngine& engine = Application::instance().getBaseEngine();
 		// update the buffer size
 	}
 }

@@ -2,18 +2,15 @@
 
 struct GLFWwindow;
 
-namespace Uranium::Core::Engine {
-	class BaseEngine;
+namespace Uranium::Engine {
+	class CallbackManager;
 }
 
 namespace Uranium::Input::Callbacks {
 
 	class CursorCallback final {
 	private:
-		/*
-		* Friend with other classes
-		*/
-		friend Core::Engine::BaseEngine;
+		friend Engine::CallbackManager;
 
 	private:
 		/*
@@ -26,13 +23,7 @@ namespace Uranium::Input::Callbacks {
 		*/
 		static void enteredEvent(GLFWwindow* window, int isInside);
 
-	private:
-		/*
-		* Cursor Callback constructor
-		* creates all the monitor related callbacks
-		*/
-		explicit CursorCallback() noexcept;
-
+	public:
 		~CursorCallback();
 
 		/*
@@ -44,7 +35,14 @@ namespace Uranium::Input::Callbacks {
 		*/
 		CursorCallback(CursorCallback&) = delete;
 		CursorCallback(CursorCallback&&) = delete;
-		CursorCallback(const CursorCallback&) = delete;
-		CursorCallback(const CursorCallback&&) = delete;
+		CursorCallback& operator=(const CursorCallback&) = delete;
+
+	private:
+		/*
+		* Cursor Callback constructor
+		* creates all the monitor related callbacks
+		*/
+		explicit CursorCallback() noexcept;
+
 	};
 }

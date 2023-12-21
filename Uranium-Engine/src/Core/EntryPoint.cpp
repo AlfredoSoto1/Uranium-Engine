@@ -12,7 +12,7 @@
 * a main function. With this the application can handle
 * efficiently the lifetime of the Application.
 */
-extern std::unique_ptr<Uranium::Core::Engine::BaseEngine> createApplication();
+extern std::unique_ptr<Uranium::Engine::BaseEngine> createApplication();
 
 namespace Uranium::Core {
 	
@@ -30,25 +30,13 @@ namespace Uranium::Core {
 
 		// Pass all the arguments from the terminal to the application
 		for (int i = 0; i < argc; i++)
-			Application::application->addArgument(argv[i]);
+			Application::application->terminalArguments.push_back(argv[i]);
 
 		// Set the new base engine
 		Application::application->baseEngine = std::move(createApplication());
 
-		try {
-			Application::application->init();
-		} catch (std::exception& e) {
-#ifdef UR_DEBUG
-			std::cout << e.what() << std::endl;
-#endif
-			// Delete the application if fails initiating
-			delete Application::application;
-			
-			// Exit application
-			return;
-		}
-		
-		Application::application->run();
+		// Starts the application
+		Application::application->start();
 
 		// Delete before exiting the applicaiton
 		delete Application::application;

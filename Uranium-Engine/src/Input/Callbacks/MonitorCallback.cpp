@@ -5,10 +5,6 @@
 
 namespace Uranium::Input::Callbacks {
 
-    using namespace Core;
-    using namespace Engine;
-    using namespace Platform::Display;
-
 	MonitorCallback::MonitorCallback() noexcept {
         // Set the monitor callback        
         glfwSetMonitorCallback(MonitorCallback::monitorEvent);

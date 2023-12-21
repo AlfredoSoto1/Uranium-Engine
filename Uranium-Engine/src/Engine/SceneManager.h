@@ -3,18 +3,27 @@
 #include <memory>
 
 namespace Uranium::Scene {
-
 	class Scene;
+}
+
+namespace Uranium::Engine {
 
 	class SceneManager final {
+	public:
+		~SceneManager();
+
+		/*
+		* 
+		*/
+		SceneManager(SceneManager&) = delete;
+		SceneManager& operator=(const SceneManager&) = delete;
+
 	private:
 		/*
 		* Creates center crontrol that manages
 		* all scenes in our Application program
 		*/
 		explicit SceneManager() noexcept;
-
-		~SceneManager();
 		
 	private:
 		/*
@@ -56,6 +65,6 @@ namespace Uranium::Scene {
 		volatile double renderTimer;
 		volatile double updateTimer;
 
-		std::shared_ptr<Scene> currentScene;
+		std::shared_ptr<Scene::Scene> currentScene;
 	};
 }

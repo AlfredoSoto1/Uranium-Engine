@@ -4,10 +4,10 @@
 #include <iostream>
 #endif // UR_DEBUG
 
-#include "Scene.h"
+#include "Scene/Scene.h"
 #include "SceneManager.h"
 
-namespace Uranium::Scene {
+namespace Uranium::Engine {
 
 	SceneManager::SceneManager() noexcept:
 		frameCount(0),
@@ -91,7 +91,7 @@ namespace Uranium::Scene {
 		// check if it needs to change to next scene
 		if (currentScene->nextScene != nullptr) {
 			// copy next scene ref
-			std::shared_ptr<Scene> next = currentScene->nextScene;
+			std::shared_ptr<Scene::Scene> next = currentScene->nextScene;
 			// reset the pointer from current
 			// of next
 			currentScene->nextScene = nullptr;

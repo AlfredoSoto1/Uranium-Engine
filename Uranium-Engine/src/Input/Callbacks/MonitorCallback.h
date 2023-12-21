@@ -1,17 +1,16 @@
 #pragma once
 
-namespace Uranium::Core::Engine {
-	class BaseEngine;
+struct GLFWmonitor;
+
+namespace Uranium::Engine {
+	class CallbackManager;
 }
 
 namespace Uranium::Input::Callbacks {
 
 	class MonitorCallback final {
 	private:
-		/*
-		* Friends with other classes
-		*/
-		friend Core::Engine::BaseEngine;
+		friend Engine::CallbackManager;
 
 	private:
 		/*
@@ -19,13 +18,7 @@ namespace Uranium::Input::Callbacks {
 		*/
 		static void monitorEvent(GLFWmonitor* monitor, int event);
 
-	private:
-		/*
-		* Monitor Callback constructor
-		* creates all the monitor related callbacks
-		*/
-		explicit MonitorCallback() noexcept;
-
+	public:
 		~MonitorCallback();
 
 		/*
@@ -37,7 +30,14 @@ namespace Uranium::Input::Callbacks {
 		*/
 		MonitorCallback(MonitorCallback&) = delete;
 		MonitorCallback(MonitorCallback&&) = delete;
-		MonitorCallback(const MonitorCallback&) = delete;
-		MonitorCallback(const MonitorCallback&&) = delete;
+		MonitorCallback& operator=(const MonitorCallback&) = delete;
+
+	private:
+		/*
+		* Monitor Callback constructor
+		* creates all the monitor related callbacks
+		*/
+		explicit MonitorCallback() noexcept;
+
 	};
 }

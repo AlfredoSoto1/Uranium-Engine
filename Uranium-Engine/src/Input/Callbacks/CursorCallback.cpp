@@ -4,14 +4,10 @@
 #include "CursorCallback.h"
 
 #include "Core/Application.h"
-#include "Core/Engine/BaseEngine.h"
+#include "Engine/BaseEngine.h"
 #include "Platform/Display/Window.h"
 
 namespace Uranium::Input::Callbacks {
-
-	using namespace Core;
-	using namespace Engine;
-	using namespace Platform::Display;
 
 	CursorCallback::CursorCallback() noexcept {
 		// Obtain the window reference from the application's engine
@@ -30,7 +26,6 @@ namespace Uranium::Input::Callbacks {
 	}
 
 	void CursorCallback::dropEvent(GLFWwindow* window, int pathCount, const char** paths) {
-		BaseEngine& engine = Application::instance().getBaseEngine();
 		//// obtain Application-program reference via glfw user pointer
 		//ApplicationProgram* program = static_cast<ApplicationProgram*>(glfwGetWindowUserPointer(window));
 		//if (program == nullptr)
@@ -38,7 +33,6 @@ namespace Uranium::Input::Callbacks {
 	}
 
 	void CursorCallback::enteredEvent(GLFWwindow* window, int isInside) {
-		BaseEngine& engine = Application::instance().getBaseEngine();
 		//// obtain Application-program reference via glfw user pointer
 		//ApplicationProgram* program = static_cast<ApplicationProgram*>(glfwGetWindowUserPointer(window));
 		//if (program == nullptr)

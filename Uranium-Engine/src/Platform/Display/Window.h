@@ -14,8 +14,6 @@ namespace Uranium::Platform::Display {
 		/*
 		* Friends with other classes
 		*/
-		friend class WindowManager;
-
 		friend class WindowProps;
 		friend class WindowModes;
 		friend class WindowStates;
@@ -51,19 +49,6 @@ namespace Uranium::Platform::Display {
 		auto getStates() -> WindowStates&;
 		auto getEvents() -> WindowEvents&;
 		auto getProperties() -> WindowProps&;
-
-	private:
-		/*
-		* This updates the content of the display
-		* by calling glfwSwapBuffers() from GLFW
-		*/
-		inline void updateDisplay() const;
-
-		/*
-		* This locks the window on the cuurrent thread.
-		* It does this by calling the GLFW function glfwMakeContextCurrent(...)
-		*/
-		inline void lockWindowOnThread() const;
 
 	private:
 		/*

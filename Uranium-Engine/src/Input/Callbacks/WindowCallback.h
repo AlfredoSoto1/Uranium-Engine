@@ -2,18 +2,15 @@
 
 struct GLFWwindow;
 
-namespace Uranium::Core::Engine {
-	class BaseEngine;
+namespace Uranium::Engine {
+	class CallbackManager;
 }
 
 namespace Uranium::Input::Callbacks {
 
 	class WindowCallback final {
 	public:
-		/*
-		* Friends with other classes
-		*/
-		friend class Core::Engine::BaseEngine;
+		friend Engine::CallbackManager;
 
 	private:
 		/*
@@ -44,13 +41,7 @@ namespace Uranium::Input::Callbacks {
 		static void refreshEvent(GLFWwindow* glWindow);
 		static void frameBufferSizeEvent(GLFWwindow* glWindow, int width, int height);
 
-	private:
-		/*
-		* Window Callback constructor
-		* creates all the window related callbacks
-		*/
-		explicit WindowCallback() noexcept;
-		
+	public:
 		~WindowCallback();
 
 		/*
@@ -62,7 +53,13 @@ namespace Uranium::Input::Callbacks {
 		*/
 		WindowCallback(WindowCallback&) = delete;
 		WindowCallback(WindowCallback&&) = delete;
-		WindowCallback(const WindowCallback&) = delete;
-		WindowCallback(const WindowCallback&&) = delete;
+		WindowCallback& operator=(const WindowCallback&) = delete;
+
+	private:
+		/*
+		* Window Callback constructor
+		* creates all the window related callbacks
+		*/
+		explicit WindowCallback() noexcept;
 	};
 }

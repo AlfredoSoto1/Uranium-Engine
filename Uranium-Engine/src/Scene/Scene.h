@@ -3,11 +3,15 @@
 #include <memory>
 #include <vector>
 
+namespace Uranium::Engine {
+	class SceneManager;
+}
+
 namespace Uranium::Scene {
 
 	class Scene {
 	private:
-		friend class SceneManager;
+		friend Engine::SceneManager;
 
 	public:
 		static constexpr unsigned int DEFAULT_60 = 60;

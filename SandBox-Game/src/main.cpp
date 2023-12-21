@@ -575,31 +575,36 @@
 //}
 
 #include "Core/Application.h"
-#include "Core/Engine/BaseEngine.h"
+#include "Engine/BaseEngine.h"
 #include "Platform/Display/Window.h"
 
 using namespace Uranium::Core;
-using namespace Uranium::Core::Engine;
+using namespace Uranium::Engine;
 using namespace Uranium::Platform::Display;
 
-class MyGame : public BaseEngine {
+class VoxelEngine : public BaseEngine {
 public:
 
-	MyGame() noexcept:
+	VoxelEngine() noexcept:
 		BaseEngine()
 	{	
-		// Initialize members here
+
 	}
 
-	~MyGame() {
-		// Delete members here
+	~VoxelEngine() {
+		
 	}
+
+	std::unique_ptr<Window> createWindow() override {
+		return std::make_unique<Window>();
+	}
+
 };
 
 std::unique_ptr<BaseEngine> createApplication() {
 	/*
-	* Create the unique application
-	* with the base engine containing all features
+	* Create an Application that 
+	* returns the base engine to be used
 	*/
-	return std::make_unique<MyGame>();
+	return std::make_unique<VoxelEngine>();
 }
