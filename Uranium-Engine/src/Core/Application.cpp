@@ -61,6 +61,8 @@ namespace Uranium::Core {
 
 		baseEngine->init();
 
+		baseEngine->createScenes();
+
 		baseEngine->updateDisplayContext();
 
 		baseEngine->dispose();

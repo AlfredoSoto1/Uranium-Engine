@@ -1,8 +1,13 @@
+#include <GL/glew.h>
 #include <GL/glfw3.h>
 
 #ifdef UR_DEBUG
 #include <iostream>
 #endif // UR_DEBUG
+
+#include "BaseEngine.h"
+#include "Core/Application.h"
+#include "Platform/Display/Window.h"
 
 #include "Scene/Scene.h"
 #include "SceneManager.h"
@@ -11,11 +16,14 @@ namespace Uranium::Engine {
 
 	SceneManager::SceneManager() noexcept:
 		frameCount(0),
-		updateCount(0),
+		tickCount(0),
 		lastFrame(0),
-		lastUpdate(0),
-		renderTimer(0),
-		updateTimer(0)
+		lastTick(0),
+		elapsedRenderTime(0),
+		elapsedTickTime(0),
+
+		lastMeasuredFrame(0),
+		lastMeasuredTick(0)
 	{
 
 	}
@@ -24,66 +32,72 @@ namespace Uranium::Engine {
 	
 	}
 
-	void SceneManager::renderOutTime() {
-		// perform render logic instantly
-		currentScene->render();
-	
-	#ifdef UR_DEBUG
-		// increase udpate count
-		frameCount++;
-		// display framerate
-		if (glfwGetTime() * 1000.0 > lastFrame + 1000.0) {
-			std::cout << "FPS: " << frameCount << std::endl;
-
-			frameCount = 0;
-			// set last time refreshed to ~new time
-			lastFrame = glfwGetTime() * 1000.0;
-		}
-	#endif // UR_DEBUG
-	}
-
-	void SceneManager::renderInTime() {
-		// calculate elapse time
-		double currentFrame = glfwGetTime();
-		double elapsedTime = currentFrame - lastFrame;
-		lastFrame = currentFrame;
-
-		// update render timer
-		renderTimer += elapsedTime;
-
-		// check if it's time to render
-		if (renderTimer >= currentScene->getFrameTime()) {
-			// perform rendering logic in time
-			currentScene->render();
-			// reset rendering timer
-			renderTimer = 0.0;
-
-	#ifdef UR_DEBUG
-			// Display framerate
-			++frameCount;
-			if (frameCount == currentScene->getTargetFramerate()) {
-				std::cout << "FPS: " << frameCount << std::endl;
-				frameCount = 0;
-			}
-	#endif // UR_DEBUG
-		}
-	}
-
 	void SceneManager::render() {
-
 		// if no scene is linked, 
 		// skip any process
 		if (currentScene == nullptr)
 			return;
-	
-		// check if the target framerate
+
+		// Calculate the elapsed framerate to
+		// control the time it takes for a frame to render
+		double currentFrame = glfwGetTime() * 1000.0;
+		double elapsedTime = currentFrame - lastFrame;
+		lastFrame = currentFrame;
+
+		elapsedRenderTime += elapsedTime;
+
+		// check if it's time to render
+		if (currentScene->getTargetFramerate() * elapsedRenderTime < 1000.0)
+			return;
+			
+		// Render the current scene	
+		glClear(GL_COLOR_BUFFER_BIT);
+		glClearColor(1.0, 0.0, 0.0, 1.0);
+		glfwSwapBuffers(Core::Application::instance().getBaseEngine().getWindow());
+
+		currentScene->render();
+
+		// reset rendering timer
+		elapsedRenderTime = 0.0;
+
+		if (!currentScene->measureFramerate)
+			return;
+
+		// Increase the frame count
+		frameCount++;
+
+		if (glfwGetTime() * 1000.0 < lastMeasuredFrame + 1000.0)
+			return;
+
+#ifdef UR_DEBUG
+		std::cout << "FPS: " << frameCount << std::endl;
+#endif // UR_DEBUG
+			
+		// Display framerate HERE
+
+		frameCount = 0;
+		// set last time refreshed to ~new time
+		lastMeasuredFrame = glfwGetTime() * 1000.0;
+	}
+
+	void SceneManager::update() {
+		// if no scene is linked, 
+		// skip any process
+		if (currentScene == nullptr)
+			return;
+
+		// handle scene loading
+		// when changing is requested
+		handleSceneLoading();
+
+		// check if the target updates
 		// must be done instantly
-		if (currentScene->getTargetFramerate() == 0) {
-			renderOutTime();
-		}
-		else {
-			renderInTime();
-		}
+		//if (currentScene->hasNoTickingLimit()) {
+		//	updateOutTime();
+		//}
+		//else {
+		//	updateInTime();
+		//}
 	}
 
 	void SceneManager::handleSceneLoading() {
@@ -111,72 +125,6 @@ namespace Uranium::Engine {
 		//	// update flag
 		//	currentScene->is_loaded = true;
 		//}
-	}
-
-	void SceneManager::updateInTime() {
-		// calculate elapse time
-		double currentUpdate = glfwGetTime();
-		double elapsedTime = currentUpdate - lastUpdate;
-		lastUpdate = currentUpdate;
-
-		// update udpate timer
-		updateTimer += elapsedTime;
-
-		// check if it's time to update
-		if (updateTimer >= currentScene->getUpdateTime()) {
-
-			// perform update logic in time
-			currentScene->update();
-
-			// reset udpate timer
-			updateTimer = 0.0;
-
-			// increase udpate count
-			++updateCount;
-
-			// display updates
-			if (updateCount == currentScene->getTargetUpdates()) {
-				std::cout << "TPS : " << updateCount << std::endl;
-				updateCount = 0;
-			}
-		}
-	}
-
-	void SceneManager::updateOutTime() {
-		// perform update logic instantly
-		currentScene->update();
-
-		// increase udpate count
-		updateCount++;
-
-		// display updates
-		if (glfwGetTime() * 1000.0 > lastUpdate + 1000.0) {
-			std::cout << "TPS : " << updateCount << std::endl;
-			updateCount = 0;
-			// set last time refreshed to ~new time
-			lastUpdate = glfwGetTime() * 1000.0;
-		}
-	}
-
-	void SceneManager::update() {
-
-		// if no scene is linked, 
-		// skip any process
-		if (currentScene == nullptr)
-			return;
-
-		// handle scene loading
-		// when changing is requested
-		handleSceneLoading();
-
-		// check if the target updates
-		// must be done instantly
-		if (currentScene->getTargetUpdates() == 0) {
-			updateOutTime();
-		}
-		else {
-			updateInTime();
-		}
 	}
 
 	void SceneManager::unloadCurrentScene() {

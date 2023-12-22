@@ -3,6 +3,7 @@
 
 #include "BaseEngine.h"
 
+#include "SceneManager.h"
 #include "RenderManager.h"
 #include "CallbackManager.h"
 
@@ -12,7 +13,9 @@ namespace Uranium::Engine {
 
 	BaseEngine::BaseEngine() noexcept :
 		display(nullptr),
+		threadPool(),
 
+		sceneManager(nullptr),
 		renderManager(nullptr),
 		callbackManager(nullptr)
 	{
@@ -28,11 +31,15 @@ namespace Uranium::Engine {
 	}
 
 	void BaseEngine::init() {
+		sceneManager = new SceneManager();
+
 		renderManager = new RenderManager();
 		callbackManager = new CallbackManager();
 	}
 
 	void BaseEngine::dispose() {
+		delete sceneManager;
+		
 		delete renderManager;
 		delete callbackManager;
 
@@ -44,21 +51,24 @@ namespace Uranium::Engine {
 		display = createWindow();
 
 		glfwMakeContextCurrent(*display);
+
+		glfwSwapInterval(0);
 	}
 
 	void BaseEngine::updateDisplayContext() {
 		while (!display->getEvents().shouldClose()) {
+			
 			int width, height;
 			glfwGetFramebufferSize(*display, &width, &height);
 			glViewport(0, 0, width, height);
 
-			// render scene here
-			glClear(GL_COLOR_BUFFER_BIT);
-			glClearColor(1.0, 0.0, 0.0, 1.0);
-
-			glfwSwapBuffers(*display);
+			sceneManager->render();
 
 			glfwPollEvents();
 		}
+	}
+
+	void BaseEngine::setScene(std::shared_ptr<Scene::Scene> scene) {
+		sceneManager->currentScene = scene;
 	}
 }

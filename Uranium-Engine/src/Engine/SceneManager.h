@@ -10,12 +10,18 @@ namespace Uranium::Engine {
 
 	class SceneManager final {
 	public:
+		friend class BaseEngine;
+
+	public:
 		~SceneManager();
 
 		/*
-		* 
+		* Delete the copy/move constructor since
+		* there must be one scene manager instance
+		* recognized by the engine
 		*/
 		SceneManager(SceneManager&) = delete;
+		SceneManager(SceneManager&&) = delete;
 		SceneManager& operator=(const SceneManager&) = delete;
 
 	private:
@@ -45,25 +51,18 @@ namespace Uranium::Engine {
 		*/
 		void unloadCurrentScene();
 
-		/*
-		* These manages the rendering of
-		* the current scene synchronized
-		*/
-		void renderInTime();
-		void renderOutTime();
-
-		void updateInTime();
-		void updateOutTime();
-
 	private:
-		volatile unsigned int frameCount;
-		volatile unsigned int updateCount;
+		volatile double lastMeasuredFrame;
+		volatile double lastMeasuredTick;
 
 		volatile double lastFrame;
-		volatile double lastUpdate;
+		volatile double lastTick;
 
-		volatile double renderTimer;
-		volatile double updateTimer;
+		volatile double elapsedRenderTime;
+		volatile double elapsedTickTime;
+
+		volatile unsigned int frameCount;
+		volatile unsigned int tickCount;
 
 		std::shared_ptr<Scene::Scene> currentScene;
 	};

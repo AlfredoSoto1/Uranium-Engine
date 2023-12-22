@@ -577,10 +577,44 @@
 #include "Core/Application.h"
 #include "Engine/BaseEngine.h"
 #include "Platform/Display/Window.h"
+#include "Scene/Scene.h"
 
 using namespace Uranium::Core;
+using namespace Uranium::Scene;
 using namespace Uranium::Engine;
 using namespace Uranium::Platform::Display;
+
+class VoxelScene : public Scene {
+
+public:
+
+	VoxelScene() :
+		Scene()
+	{
+		setTargetFramerate(360u);
+	}
+
+	~VoxelScene() {
+
+	}
+
+	void render() override {
+
+	}
+
+	void reset() override {
+
+	}
+
+	void load() override {
+
+	}
+
+	void unload() override {
+
+	}
+
+};
 
 class VoxelEngine : public BaseEngine {
 public:
@@ -595,8 +629,20 @@ public:
 		
 	}
 
+	void init() override {
+
+	}
+
+	void dispose() override {
+
+	}
+
 	std::unique_ptr<Window> createWindow() override {
 		return std::make_unique<Window>();
+	}
+
+	void createScenes() override {
+		setScene(std::make_shared<VoxelScene>());
 	}
 
 };

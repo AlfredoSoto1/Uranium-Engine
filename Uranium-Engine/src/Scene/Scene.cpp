@@ -1,19 +1,21 @@
 #include <GL/glfw3.h>
-#include <stdexcept>
 
 #include "Scene.h"
 
 namespace Uranium::Scene {
 
 	Scene::Scene() noexcept :
-		targetUpdates(Scene::DEFAULT_60),
-		targetFrames(Scene::DEFAULT_60)
+		nextScene(nullptr),
+		targetTicks(60u),
+		targetFrames(60u),
+		measureTickrate(false),
+		measureFramerate(false)
 	{
 
 	}
 
 	Scene::~Scene() {
-		nextScene = nullptr;
+		
 	}
 
 	std::shared_ptr<Scene> Scene::getNextScene() const {
@@ -24,26 +26,27 @@ namespace Uranium::Scene {
 		nextScene = next;
 	}
 
-	void Scene::setTargetUpdate(unsigned int targetUpdate) {
-		this->targetUpdates = targetUpdate;
+	void Scene::setTargetTicks(unsigned int targetTicks) {
+		this->targetTicks = targetTicks;
 	}
 
 	void Scene::setTargetFramerate(unsigned int targetFramerate) {
 		this->targetFrames = targetFramerate;
 	}
 
-	unsigned int Scene::getTargetUpdates() const {
-		return targetUpdates;
+	void Scene::allowTickMeasure(bool allow) {
+		measureTickrate = allow;
 	}
+
+	void Scene::allowFramerateMeasure(bool allow) {
+		measureFramerate = allow;
+	}
+
+	unsigned int Scene::getTargetTicks() const {
+		return targetTicks;
+	}
+
 	unsigned int Scene::getTargetFramerate() const {
 		return targetFrames;
-	}
-
-	double Scene::getFrameTime() const {
-		return 1.0 / targetFrames;
-	}
-
-	double Scene::getUpdateTime() const {
-		return 1.0 / targetUpdates;
 	}
 }

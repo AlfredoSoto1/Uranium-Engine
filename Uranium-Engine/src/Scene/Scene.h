@@ -1,7 +1,6 @@
 #pragma once
 
 #include <memory>
-#include <vector>
 
 namespace Uranium::Engine {
 	class SceneManager;
@@ -10,14 +9,9 @@ namespace Uranium::Engine {
 namespace Uranium::Scene {
 
 	class Scene {
-	private:
+	public:
 		friend Engine::SceneManager;
 
-	public:
-		static constexpr unsigned int DEFAULT_60 = 60;
-		static constexpr unsigned int UNLIMITED_FPS = 0;
-		static constexpr unsigned int UNLIMITED_UPS = 0;
-	
 	public:
 		/*
 		* Returns a reference of the next scene to be changed
@@ -25,17 +19,10 @@ namespace Uranium::Scene {
 		std::shared_ptr<Scene> getNextScene() const;
 
 		/*
-		* Returns the time it takes a 
-		* single frame/update to execute
-		*/
-		double getFrameTime() const;
-		double getUpdateTime() const;
-
-		/*
 		* Returns the target updates/frames
 		* provided in the setters
 		*/
-		unsigned int getTargetUpdates() const;
+		unsigned int getTargetTicks() const;
 		unsigned int getTargetFramerate() const;
 
 	public:
@@ -43,13 +30,6 @@ namespace Uranium::Scene {
 		* Sets the next scene to be changed after event
 		*/
 		void setNextScene(std::shared_ptr<Scene> next);
-
-		/*
-		* Sets the prefered target update/frames
-		* to be achieved when rendering/updating the scene
-		*/
-		void setTargetUpdate(unsigned int targetUpdate);
-		void setTargetFramerate(unsigned int targetFramerate);
 
 	protected:
 		/*
@@ -61,10 +41,9 @@ namespace Uranium::Scene {
 
 	protected:
 		/*
-		* These methods get called in context
-		* when updating / rendering the scene
+		* This gets called every frame in the render thread
+		* always running in a secured GL-Context
 		*/
-		virtual void update() = 0;
 		virtual void render() = 0;
 
 		/*
@@ -74,9 +53,30 @@ namespace Uranium::Scene {
 		virtual void load() = 0;
 		virtual void unload() = 0;
 
+		/*
+		* Resets the scene content
+		*/
+		virtual void reset() = 0;
+
+		/*
+		* Sets the prefered target ticks/frames
+		* to be achieved when rendering/updating the scene
+		*/
+		void setTargetTicks(unsigned int targetTicks);
+		void setTargetFramerate(unsigned int targetFramerate);
+
+		/*
+		* Allows the framerate/tick to be measured
+		*/
+		void allowTickMeasure(bool allow);
+		void allowFramerateMeasure(bool allow);
+
 	private:
+		bool measureTickrate;
+		bool measureFramerate;
+
+		unsigned int targetTicks;
 		unsigned int targetFrames;
-		unsigned int targetUpdates;
 		
 		std::shared_ptr<Scene> nextScene;
 	};
