@@ -2,8 +2,8 @@
 
 #include <mutex>
 #include <queue>
-#include <thread>
 #include <vector>
+#include <thread>
 #include <functional>
 #include <condition_variable>
 
@@ -25,6 +25,11 @@ namespace Uranium::Engine {
 		ThreadManager(ThreadManager&&) = delete;
 		ThreadManager& operator=(const ThreadManager&) = delete;
 
+	public:
+		/*
+		*/
+		void enqueTask(const std::function<void()>& functionTask);
+
 	private:
 		/*
 		* Creates center crontrol that manages
@@ -32,41 +37,28 @@ namespace Uranium::Engine {
 		*/
 		explicit ThreadManager() noexcept;
 
-		/*
-		* Struct definition of a task that an
-		* individual thread can work on
-		*/
 		struct Task {
-			size_t threadIndex;
-			std::function<void()> task;
+			bool loop;
+			std::function<void()> doTask;
 		};
 
 		struct WorkingThread {
-			volatile bool isAlive;
+			bool isAlive;
 			size_t taskCount;
+			size_t threadIndex;
 			std::thread thread;
 		};
 
 	private:
-
-		void enqueTask(const std::function<void()>& functionTask);
-
-		/*
-		* Returns the number workload in the provided thread index
-		*/
-		size_t getThreadWorkload(size_t threadIndex) const;
-
-		/*
-		* Returns the threadIndex of which is the
-		* one with least tasks assigned.
-		*/
-		size_t getLeastWorkingThread() const;
-
 		/*
 		* Creates a threadpool with the provided
 		* count
 		*/
 		void createThreadPool(size_t threadCount);
+
+		/*
+		*/
+		void workerThread(WorkingThread& workingThread);
 
 		/*
 		* Kills all processes and ends each thread
@@ -79,17 +71,16 @@ namespace Uranium::Engine {
 		void disposeThreads();
 
 		/*
+		* Returns the threadIndex of which is the
+		* one with least tasks assigned.
 		*/
-		void workerThread(WorkingThread& workingThread);
+		size_t getLeastWorkingThread() const;
 
 	private:
-		std::vector<WorkingThread> pool;
-		
-		std::queue<Task> tasks;
-		
 		mutable std::mutex queueMutex;
 		mutable std::condition_variable condition;
-		
-		volatile bool stop;
+
+		std::queue<Task> queuedTasks;
+		std::vector<WorkingThread> pool;
 	};
 }

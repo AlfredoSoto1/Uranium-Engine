@@ -4,33 +4,26 @@ namespace Uranium::Engine {
 
 	ThreadManager::ThreadManager() noexcept :
 		pool(),
-		tasks(),
-		stop(false)
+		queuedTasks()
 	{
 
 	}
 
 	ThreadManager::~ThreadManager() {
-
+		disposeThreads();
 	}
 
 	void ThreadManager::enqueTask(const std::function<void()>& functionTask) {
-		{
-			std::unique_lock<std::mutex> lock(queueMutex);
-			tasks.emplace(0L, functionTask);
-		}
-		condition.notify_one();
-	}
 
-	size_t ThreadManager::getThreadWorkload(size_t threadIndex) const {
-		return pool[threadIndex].taskCount;
+		size_t availableWorkerIndex = getLeastWorkingThread();
+
+		WorkingThread& worker = pool[availableWorkerIndex];
+
+		std::unique_lock<std::mutex> lock(queueMutex);
+
 	}
 
 	size_t ThreadManager::getLeastWorkingThread() const {
-#ifdef UR_DEBUG
-		if (pool.empty())
-			throw std::exception("No working thread available!");
-#endif // UR_DEBUG
 
 		std::unique_lock<std::mutex> lock(queueMutex);
 
@@ -53,18 +46,14 @@ namespace Uranium::Engine {
 	}
 
 	void ThreadManager::createThreadPool(size_t threadCount) {
-#ifdef UR_DEBUG
-		if (!pool.empty())
-			throw std::exception("Thread pool already created!");
-#endif // UR_DEBUG
-
 		// Initialize all working threads
-		for (size_t i = 0; i < threadCount; i++)
-			pool.emplace_back(true, i, std::thread());
-
-		// Start running all threads
-		for (size_t i = 0; i < threadCount; i++)
-			pool[i].thread = std::thread(&ThreadManager::workerThread, this, pool[i]);
+		for (size_t i = 0; i < threadCount; i++) {
+			// Create the worker thread struct first
+			//pool.emplace_back(true, 0, i, std::thread(), std::set<Task>());
+			
+			// Initialize and start the thread after the struct is created properly
+			pool[i].thread = std::thread(&ThreadManager::workerThread, this, std::ref(pool[i]));
+		}
 	}
 
 	void ThreadManager::killAll() {
@@ -73,12 +62,7 @@ namespace Uranium::Engine {
 	}
 
 	void ThreadManager::disposeThreads() {
-#ifdef UR_DEBUG
-		if (pool.empty())
-			throw std::exception("No working thread to dispose!");
-#endif // UR_DEBUG
-
-		// Kills all threads that are alive (if any)
+		// Kills all threads that are alive
 		killAll();
 
 		// joins all threads after being killed
