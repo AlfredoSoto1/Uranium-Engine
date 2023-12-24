@@ -32,18 +32,63 @@ namespace Uranium::Engine {
 		*/
 		explicit ThreadManager() noexcept;
 
+		/*
+		* Struct definition of a task that an
+		* individual thread can work on
+		*/
 		struct Task {
-			std::function<void()> task;
 			size_t threadIndex;
+			std::function<void()> task;
+		};
+
+		struct WorkingThread {
+			volatile bool isAlive;
+			size_t taskCount;
+			std::thread thread;
 		};
 
 	private:
-		std::vector<std::thread> threads;
+
+		void enqueTask(const std::function<void()>& functionTask);
+
+		/*
+		* Returns the number workload in the provided thread index
+		*/
+		size_t getThreadWorkload(size_t threadIndex) const;
+
+		/*
+		* Returns the threadIndex of which is the
+		* one with least tasks assigned.
+		*/
+		size_t getLeastWorkingThread() const;
+
+		/*
+		* Creates a threadpool with the provided
+		* count
+		*/
+		void createThreadPool(size_t threadCount);
+
+		/*
+		* Kills all processes and ends each thread
+		*/
+		void killAll();
+
+		/*
+		* Disposes all the generated threads
+		*/
+		void disposeThreads();
+
+		/*
+		*/
+		void workerThread(WorkingThread& workingThread);
+
+	private:
+		std::vector<WorkingThread> pool;
 		
 		std::queue<Task> tasks;
 		
-		std::mutex queueMutex;
-		std::condition_variable condition;
+		mutable std::mutex queueMutex;
+		mutable std::condition_variable condition;
 		
 		volatile bool stop;
 	};

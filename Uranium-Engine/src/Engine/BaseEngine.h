@@ -50,8 +50,8 @@ namespace Uranium::Engine {
 		/*
 		* Initializes and disposes all content
 		*/
-		virtual void init() = 0;
-		virtual void dispose() = 0;
+		//virtual void init() = 0;
+		//virtual void dispose() = 0;
 
 		/*
 		* Creates a unique instance of a window that
@@ -70,7 +70,7 @@ namespace Uranium::Engine {
 		*/
 		void setScene(std::shared_ptr<Scene::Scene> scene);
 
-		void createThreadPool(unsigned int threadPoolCount);
+		//void createThreadPool(unsigned int threadPoolCount);
 
 	private:
 		void init();

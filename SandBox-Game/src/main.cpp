@@ -591,10 +591,23 @@ public:
 	VoxelScene() :
 		Scene()
 	{
-		setTargetFramerate(360u);
+		setTargetFramerate(10000u);
+		allowFramerateMeasure(true);
 	}
 
 	~VoxelScene() {
+
+	}
+
+	void updateParticles() {
+
+	}
+
+	void updateEntities() {
+
+	}
+
+	void updateChunks() {
 
 	}
 
@@ -629,13 +642,13 @@ public:
 		
 	}
 
-	void init() override {
+	//void init() override {
 
-	}
+	//}
 
-	void dispose() override {
+	//void dispose() override {
 
-	}
+	//}
 
 	std::unique_ptr<Window> createWindow() override {
 		return std::make_unique<Window>();
