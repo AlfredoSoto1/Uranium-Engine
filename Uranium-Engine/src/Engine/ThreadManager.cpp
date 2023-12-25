@@ -3,8 +3,8 @@
 namespace Uranium::Engine {
 
 	ThreadManager::ThreadManager() noexcept :
-		pool(),
-		queuedTasks()
+		threadPool(),
+		threadWorkers()
 	{
 
 	}
@@ -15,12 +15,16 @@ namespace Uranium::Engine {
 
 	void ThreadManager::enqueTask(const std::function<void()>& functionTask) {
 
+		// Gets the least working thread index
 		size_t availableWorkerIndex = getLeastWorkingThread();
 
-		WorkingThread& worker = pool[availableWorkerIndex];
+		// Gets the worker assigned to such thread
+		Worker& worker = threadWorkers[availableWorkerIndex];
 
 		std::unique_lock<std::mutex> lock(queueMutex);
 
+		// Pass the function task to the worker
+		worker.tasks.push_back(functionTask);
 	}
 
 	size_t ThreadManager::getLeastWorkingThread() const {
@@ -28,14 +32,14 @@ namespace Uranium::Engine {
 		std::unique_lock<std::mutex> lock(queueMutex);
 
 		size_t threadIndex = 0;
-		size_t leastTaskCount = pool[0].taskCount;
+		size_t leastTaskCount = threadWorkers[0].taskCount;
 
 		// Simple linear search to find the thread index
 		// with the least task count
-		for (size_t i = 1; i < pool.size(); i++) {
-			if (pool[i].taskCount < leastTaskCount) {
+		for (size_t i = 1; i < threadWorkers.size(); i++) {
+			if (threadWorkers[i].taskCount < leastTaskCount) {
 				threadIndex = i;
-				leastTaskCount = pool[i].taskCount;
+				leastTaskCount = threadWorkers[i].taskCount;
 			}
 		}
 
@@ -48,17 +52,21 @@ namespace Uranium::Engine {
 	void ThreadManager::createThreadPool(size_t threadCount) {
 		// Initialize all working threads
 		for (size_t i = 0; i < threadCount; i++) {
-			// Create the worker thread struct first
-			//pool.emplace_back(true, 0, i, std::thread(), std::set<Task>());
+			threadWorkers.emplace_back(true, 0, i, std::vector<Task>());
 			
 			// Initialize and start the thread after the struct is created properly
-			pool[i].thread = std::thread(&ThreadManager::workerThread, this, std::ref(pool[i]));
+			threadPool[i] = std::thread(&ThreadManager::executeWork, this, std::ref(threadWorkers.back()));
 		}
 	}
 
 	void ThreadManager::killAll() {
-		for (size_t i = 0; i < pool.size(); i++)
-			pool[i].isAlive = false;
+		std::unique_lock<std::mutex> lock(queueMutex);
+
+		for (size_t i = 0; i < threadWorkers.size(); i++)
+			threadWorkers[i].isAlive = false;
+
+		lock.unlock();
+		condition.notify_one();
 	}
 
 	void ThreadManager::disposeThreads() {
@@ -66,16 +74,17 @@ namespace Uranium::Engine {
 		killAll();
 
 		// joins all threads after being killed
-		for (auto& threadTask : pool)
-			threadTask.thread.join();
+		for (auto& thread : threadPool)
+			thread.join();
 
 		// clears all threads from memory
-		pool.clear();
+		threadPool.clear();
+		threadWorkers.clear();
 	}
 
-	void ThreadManager::workerThread(WorkingThread& workingThread) {
+	void ThreadManager::executeWork(Worker& worker) {
 		
-		while (workingThread.isAlive) {
+		while (worker.isAlive) {
 
 		}
 	}

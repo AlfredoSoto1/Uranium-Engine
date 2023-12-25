@@ -57,14 +57,16 @@ namespace Uranium::Core {
 
 	void Application::start() noexcept {
 		
+		// Create display and prepare the context
 		baseEngine->createDisplayContext();
 
+		// Initiate the engine members and managers
 		baseEngine->init();
 
-		baseEngine->createScenes();
+		// Run and update engine
+		baseEngine->run();
 
-		baseEngine->updateDisplayContext();
-
+		// Dispose all engine content initiated
 		baseEngine->dispose();
 	}
 }

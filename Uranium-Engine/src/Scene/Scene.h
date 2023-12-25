@@ -18,13 +18,6 @@ namespace Uranium::Scene {
 		*/
 		std::shared_ptr<Scene> getNextScene() const;
 
-		/*
-		* Returns the target updates/frames
-		* provided in the setters
-		*/
-		unsigned int getTargetTicks() const;
-		unsigned int getTargetFramerate() const;
-
 	public:
 		/*
 		* Sets the next scene to be changed after event
@@ -41,12 +34,6 @@ namespace Uranium::Scene {
 
 	protected:
 		/*
-		* This gets called every frame in the render thread
-		* always running in a secured GL-Context
-		*/
-		virtual void render() = 0;
-
-		/*
 		* These methods get called in context when
 		* it needs to load / unload the scene
 		*/
@@ -58,26 +45,7 @@ namespace Uranium::Scene {
 		*/
 		virtual void reset() = 0;
 
-		/*
-		* Sets the prefered target ticks/frames
-		* to be achieved when rendering/updating the scene
-		*/
-		void setTargetTicks(unsigned int targetTicks);
-		void setTargetFramerate(unsigned int targetFramerate);
-
-		/*
-		* Allows the framerate/tick to be measured
-		*/
-		void allowTickMeasure(bool allow);
-		void allowFramerateMeasure(bool allow);
-
 	private:
-		bool measureTickrate;
-		bool measureFramerate;
-
-		unsigned int targetTicks;
-		unsigned int targetFrames;
-		
 		std::shared_ptr<Scene> nextScene;
 	};
 }

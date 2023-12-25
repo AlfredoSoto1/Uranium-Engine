@@ -37,28 +37,25 @@ namespace Uranium::Engine {
 		*/
 		explicit ThreadManager() noexcept;
 
-		struct Task {
-			bool loop;
-			std::function<void()> doTask;
-		};
+		using Task = std::function<void()>;
 
-		struct WorkingThread {
+		struct Worker {
 			bool isAlive;
 			size_t taskCount;
-			size_t threadIndex;
-			std::thread thread;
+			size_t workerIndex;
+			std::vector<Task> tasks;
 		};
 
 	private:
 		/*
-		* Creates a threadpool with the provided
-		* count
+		* Creates a threadpool with the provided count
 		*/
 		void createThreadPool(size_t threadCount);
 
 		/*
+		* Executes queued tasks
 		*/
-		void workerThread(WorkingThread& workingThread);
+		void executeWork(Worker& worker);
 
 		/*
 		* Kills all processes and ends each thread
@@ -80,7 +77,7 @@ namespace Uranium::Engine {
 		mutable std::mutex queueMutex;
 		mutable std::condition_variable condition;
 
-		std::queue<Task> queuedTasks;
-		std::vector<WorkingThread> pool;
+		std::vector<Worker> threadWorkers;
+		std::vector<std::thread> threadPool;
 	};
 }

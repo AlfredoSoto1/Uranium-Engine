@@ -38,7 +38,7 @@ namespace Uranium::Platform::Display {
 		/*
 		* Center window on a monitor
 		*/
-		void center(std::unique_ptr<Monitor::Monitor> monitor);
+		void center(std::shared_ptr<Monitor::Monitor> monitor);
 
 	public:
 		/*

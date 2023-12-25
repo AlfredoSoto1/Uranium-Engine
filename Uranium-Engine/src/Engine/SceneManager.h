@@ -33,12 +33,6 @@ namespace Uranium::Engine {
 		
 	private:
 		/*
-		* handles render and update of current scene
-		*/
-		void render();
-		void update();
-
-		/*
 		* This gets in charge of loading and
 		* unloading a scene in memory
 		*/
@@ -52,18 +46,6 @@ namespace Uranium::Engine {
 		void unloadCurrentScene();
 
 	private:
-		volatile double lastMeasuredFrame;
-		volatile double lastMeasuredTick;
-
-		volatile double lastFrame;
-		volatile double lastTick;
-
-		volatile double elapsedRenderTime;
-		volatile double elapsedTickTime;
-
-		volatile unsigned int frameCount;
-		volatile unsigned int tickCount;
-
 		std::shared_ptr<Scene::Scene> currentScene;
 	};
 }

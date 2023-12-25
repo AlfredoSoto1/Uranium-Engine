@@ -24,10 +24,19 @@ namespace Uranium::Engine {
 		explicit RenderManager() noexcept;
 
 	private:
-		// TODO temp method
+		/*
+		* 
+		*/
 		void render();
 
-	private:
+		void linearRender();
 
+	private:
+		double lastFrame;
+		double lastMeasuredFrame;
+		double elapsedRenderTime;
+
+		unsigned int frameCount;
+		unsigned int targetFramerate;
 	};
 }

@@ -53,6 +53,7 @@ namespace Uranium::Platform::Display {
 		if (!window->glWindow)
 			throw std::exception("GLFW window is not initialized");
 #endif
+		this->position = position;
 		glfwSetWindowPos(window->glWindow, position.x, position.y);
 	}
 
@@ -61,6 +62,7 @@ namespace Uranium::Platform::Display {
 		if (!window->glWindow)
 			throw std::exception("GLFW window is not initialized");
 #endif
+		this->dimension = dimension;
 		glfwSetWindowSize(window->glWindow, dimension.x, dimension.y);
 	}
 
@@ -95,7 +97,7 @@ namespace Uranium::Platform::Display {
 		glfwSetWindowOpacity(window->glWindow, opacity / 100.0f);
 	}
 
-	void WindowProps::center(std::unique_ptr<Monitor::Monitor> monitor) {
+	void WindowProps::center(std::shared_ptr<Monitor::Monitor> monitor) {
 #ifdef UR_DEBUG
 		if (!window->glWindow)
 			throw std::exception("GLFW window is not initialized");
@@ -111,8 +113,8 @@ namespace Uranium::Platform::Display {
 			return;
 
 		// calculate relative position retlative to center
-		int newPositionX = (resolution.x - dimension.x) / 2;
-		int newPositionY = (resolution.y - dimension.y) / 2;
+		int newPositionX = (monitor->getResolution().x - dimension.x) / 2;
+		int newPositionY = (monitor->getResolution().y - dimension.y) / 2;
 
 		// set new position to Props. and update GLFW window
 		position.x = newPositionX;

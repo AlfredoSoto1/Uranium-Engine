@@ -20,6 +20,7 @@ namespace Uranium::Engine {
 
 	class SceneManager;
 	class RenderManager;
+	class ThreadManager;
 	class CallbackManager;
 
 	class BaseEngine {
@@ -74,10 +75,10 @@ namespace Uranium::Engine {
 
 	private:
 		void init();
+		void run();
 		void dispose();
 
 		void createDisplayContext();
-		void updateDisplayContext();
 
 	private:
 		std::vector<std::thread> threadPool;
@@ -89,6 +90,7 @@ namespace Uranium::Engine {
 		*/
 		Engine::SceneManager* sceneManager;
 		Engine::RenderManager* renderManager;
+		Engine::ThreadManager* threadManager;
 		Engine::CallbackManager* callbackManager;
 	};
 }
