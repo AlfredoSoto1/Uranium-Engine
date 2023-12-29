@@ -227,6 +227,10 @@ public:
 
 	}
 
+	void update() override {
+
+	}
+
 	void reset() override {
 
 	}
@@ -276,38 +280,37 @@ public:
 
 };
 
-class VoxelEngine : public BaseEngine {
+class GameApplication : public Application {
 public:
 
-	VoxelEngine() noexcept:
-		BaseEngine()
-	{	
-
+	GameApplication() noexcept:
+		Application()
+	{
+		// Initialize any member
 	}
 
-	~VoxelEngine() {
-		
+	~GameApplication() {
+		// Delete any member
 	}
 
 	std::unique_ptr<Window> createWindow() override {
-		auto window = std::make_unique<Window>();
+		//auto window = std::make_unique<Window>();
 
-		window->getProperties().setDimension(glm::ivec2(1280, 720));
-		window->getProperties().center(MonitorHandler::getPrimary());
+		//window->setDimension(glm::ivec2(1280, 720));
+		//window->center(MonitorHandler::getPrimary());
 
-		return window;
+		return std::make_unique<Window>();
 	}
 
-	void createScenes() override {
-		//setScene(std::make_shared<VoxelScene>());
-	}
+	//std::shared_ptr<Scene> createScenes() override {
+	//	return std::make_shared<VoxelScene>();
+	//}
 
 };
 
-std::unique_ptr<BaseEngine> createApplication() {
+std::unique_ptr<Application> createApplication() {
 	/*
-	* Create an Application that 
-	* returns the base engine to be used
+	* Create a unique application
 	*/
-	return std::make_unique<VoxelEngine>();
+	return std::make_unique<GameApplication>();
 }

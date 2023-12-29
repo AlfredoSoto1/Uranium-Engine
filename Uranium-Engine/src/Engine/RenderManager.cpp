@@ -130,7 +130,7 @@ namespace Uranium::Engine {
 		// and call it here to start rendering
 		linearRender();
 
-		glfwSwapBuffers(Core::Application::instance().getBaseEngine().getWindow());
+		//glfwSwapBuffers(Core::Application::instance().getBaseEngine().getWindow());
 	
 		frameCount++;
 

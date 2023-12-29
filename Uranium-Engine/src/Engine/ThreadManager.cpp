@@ -1,5 +1,10 @@
 #include "ThreadManager.h"
 
+#ifdef UR_DEBUG
+#include <iostream>
+#endif // UR_DEBUG
+
+
 namespace Uranium::Engine {
 
 	ThreadManager::ThreadManager() noexcept :
@@ -10,7 +15,7 @@ namespace Uranium::Engine {
 	}
 
 	ThreadManager::~ThreadManager() {
-		disposeThreads();
+		
 	}
 
 	void ThreadManager::enqueTask(const std::function<void()>& functionTask) {
@@ -55,7 +60,7 @@ namespace Uranium::Engine {
 			threadWorkers.emplace_back(true, 0, i, std::vector<Task>());
 			
 			// Initialize and start the thread after the struct is created properly
-			threadPool[i] = std::thread(&ThreadManager::executeWork, this, std::ref(threadWorkers.back()));
+			threadPool.emplace_back(&ThreadManager::executeWork, this, std::ref(threadWorkers.back()));
 		}
 	}
 
@@ -85,7 +90,16 @@ namespace Uranium::Engine {
 	void ThreadManager::executeWork(Worker& worker) {
 		
 		while (worker.isAlive) {
+			//for (auto& doTask : worker.tasks) {
+			//	if(doTask != nullptr)
+			//		doTask();
+			//}
 
+			std::cout << "Working: " << worker.workerIndex << std::endl;
 		}
+
+		// Free all tasks from worker
+		worker.taskCount = 0;
+		worker.tasks.clear();
 	}
 }

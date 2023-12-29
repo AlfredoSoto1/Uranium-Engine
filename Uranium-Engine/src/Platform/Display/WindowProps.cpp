@@ -40,45 +40,25 @@ namespace Uranium::Platform::Display {
 	}
 
 	void WindowProps::setTitle(const std::string& title) {
-#ifdef UR_DEBUG
-		if (!window->glWindow)
-			throw std::exception("GLFW window is not initialized");
-#endif
 		this->title = title;
 		glfwSetWindowTitle(window->glWindow, title.c_str());
 	}
 
 	void WindowProps::setPosition(const glm::ivec2& position) {
-#ifdef UR_DEBUG
-		if (!window->glWindow)
-			throw std::exception("GLFW window is not initialized");
-#endif
 		this->position = position;
 		glfwSetWindowPos(window->glWindow, position.x, position.y);
 	}
 
 	void WindowProps::setDimension(const glm::ivec2& dimension) {
-#ifdef UR_DEBUG
-		if (!window->glWindow)
-			throw std::exception("GLFW window is not initialized");
-#endif
 		this->dimension = dimension;
 		glfwSetWindowSize(window->glWindow, dimension.x, dimension.y);
 	}
 
 	void WindowProps::setResolution(const glm::ivec2& resolution) {
-#ifdef UR_DEBUG
-		if (!window->glWindow)
-			throw std::exception("GLFW window is not initialized");
-#endif
 		this->resolution = resolution;
 	}
 
 	void WindowProps::setOpacity(unsigned int opacity) {
-#ifdef UR_DEBUG
-		if (!window->glWindow)
-			throw std::exception("GLFW window is not initialized");
-#endif
 		this->opacity = opacity >= 100 ? 100 : opacity <= 0 ? 0 : opacity;
 
 		// if max opacity is achieved, dont make
@@ -98,10 +78,6 @@ namespace Uranium::Platform::Display {
 	}
 
 	void WindowProps::center(std::shared_ptr<Monitor::Monitor> monitor) {
-#ifdef UR_DEBUG
-		if (!window->glWindow)
-			throw std::exception("GLFW window is not initialized");
-#endif
 		// if no monitor connected, throw exception
 		if (!monitor->isConnected())
 			throw std::invalid_argument("Provided monitor is not connected!");
@@ -109,7 +85,7 @@ namespace Uranium::Platform::Display {
 		// If monitor is present but is maximized, minimized or fullscreen
 		// there is no need to update the window position since
 		// there is not going to be visible if any of these conditions happen
-		if (window->states.isMaximized() || window->states.isMinimized() || window->states.isFullscreen())
+		if (window->maximized || window->minimized || window->fullscreen)
 			return;
 
 		// calculate relative position retlative to center

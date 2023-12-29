@@ -8,19 +8,19 @@ namespace Uranium::Core {
 	class Application;
 }
 
-namespace Uranium::Platform::Display {
-	class Window;
-}
-
 namespace Uranium::Scene {
 	class Scene;
 }
 
+namespace Uranium::States {
+	class State;
+}
+
 namespace Uranium::Engine {
 
+	class StateManager;
 	class SceneManager;
 	class RenderManager;
-	class ThreadManager;
 	class CallbackManager;
 
 	class BaseEngine {
@@ -39,7 +39,10 @@ namespace Uranium::Engine {
 		BaseEngine& operator=(const BaseEngine&) = delete;
 
 	public:
-		Platform::Display::Window& getWindow();
+		/*
+		* Returns the primary scene
+		*/
+		Scene::Scene& getPrimaryScene();
 
 	protected:
 		/*
@@ -49,48 +52,37 @@ namespace Uranium::Engine {
 		
 	protected:
 		/*
-		* Initializes and disposes all content
-		*/
-		//virtual void init() = 0;
-		//virtual void dispose() = 0;
-
-		/*
-		* Creates a unique instance of a window that
-		* the engine manages throught the life time of the
-		* program. In this window is where the scenes will be rendered
-		*/
-		virtual std::unique_ptr<Platform::Display::Window> createWindow() = 0;
-
-		/*
 		* Creates and initializes all scenes
 		*/
-		virtual void createScenes() = 0;
+		virtual std::shared_ptr<Scene::Scene> createScenes() = 0;
+
+	private:
+		/*
+		* Initializes the base engine controlled by the application
+		*/
+		void init();
 
 		/*
-		* Prepares the first scene to be rendered/updated
+		* Disposes the initialized content
 		*/
-		void setScene(std::shared_ptr<Scene::Scene> scene);
-
-		//void createThreadPool(unsigned int threadPoolCount);
-
-	private:
-		void init();
-		void run();
 		void dispose();
 
-		void createDisplayContext();
+		/*
+		* Starts the engine after initialization
+		*/
+		void start();
 
 	private:
-		std::vector<std::thread> threadPool;
+		void initializeManagers();
+		void disposeManagers();
 
-		std::unique_ptr<Platform::Display::Window> display;
-
+	private:
 		/*
 		* Engine managers
 		*/
+		Engine::StateManager* stateManager;
 		Engine::SceneManager* sceneManager;
 		Engine::RenderManager* renderManager;
-		Engine::ThreadManager* threadManager;
 		Engine::CallbackManager* callbackManager;
 	};
 }

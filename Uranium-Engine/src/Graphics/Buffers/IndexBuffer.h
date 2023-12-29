@@ -1,57 +1,33 @@
 #pragma once
 
-namespace Uranium::Graphics::Meshes {
-	class Model;
-}
+#include "AccessFormat.h"
 
 namespace Uranium::Graphics::Buffers {
 
-	class IndexBuffer {
+	class IndexBuffer final {
 	public:
-		/*
-		* Custom alias
-		*/
-		using Model = Meshes::Model;
-
-	public:
-
 		/*
 		* Construct an Index Buffer inside a given Model
 		* 
 		* accessFormat - determines how the program should read this buffer
-		*	~ STATIC_DRAW
-		*	~ DYNAMIC_DRAW
-		* 
 		* indCount - determines the count of indices inside the buffer
 		*/		
-		IndexBuffer(const Model& model, unsigned int accessFormat, unsigned int indCount);
+		explicit IndexBuffer(AccessFormat format, unsigned int indCount) noexcept;
 		
 		/*
 		* Construct an Index Buffer inside a given Model
 		* 
 		* accessFormat - determines how the program should read this buffer
-		*	~ STATIC_DRAW
-		*	~ DYNAMIC_DRAW
-		* 
 		* indCount - determines the count of indices inside the buffer
-		* 
 		* data* - determines the initial data to be *copied* to the buffer
 		*/
-		IndexBuffer(const Model& model, unsigned int accessFormat, unsigned int indCount, const void* data);
+		explicit IndexBuffer(AccessFormat format, unsigned int indCount, const void* data) noexcept;
 
 		/*
-		* Copy constructor; This copies all private
-		* members to the new instance of the Buffer that
-		* is being copied to
 		*/
-		IndexBuffer(const IndexBuffer&);
+		~IndexBuffer();
 
-		/*
-		* assign operator overloaded to copy
-		* all data from 'this' buffer to new buffer
-		*/
-		IndexBuffer& operator=(const IndexBuffer&);
-
+	public:
 		/*
 		* Bind the buffer so that
 		* OpenGL knows when to use all of its content
@@ -63,19 +39,7 @@ namespace Uranium::Graphics::Buffers {
 		*/
 		void unbind() const;
 
-		/*
-		* Deletes the buffer from memory entirely
-		* and all of its references. Any reference that
-		* might still point to this buffer will either return
-		* nullptr or throw an exception depending of the circumstances
-		*/
-		void dispose() const;
-
 	public:
-		/*
-		* getters and setters
-		*/
-
 		/*
 		* Returns the actual ibo ID of 'this' buffer
 		*/
@@ -104,19 +68,9 @@ namespace Uranium::Graphics::Buffers {
 		void setTriangle(unsigned int index, unsigned int index1, unsigned int index2, unsigned int index3);
 
 	private:
-		/*
-		* friend with other classes
-		*/
-		friend Model;
-
-	private:
-		/*
-		* private members
-		*/
-		const Model& model;
-
 		unsigned int ibo;
 		unsigned int indCount;
-		unsigned int accessFormat;
+
+		AccessFormat format;
 	};
 }

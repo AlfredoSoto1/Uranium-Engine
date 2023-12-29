@@ -18,7 +18,6 @@ namespace Uranium::Platform::Display {
 		* Friends with other classes
 		*/
 		friend class Window;
-		friend class WindowStates;
 
 	public:
 		/*

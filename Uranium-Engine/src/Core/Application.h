@@ -4,53 +4,45 @@
 #include <vector>
 #include <string>
 
-namespace Uranium::Engine {
-	class BaseEngine;
+namespace Uranium::Platform::Display {
+	class Window;
 }
 
 namespace Uranium::Core {
 
-	class Application final {
+	class Application {
 	public:
-		~Application();
-
 		/*
-		* Deletes the copy/move constructors because
-		* we dont want to accidently create instances or move
-		* the application singleton
+		* Creates and initializes a unique instance of the application
 		*/
+		explicit Application() noexcept;
+		
+		/*
+		* Destroys and cleans up the application
+		*/
+		virtual ~Application();
+
 		Application(Application&) = delete;
 		Application(Application&&) = delete;
 		Application& operator=(const Application&) = delete;
 		
-	public:
+	protected:
 		/*
-		* Returns the instance of the currently active application
+		* Creates a unique instance of a window
 		*/
-		static Application& instance();
-
-		/*
-		* Returns a reference of the base engine
-		*/
-		Engine::BaseEngine& getBaseEngine();
-
-	private:
-		/*
-		* Creates a unique instance of application
-		*/
-		explicit Application() noexcept;
-
-		/*
-		* Starts the application
-		*/
-		void start() noexcept;
+		virtual std::unique_ptr<Platform::Display::Window> createWindow() = 0;
 
 	private:
 		/*
 		* Holds a reference to the unique application instance
 		* throughout the life time of the program
 		*/
-		static Application* application;
+		static std::unique_ptr<Application> application;
+		
+		/*
+		* Default method that logs any GL errors
+		*/
+		static void diagnosticErrors(int error, const char* description);
 		
 		/*
 		* Extern friend to start application
@@ -59,13 +51,15 @@ namespace Uranium::Core {
 		friend void buildApplication(int argc, char* argv[]);
 
 		/*
-		* Default method that logs any GL errors
+		* Starts the application
 		*/
-		static void diagnosticErrors(int error, const char* description);
-		
+		void start() noexcept;
+
 	private:
+		volatile bool isRunning;
+
 		std::vector<std::string> terminalArguments;
 
-		std::unique_ptr<Engine::BaseEngine> baseEngine;
+		//std::unique_ptr<Platform::Display::Window> windowDisplay;
 	};
 }

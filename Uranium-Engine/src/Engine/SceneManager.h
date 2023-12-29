@@ -1,6 +1,7 @@
 #pragma once
 
 #include <memory>
+#include <thread>
 
 namespace Uranium::Scene {
 	class Scene;
@@ -45,7 +46,31 @@ namespace Uranium::Engine {
 		*/
 		void unloadCurrentScene();
 
+		/*
+		* This executes all tasks that the current scene has
+		*/
+		void executeSceneTasks();
+
+		/*
+		* Updates the current scene in the appropiate thread
+		*/
+		void updateCurrentScene();
+
 	private:
+		double lastTick;
+		double lastMeasuredTick;
+		double elapsedTickingTime;
+
+		unsigned int tickTime;
+		unsigned int targetTicks;
+
+		volatile bool isTaskThreadAlive;
+		volatile bool isTickingThreadAlive;
+
+		std::thread taskThread;
+		std::thread tickingThread;
+
+		std::shared_ptr<Scene::Scene> primaryScene;
 		std::shared_ptr<Scene::Scene> currentScene;
 	};
 }

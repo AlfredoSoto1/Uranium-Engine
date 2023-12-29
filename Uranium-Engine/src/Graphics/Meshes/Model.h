@@ -2,68 +2,40 @@
 
 #include <vector>
 
-#include "Graphics/Buffers/VertexBuffer.h"
-#include "Graphics/Buffers/IndexBuffer.h"
+namespace Uranium::Graphics::Buffers {
+	class IndexBuffer;
+	class VertexBuffer;
+}
 
 namespace Uranium::Graphics::Meshes {
 
-	class Model {
-	public:
-		/*
-		* custom alias
-		*/
-		using IndexBuffer = Buffers::IndexBuffer;
-		using VertexBuffer = Buffers::VertexBuffer;
-
+	class Model final {
 	public:
 		/*
 		* Constructs a model and assigns a proper vao
 		* for any bound buffer that this model will use
 		* to be rendered
 		*/
-		Model();
+		explicit Model() noexcept;
 		
 		/*
 		* deletes all data from vao, including all
 		* the buffers linked to it
 		*/
-		virtual ~Model();
-		
-		/*
-		* binds the vao
-		*/
-		void bind() const;
-		
-		/*
-		* unbinds the vao
-		*/
-		void unbind() const;
-
-		/*
-		* It binds the vao
-		* and the proper index buffers and
-		* enables the attributes before rendering
-		* it also has an unbind method that unbinds all
-		* these actions done by the bindToRender()
-		*/
-		void bindToRender() const;
-		void unbindToRender() const;
+		~Model();
 
 	public:
 		/*
-		* getters and setters
+		* binds/unbinds this instance of the vao created
 		*/
-
+		void bind() const;
+		void unbind() const;
+	
+	public:
 		/*
 		* Returns the vao Id
 		*/
 		operator unsigned int();
-
-		/*
-		* selects the index buffer to 
-		* be used to render the vertex buffer from
-		*/
-		void selectIndexBuffer(unsigned int iboSelected);
 
 		/*
 		* Returns the total index count from the
@@ -71,21 +43,17 @@ namespace Uranium::Graphics::Meshes {
 		*/
 		unsigned int indexCount() const;
 
-	private:
 		/*
-		* friends with other classes
+		* selects the index buffer to
+		* be used to render the vertex buffer from
 		*/
-		friend IndexBuffer;
-		friend VertexBuffer;
+		void selectIndexBuffer(unsigned int iboSelected);
 
 	private:
-		/*
-		* private members
-		*/
 		unsigned int vao;
 		unsigned int iboSelected;
 
-		mutable std::vector<IndexBuffer> ibos;
-		mutable std::vector<VertexBuffer> vbos;
+		std::vector<Buffers::IndexBuffer> ibos;
+		std::vector<Buffers::VertexBuffer> vbos;
 	};
 }

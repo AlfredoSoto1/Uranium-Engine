@@ -1,10 +1,8 @@
-
 #ifdef UR_DEBUG
 #include <iostream>
 #endif
 
 #include "Application.h"
-#include "Engine/BaseEngine.h"
 
 /*
 * Define a custom entry point where
@@ -12,7 +10,7 @@
 * a main function. With this the application can handle
 * efficiently the lifetime of the Application.
 */
-extern std::unique_ptr<Uranium::Engine::BaseEngine> createApplication();
+extern std::unique_ptr<Uranium::Core::Application> createApplication();
 
 namespace Uranium::Core {
 	
@@ -26,20 +24,17 @@ namespace Uranium::Core {
 	void buildApplication(int argc, char* argv[]) {
 
 		// Create a new application instance
-		Application::application = new Application();
+		Application::application = createApplication();
 
 		// Pass all the arguments from the terminal to the application
 		for (int i = 0; i < argc; i++)
 			Application::application->terminalArguments.push_back(argv[i]);
 
-		// Set the new base engine
-		Application::application->baseEngine = std::move(createApplication());
-
 		// Starts the application
 		Application::application->start();
 
 		// Delete before exiting the applicaiton
-		delete Application::application;
+		delete Application::application.release();
 	}
 }
 

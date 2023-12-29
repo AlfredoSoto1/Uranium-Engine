@@ -1,89 +1,60 @@
 #pragma once
 
+#include <memory>
 #include <vector>
-
-namespace Uranium::Graphics::Meshes {
-	class Model;
-}
+#include "AccessFormat.h"
 
 namespace Uranium::Graphics::Buffers {
 
-	class VertexBuffer {
+	class VertexBuffer final {
 	public:
 		/*
-		* custom alias
+		* Buffer layout struct
+		* This will determine the layout of how
+		* the VBO should read each attribute inside each vertex
 		*/
-		using Model = Meshes::Model;
+		struct VertexAttribute {
+			unsigned int location;          // defines a location as to which attribute enable
+			unsigned int componentCount;    // determines the count of elements that a single attribute can have (Must be: 1, 2, 3, 4)
+			unsigned int readType;          // determines the type that we are storing in the attribute ex:(GL_FLOAT, GL_INT, GL_UNSIGNED_BYTE, etc...)
+			unsigned int typeNormalization;	// determines if the type should be normalized ex: (GL_BYTE -> reads in shader as a float from 0.0 - 1.0)
+			unsigned int attribIndex;       // determines the offset of which this attribute fits inside the actual Vertex
+		};
 
 	public:
 		/*
 		* Construct a Vertex Buffer inside a given Model
 		* 
 		* accessFormat - determines how the program should read this buffer
-		*	~ STATIC_DRAW
-		*	~ DYNAMIC_DRAW
-		* 
 		* vertexCount - determines how many vertices are inside the buffer
-		*
 		* vertexSize - determines the size of the individual vertex - in bytes
-		* 
 		*/
-		VertexBuffer(const Model& model, unsigned int accessFormat, unsigned int vertexCount, unsigned int vertexSize);
+		explicit VertexBuffer(AccessFormat format, unsigned int vertexCount, unsigned int vertexSize) noexcept;
 
 		/*
 		* Construct a Vertex Buffer inside a given Model
 		*
 		* accessFormat - determines how the program should read this buffer
-		*	~ STATIC_DRAW
-		*	~ DYNAMIC_DRAW
-		*
 		* vertexCount - determines how many vertices are inside the buffer
-		* 
 		* vertexSize - determines the size of the individual vertex - in bytes
-		* 
 		* attribCount - determines how many attributes or elements are inside the vertex
-		* 
 		* data* - determines the initial data to be *copied* to the buffer
 		*/
-		VertexBuffer(const Model& model, unsigned int accessFormat, unsigned int vertexCount, unsigned int vertexSize, void* data);
-		
-		/*
-		* Copy constructor; This copies all private
-		* members to the new instance of the Buffer that
-		* is being copied to
-		*/
-		VertexBuffer(const VertexBuffer&);
+		explicit VertexBuffer(AccessFormat format, unsigned int vertexCount, unsigned int vertexSize, void* data) noexcept;
 
 		/*
-		* assign operator overloaded to copy
-		* all data from 'this' buffer to new buffer
- 		*/
-		VertexBuffer& operator=(const VertexBuffer&);
-
-		/*
-		* Bind the buffer so that
-		* OpenGL knows when to use all of its content
+		* Deletes the buffer and all the data loaded to the GPU
 		*/
-		void bind() const;
-
-		/*
-		* UnBind the buffer when no longer is being used
-		*/
-		void unbind() const;
-
-		/*
-		* Deletes the buffer from memory entirely
-		* and all of its references. Any reference that
-		* might still point to this buffer will either return
-		* nullptr or throw an exception depending of the circumstances
-		*/
-		void dispose() const;
+		~VertexBuffer();
 
 	public:
 		/*
-		* getters and setters
+		* Binds/unbinds the current instance of the buffer
 		*/
+		void bind() const;
+		void unbind() const;
 
+	public:
 		/*
 		* Returns the actual vbo ID of 'this' buffer
 		*/
@@ -102,28 +73,13 @@ namespace Uranium::Graphics::Buffers {
 		/*
 		* Returns a void* to a copy of the data in 'this' buffer
 		*/
-		void getVertices(void* outDataCopy) const;
-		void getVertex(unsigned int index, void* outDataCopy) const;
+		std::unique_ptr<char> getSubData(unsigned int location, unsigned int size) const;
 
 		/*
 		* sets data to 'this' buffer
 		*/
 		void setVertices(const void* data);
 		void setVertex(unsigned int index, const void* data);
-
-	public:
-		/*
-		* Buffer layout struct
-		* This will determine the layout of how
-		* the VBO should read each attribute inside each vertex
-		*/
-		struct VertexAttribute {
-			unsigned int location;          // defines a location as to which attribute enable
-			unsigned int componentCount;    // determines the count of elements that a single attribute can have (Must be: 1, 2, 3, 4)
-			unsigned int readType;          // determines the type that we are storing in the attribute ex:(GL_FLOAT, GL_INT, GL_UNSIGNED_BYTE, etc...)
-			unsigned int typeNormalization;	// determines if the type should be normalized ex: (GL_BYTE -> reads in shader as a float from 0.0 - 1.0)
-			unsigned int attribIndex;       // determines the offset of which this attribute fits inside the actual Vertex
-		};
 
 		/*
 		* Sets a buffer layout for each of 'this'
@@ -134,10 +90,6 @@ namespace Uranium::Graphics::Buffers {
 
 	private:
 		/*
-		* friends with other classes
-		*/
-		friend Model;
-		/*
 		* Enables the attributes from this buffer
 		*/
 		void enableAttribs() const;
@@ -147,25 +99,16 @@ namespace Uranium::Graphics::Buffers {
 		*/
 		void disableAttribs() const;
 
-	private:
-		/*
-		* private methods
-		*/
 		size_t getSizeType(unsigned int type);
 
 	private:
-		/*
-		* private members
-		*/
-		const Model& model;
-
 		unsigned int vbo;
-		unsigned int accessFormat;
-		unsigned int vertCount;
 		unsigned int vertSize;
+		unsigned int vertCount;
 
-		mutable std::vector<VertexAttribute> attributes;
-		
+		AccessFormat format;
+
+		std::vector<VertexAttribute> attributes;
 	};
 
 }

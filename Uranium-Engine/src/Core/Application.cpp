@@ -1,20 +1,11 @@
 #include <GL/glfw3.h>
 
 #include "Core/Application.h"
-#include "Engine/BaseEngine.h"
 #include "Platform/Monitor/MonitorHandler.h"
 
 namespace Uranium::Core {
 
-	Application* Application::application = nullptr;
-
-	Application& Application::instance() {
-		return *application;
-	}
-
-	Engine::BaseEngine& Application::getBaseEngine() {
-		return *baseEngine;
-	}
+	std::unique_ptr<Application> Application::application = nullptr;
 
 	void Application::diagnosticErrors(int error, const char* description) {
 		// Print the error to the console. We dont use the built-in
@@ -24,15 +15,16 @@ namespace Uranium::Core {
 	}
 
 	Application::Application() noexcept :
-		baseEngine(),
+		isRunning(true),
 		terminalArguments()
 	{
-		using namespace Platform::Monitor;
+		if (application != nullptr)
+			__debugbreak(); // REMOVE
 
 		// Initialize GLFW and check it did it correctly
 		// If the application doesn't initiate, exit the application
 		if (glfwInit() == GLFW_FALSE)
-			throw std::exception("Application could not initiate GLFW.");
+			__debugbreak(); // REMOVE // throw std::exception("Application could not initiate GLFW.");
 
 		// Set the custom error callback
 		// to diagnostic any possible error in 
@@ -40,7 +32,7 @@ namespace Uranium::Core {
 		glfwSetErrorCallback(&Application::diagnosticErrors);
 
 		// Initiate the monitor handler
-		MonitorHandler::initMonitors();
+		Platform::Monitor::MonitorHandler::initMonitors();
 	}
 
 	Application::~Application() {
@@ -49,24 +41,15 @@ namespace Uranium::Core {
 		// Dispose all window instances
 		MonitorHandler::disposeMonitors();
 
-		terminalArguments.clear();
-		
 		// Terminate GLFW after initializing
 		glfwTerminate();
+		terminalArguments.clear();
 	}
 
 	void Application::start() noexcept {
-		
-		// Create display and prepare the context
-		baseEngine->createDisplayContext();
 
-		// Initiate the engine members and managers
-		baseEngine->init();
+		while (isRunning) {
 
-		// Run and update engine
-		baseEngine->run();
-
-		// Dispose all engine content initiated
-		baseEngine->dispose();
+		}
 	}
 }

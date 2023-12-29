@@ -5,26 +5,20 @@
 #include <iostream>
 #endif // UR_DEBUG
 
-#include <GL/glfw3.h>
-
 #include "BaseEngine.h"
 
+#include "StateManager.h"
 #include "SceneManager.h"
 #include "RenderManager.h"
 #include "ThreadManager.h"
 #include "CallbackManager.h"
 
-#include "Platform/Display/Window.h"
-
 namespace Uranium::Engine {
 
 	BaseEngine::BaseEngine() noexcept :
-		display(nullptr),
-		threadPool(),
-
+		stateManager(nullptr),
 		sceneManager(nullptr),
 		renderManager(nullptr),
-		threadManager(nullptr),
 		callbackManager(nullptr)
 	{
 		
@@ -34,57 +28,41 @@ namespace Uranium::Engine {
 		
 	}
 
-	Platform::Display::Window& BaseEngine::getWindow() {
-		return *display;
+	Scene::Scene& BaseEngine::getPrimaryScene() {
+		return *sceneManager->primaryScene;
 	}
 
 	void BaseEngine::init() {
-		sceneManager = new SceneManager();
-		renderManager = new RenderManager();
-		threadManager = new ThreadManager();
-		callbackManager = new CallbackManager();
 
-		// Must be called from access modifier method from base engine abstract object
-		threadManager->createThreadPool(1);
+		initializeManagers();
 	}
 
 	void BaseEngine::dispose() {
+		disposeManagers();
+	}
+
+	void BaseEngine::initializeManagers() {
+		stateManager = new StateManager();
+		sceneManager = new SceneManager();
+		renderManager = new RenderManager();
+		callbackManager = new CallbackManager();
+	}
+
+	void BaseEngine::disposeManagers() {
+		delete stateManager;
 		delete sceneManager;
 		delete renderManager;
-		delete threadManager;
 		delete callbackManager;
-
-		display.reset();
 	}
 
-	void BaseEngine::createDisplayContext() {
+	void BaseEngine::start() {
 
-		display = createWindow();
+		//int width, height;
+		//glfwGetFramebufferSize(*display, &width, &height);
+		//glViewport(0, 0, width, height);
 
-		glfwMakeContextCurrent(*display);
+		//renderManager->render();
 
-		if (glewInit() != GLEW_OK)
-			throw std::exception("GLEW could not initiate correctly!");
-
-		std::cout << glGetString(GL_VERSION) << std::endl;
-
-		glfwSwapInterval(0);
-	}
-
-	void BaseEngine::run() {
-		while (!display->getEvents().shouldClose()) {
-			
-			int width, height;
-			glfwGetFramebufferSize(*display, &width, &height);
-			glViewport(0, 0, width, height);
-
-			renderManager->render();
-
-			glfwPollEvents();
-		}
-	}
-
-	void BaseEngine::setScene(std::shared_ptr<Scene::Scene> scene) {
-		sceneManager->currentScene = scene;
+		//glfwPollEvents();
 	}
 }
