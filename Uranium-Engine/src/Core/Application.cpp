@@ -1,7 +1,9 @@
 #include <GL/glfw3.h>
 
 #include "Core/Application.h"
-#include "Platform/Monitor/MonitorHandler.h"
+#include "Platform/Display/Window.h"
+
+#include "Engine/CallbackManager.h"
 
 namespace Uranium::Core {
 
@@ -30,26 +32,22 @@ namespace Uranium::Core {
 		// to diagnostic any possible error in 
 		// the lifetime of the glfw application
 		glfwSetErrorCallback(&Application::diagnosticErrors);
-
-		// Initiate the monitor handler
-		Platform::Monitor::MonitorHandler::initMonitors();
 	}
 
 	Application::~Application() {
-		using namespace Platform::Monitor;
-
-		// Dispose all window instances
-		MonitorHandler::disposeMonitors();
-
-		// Terminate GLFW after initializing
 		glfwTerminate();
 		terminalArguments.clear();
 	}
 
 	void Application::start() noexcept {
 
-		while (isRunning) {
+		windowDisplay = createWindow();
 
+		while (!windowDisplay->shouldClose()) {
+
+			windowDisplay->onUpdate();
 		}
+
+		delete windowDisplay.release();
 	}
 }

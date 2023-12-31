@@ -294,18 +294,13 @@ public:
 	}
 
 	std::unique_ptr<Window> createWindow() override {
-		//auto window = std::make_unique<Window>();
+		auto window = std::make_unique<Window>();
 
-		//window->setDimension(glm::ivec2(1280, 720));
+		window->setDimension(glm::ivec2(1280, 720));
 		//window->center(MonitorHandler::getPrimary());
 
-		return std::make_unique<Window>();
+		return window;
 	}
-
-	//std::shared_ptr<Scene> createScenes() override {
-	//	return std::make_shared<VoxelScene>();
-	//}
-
 };
 
 std::unique_ptr<Application> createApplication() {

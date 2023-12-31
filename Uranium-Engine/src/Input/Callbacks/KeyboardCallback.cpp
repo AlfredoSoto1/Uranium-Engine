@@ -1,15 +1,11 @@
 #include <GL/glfw3.h>
 
-#include <memory>
 #include "KeyboardCallback.h"
-
-#include "Core/Application.h"
-#include "Engine/BaseEngine.h"
 #include "Platform/Display/Window.h"
 
 namespace Uranium::Input::Callbacks {
 
-	KeyboardCallback::KeyboardCallback() noexcept :
+	KeyboardCallback::KeyboardCallback(Platform::Display::Window* window) noexcept :
 		keys(nullptr),
 		toggled(false),
 		released(false)
@@ -19,22 +15,8 @@ namespace Uranium::Input::Callbacks {
 		for (int i = 0; i < GLFW_KEY_LAST; i++)
 			keys[i] = false;
 
-		//// Obtain the window reference from the application's engine
-		//std::shared_ptr<Window> window = Application::instance().getBaseEngine().getWindow();
-
-		//glfwSetKeyCallback(*window,  KeyboardCallback::keyEvent);
-		//glfwSetCharCallback(*window, KeyboardCallback::charEvent);
-	}
-
-	KeyboardCallback::~KeyboardCallback() {
-		// delete the key buffer
-		delete[] keys;
-
-		// Obtain the window reference from the application's engine
-		//std::shared_ptr<Window> window = Application::instance().getBaseEngine().getWindow();
-
-		//glfwSetKeyCallback(*window,  nullptr);
-		//glfwSetCharCallback(*window, nullptr);
+		glfwSetKeyCallback(*window,  KeyboardCallback::keyEvent);
+		glfwSetCharCallback(*window, KeyboardCallback::charEvent);
 	}
 
 	void KeyboardCallback::keyEvent(GLFWwindow* window, int key, int scancode, int action, int mods) {

@@ -2,16 +2,13 @@
 
 struct GLFWwindow;
 
-namespace Uranium::Engine {
-	class CallbackManager;
+namespace Uranium::Platform::Display {
+	class Window;
 }
 
 namespace Uranium::Input::Callbacks {
 
 	class MouseCallback final {
-	private:
-		friend Engine::CallbackManager;
-
 	public:
 		/*
 		* Returns true if a mouse button is being hold down
@@ -35,7 +32,7 @@ namespace Uranium::Input::Callbacks {
 		static void scrollEvent(GLFWwindow* window, double xOffset, double yOffset);
 
 	public:
-		~MouseCallback();
+		~MouseCallback() = default;
 
 		/*
 		* Copy and move constructor deleted
@@ -48,12 +45,12 @@ namespace Uranium::Input::Callbacks {
 		MouseCallback(MouseCallback&&) = delete;
 		MouseCallback& operator=(const MouseCallback&) = delete;
 
-	private:
+	public:
 		/*
 		* Mouse Callback constructor
 		* creates all the mouse related callbacks
 		*/
-		explicit MouseCallback() noexcept;
+		explicit MouseCallback(Platform::Display::Window* window) noexcept;
 		
 	private:
 		/*

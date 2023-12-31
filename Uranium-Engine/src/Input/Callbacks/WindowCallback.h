@@ -1,17 +1,16 @@
 #pragma once
 
+#include "Input/Events/WindowPositionEvent.h"
+
 struct GLFWwindow;
 
-namespace Uranium::Engine {
-	class CallbackManager;
+namespace Uranium::Platform::Display {
+	class Window;
 }
 
 namespace Uranium::Input::Callbacks {
 
 	class WindowCallback final {
-	public:
-		friend Engine::CallbackManager;
-
 	private:
 		/*
 		* Called when window close is requested
@@ -42,7 +41,7 @@ namespace Uranium::Input::Callbacks {
 		static void frameBufferSizeEvent(GLFWwindow* glWindow, int width, int height);
 
 	public:
-		~WindowCallback();
+		~WindowCallback() = default;
 
 		/*
 		* Copy and move constructor deleted
@@ -55,11 +54,14 @@ namespace Uranium::Input::Callbacks {
 		WindowCallback(WindowCallback&&) = delete;
 		WindowCallback& operator=(const WindowCallback&) = delete;
 
-	private:
+	public:
 		/*
 		* Window Callback constructor
 		* creates all the window related callbacks
 		*/
-		explicit WindowCallback() noexcept;
+		explicit WindowCallback(Platform::Display::Window*) noexcept;
+
+	private:
+		Events::WindowPositionEvent windowPositionEvent;
 	};
 }

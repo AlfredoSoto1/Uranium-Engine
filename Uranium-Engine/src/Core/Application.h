@@ -25,6 +25,15 @@ namespace Uranium::Core {
 		Application(Application&) = delete;
 		Application(Application&&) = delete;
 		Application& operator=(const Application&) = delete;
+
+	public:
+		static Application& instance() {
+			return *application;
+		}
+
+		const Platform::Display::Window& getWindow() {
+			return *windowDisplay;
+		}
 		
 	protected:
 		/*
@@ -60,6 +69,6 @@ namespace Uranium::Core {
 
 		std::vector<std::string> terminalArguments;
 
-		//std::unique_ptr<Platform::Display::Window> windowDisplay;
+		std::unique_ptr<Platform::Display::Window> windowDisplay;
 	};
 }

@@ -1,7 +1,6 @@
 #include <GL/glfw3.h>
 
 #include "MonitorCallback.h"
-#include "Platform/Display/Window.h"
 
 namespace Uranium::Input::Callbacks {
 
@@ -9,11 +8,6 @@ namespace Uranium::Input::Callbacks {
         // Set the monitor callback        
         glfwSetMonitorCallback(MonitorCallback::monitorEvent);
 	}
-
-    MonitorCallback::~MonitorCallback() {
-        // Free the monitor callback
-        glfwSetMonitorCallback(nullptr);
-    }
 
     void MonitorCallback::monitorEvent(GLFWmonitor* monitor, int event) {
 

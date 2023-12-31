@@ -1,10 +1,10 @@
 #pragma once
 
-namespace Uranium::Events {
+namespace Uranium::Input::Events {
 
 	class Event {
 	public:
-
+		Event();
 	private:
 
 	};

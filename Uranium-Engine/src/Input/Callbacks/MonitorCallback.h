@@ -2,16 +2,9 @@
 
 struct GLFWmonitor;
 
-namespace Uranium::Engine {
-	class CallbackManager;
-}
-
 namespace Uranium::Input::Callbacks {
 
 	class MonitorCallback final {
-	private:
-		friend Engine::CallbackManager;
-
 	private:
 		/*
 		* it gets called when a monitor gets created
@@ -19,7 +12,7 @@ namespace Uranium::Input::Callbacks {
 		static void monitorEvent(GLFWmonitor* monitor, int event);
 
 	public:
-		~MonitorCallback();
+		~MonitorCallback() = default;
 
 		/*
 		* Copy and move constructor deleted
@@ -32,12 +25,11 @@ namespace Uranium::Input::Callbacks {
 		MonitorCallback(MonitorCallback&&) = delete;
 		MonitorCallback& operator=(const MonitorCallback&) = delete;
 
-	private:
+	public:
 		/*
 		* Monitor Callback constructor
 		* creates all the monitor related callbacks
 		*/
 		explicit MonitorCallback() noexcept;
-
 	};
 }

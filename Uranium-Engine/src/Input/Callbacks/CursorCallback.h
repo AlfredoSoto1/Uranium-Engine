@@ -2,16 +2,13 @@
 
 struct GLFWwindow;
 
-namespace Uranium::Engine {
-	class CallbackManager;
+namespace Uranium::Platform::Display {
+	class Window;
 }
 
 namespace Uranium::Input::Callbacks {
 
 	class CursorCallback final {
-	private:
-		friend Engine::CallbackManager;
-
 	private:
 		/*
 		* Gets called when a link or file is dropped in window
@@ -24,7 +21,7 @@ namespace Uranium::Input::Callbacks {
 		static void enteredEvent(GLFWwindow* window, int isInside);
 
 	public:
-		~CursorCallback();
+		~CursorCallback() = default;
 
 		/*
 		* Copy and move constructor deleted
@@ -37,12 +34,12 @@ namespace Uranium::Input::Callbacks {
 		CursorCallback(CursorCallback&&) = delete;
 		CursorCallback& operator=(const CursorCallback&) = delete;
 
-	private:
+	public:
 		/*
 		* Cursor Callback constructor
 		* creates all the monitor related callbacks
 		*/
-		explicit CursorCallback() noexcept;
+		explicit CursorCallback(Platform::Display::Window* window) noexcept;
 
 	};
 }
