@@ -1,5 +1,7 @@
 #pragma once
 
+#include "Input/Events/KeyEvents.h"
+
 struct GLFWwindow;
 
 namespace Uranium::Platform::Display {
@@ -18,13 +20,8 @@ namespace Uranium::Input::Callbacks {
 		/*
 		* Gets called when a key event happened
 		*/
-		static void keyEvent(GLFWwindow* window, int key, int scancode, int action, int mods);
+		static void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods);
 		
-		/*
-		* Gets called when a char event happened
-		*/
-		static void charEvent(GLFWwindow* window, unsigned int codePoint);
-
 	public:
 		~KeyboardCallback() = default;
 
@@ -49,6 +46,9 @@ namespace Uranium::Input::Callbacks {
 		explicit KeyboardCallback(Window* window) noexcept;
 
 	private:
+		Events::KeyPressedEvent keyPressedEvent;
+		Events::KeyReleasedEvent keyReleasedEvent;
+
 		bool* keys;
 		bool toggled;
 		bool released;

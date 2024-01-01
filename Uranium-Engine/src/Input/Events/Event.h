@@ -18,6 +18,9 @@ namespace Uranium::Input::Events {
 			WINDOW_MAXIMIZE,
 			WINDOW_POSITION,
 			WINDOW_BUFFER_RESIZE,
+
+			KEYBOARD_KEY_PRESSED,
+			KEYBOARD_KEY_RELEASED,
 		};
 
 	public:
