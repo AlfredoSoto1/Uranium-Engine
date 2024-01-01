@@ -35,11 +35,13 @@ namespace Uranium::Input::Callbacks {
 		CursorCallback& operator=(const CursorCallback&) = delete;
 
 	public:
+		using Window = Platform::Display::Window;
+
 		/*
 		* Cursor Callback constructor
 		* creates all the monitor related callbacks
 		*/
-		explicit CursorCallback(Platform::Display::Window* window) noexcept;
+		explicit CursorCallback(Window* window) noexcept;
 
 	};
 }

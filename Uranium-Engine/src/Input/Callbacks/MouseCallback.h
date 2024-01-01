@@ -46,11 +46,13 @@ namespace Uranium::Input::Callbacks {
 		MouseCallback& operator=(const MouseCallback&) = delete;
 
 	public:
+		using Window = Platform::Display::Window;
+
 		/*
 		* Mouse Callback constructor
 		* creates all the mouse related callbacks
 		*/
-		explicit MouseCallback(Platform::Display::Window* window) noexcept;
+		explicit MouseCallback(Window* window) noexcept;
 		
 	private:
 		/*

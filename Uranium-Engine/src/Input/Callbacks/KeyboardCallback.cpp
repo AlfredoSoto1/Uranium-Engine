@@ -5,7 +5,7 @@
 
 namespace Uranium::Input::Callbacks {
 
-	KeyboardCallback::KeyboardCallback(Platform::Display::Window* window) noexcept :
+	KeyboardCallback::KeyboardCallback(Window* window) noexcept :
 		keys(nullptr),
 		toggled(false),
 		released(false)

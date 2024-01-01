@@ -42,7 +42,7 @@ namespace Uranium::Input::Events {
 		EventType getEventType() const {
 			return eventType;
 		}
-		
+
 	private:
 		EventType eventType;
 	};

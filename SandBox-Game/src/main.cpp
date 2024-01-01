@@ -298,7 +298,7 @@ public:
 		auto window = std::make_unique<OpenGLWindow>();
 
 		window->setDimension(glm::ivec2(1280, 720));
-		//window->center(MonitorHandler::getPrimary());
+		window->center(MonitorHandler::getPrimary());
 
 		return window;
 	}

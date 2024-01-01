@@ -1,14 +1,12 @@
 #include <GL/glfw3.h>
 
 #include <memory>
+
 #include "WindowCallback.h"
 #include "Platform/Display/Window.h"
-
 #include "Input/Events/WindowEvents.h"
 
 namespace Uranium::Input::Callbacks {
-
-	using namespace Platform::Display;
 
 	WindowCallback::WindowCallback(Window* window) noexcept {	
 		// On position and size callbacks
@@ -32,49 +30,69 @@ namespace Uranium::Input::Callbacks {
 		using namespace Events;
 		Window& window = *(Window*)glfwGetWindowUserPointer(glWindow);
 
-		// Create a new event with the new updated size
 		WindowCloseEvent event = WindowCloseEvent();
-
-		// Set the new event
-		window.getEventFunction() (event);
+		window.callbackFunction(event);
 	}
 
 	void WindowCallback::resizedEvent(GLFWwindow* glWindow, int width, int height) {
 		using namespace Events;
 		Window& window = *(Window*)glfwGetWindowUserPointer(glWindow);
+		window.props.dimension.x = width;
+		window.props.dimension.y = height;
 
-		// Create a new event with the new updated size
 		WindowResizeEvent event(width, height);
-
-		// Set the new event
-		window.getEventFunction() (event);
+		window.callbackFunction(event);
 	}
 
 	void WindowCallback::movedEvent(GLFWwindow* glWindow, int xpos, int ypos) {
 		using namespace Events;
 		Window& window = *(Window*)glfwGetWindowUserPointer(glWindow);
-		
-		// Create a new event with the new updated position
-		WindowPositionEvent event(xpos, ypos);
+		window.props.position.x = xpos;
+		window.props.position.y = ypos;
 
-		// Set the new event
-		window.getEventFunction() (event);
+		WindowPositionEvent event(xpos, ypos);
+		window.callbackFunction(event);
 	}
 
 	void WindowCallback::focusEvent(GLFWwindow* glWindow, int isFocused) {
-		// update the window focused flag
+		using namespace Events;
+		Window& window = *(Window*)glfwGetWindowUserPointer(glWindow);
+
+		WindowFocusEvent event(isFocused == GLFW_TRUE);
+		window.callbackFunction(event);
 	}
 
 	void WindowCallback::minimizeEvent(GLFWwindow* glWindow, int isMinimized) {
+		using namespace Events;
+		Window& window = *(Window*)glfwGetWindowUserPointer(glWindow);
+
+		WindowMinimizedEvent event(isMinimized == GLFW_TRUE);
+		window.callbackFunction(event);
 	}
 
 	void WindowCallback::maximizeEvent(GLFWwindow* glWindow, int isMaximized) {
+		using namespace Events;
+		Window& window = *(Window*)glfwGetWindowUserPointer(glWindow);
+
+		WindowMaximizedEvent event(isMaximized == GLFW_TRUE);
+		window.callbackFunction(event);
 	}
 
 	void WindowCallback::refreshEvent(GLFWwindow* glWindow) {
+		using namespace Events;
+		Window& window = *(Window*)glfwGetWindowUserPointer(glWindow);
+
+		WindowRefreshEvent event = WindowRefreshEvent();
+		window.callbackFunction(event);
 	}
 
 	void WindowCallback::frameBufferSizeEvent(GLFWwindow* glWindow, int width, int height) {
-		// update the buffer size
+		using namespace Events;
+		Window& window = *(Window*)glfwGetWindowUserPointer(glWindow);
+		window.props.resolution.x = width;
+		window.props.resolution.y = height;
+
+		WindowBufferResizeEvent event(width, height);
+		window.callbackFunction(event);
 	}
 }

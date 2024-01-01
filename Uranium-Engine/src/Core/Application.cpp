@@ -3,6 +3,8 @@
 
 #include "Core/Application.h"
 #include "Platform/Display/Window.h"
+#include "Input/Events/WindowEvents.h"
+#include "Platform/Monitor/MonitorHandler.h"
 
 namespace Uranium::Core {
 
@@ -31,17 +33,25 @@ namespace Uranium::Core {
 		// to diagnostic any possible error in 
 		// the lifetime of the glfw application
 		glfwSetErrorCallback(&Application::diagnosticErrors);
+
+		using namespace Platform::Monitor;
+		// Initiate the monitor handler
+		Platform::Monitor::MonitorHandler::initMonitors();
 	}
 
 	Application::~Application() {
+		using namespace Platform::Monitor;
+		// Dispose all window instances
+		MonitorHandler::disposeMonitors();
+
 		glfwTerminate();
 		terminalArguments.clear();
 	}
 
 	void Application::start() noexcept {
-
 		windowDisplay = createWindow();
 
+		windowDisplay->createCallbacks();
 		windowDisplay->setEventCallback(std::bind(&Application::onEvent, this, std::placeholders::_1));
 
 		while (!windowDisplay->shouldClose()) {
@@ -49,12 +59,29 @@ namespace Uranium::Core {
 			windowDisplay->onUpdate();
 		}
 
+		windowDisplay->disposeCallbacks();
+
 		delete windowDisplay.release();
 	}
 
 	void Application::onEvent(Input::Events::Event& e) {
 		// This gets called when an event happens
 
-		std::cout << "Moved" << std::endl;
+		using namespace Input::Events;
+
+		switch (e.getEventType()) {
+		case Event::EventType::WINDOW_POSITION:
+		{
+			WindowPositionEvent& position = *static_cast<WindowPositionEvent*>(&e);
+			std::cout << "Position: " << position.getXPosition() << ", " << position.getYPosition() << std::endl;
+		}
+			break;
+		case Event::EventType::WINDOW_RESIZE:
+		{
+			WindowResizeEvent& resize = *static_cast<WindowResizeEvent*>(&e);
+			std::cout << "Resize: " << resize.getWidth() << ", " << resize.getHeight() << std::endl;
+		}
+			break;
+		}
 	}
 }

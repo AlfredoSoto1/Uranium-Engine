@@ -53,10 +53,12 @@ namespace Uranium::Input::Callbacks {
 		WindowCallback& operator=(const WindowCallback&) = delete;
 
 	public:
+		using Window = Platform::Display::Window;
+
 		/*
 		* Window Callback constructor
 		* creates all the window related callbacks
 		*/
-		explicit WindowCallback(Platform::Display::Window*) noexcept;
+		explicit WindowCallback(Window* window) noexcept;
 	};
 }

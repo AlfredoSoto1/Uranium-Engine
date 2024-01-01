@@ -5,7 +5,7 @@
 
 namespace Uranium::Input::Callbacks {
 
-	MouseCallback::MouseCallback(Platform::Display::Window* window) noexcept:
+	MouseCallback::MouseCallback(Window* window) noexcept:
 		mouseButtons(nullptr)
 	{
 		// create bool array containing

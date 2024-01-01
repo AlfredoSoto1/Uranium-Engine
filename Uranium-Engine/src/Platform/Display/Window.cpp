@@ -8,7 +8,6 @@
 #include "Window.h"
 
 #include "Input/Callbacks/WindowCallback.h"
-#include "Input/Callbacks/MonitorCallback.h"
 #include "Input/Callbacks/MouseCallback.h"
 #include "Input/Callbacks/CursorCallback.h"
 #include "Input/Callbacks/KeyboardCallback.h"
@@ -17,39 +16,8 @@ namespace Uranium::Platform::Display {
 
 	Window::Window() noexcept :
 		glWindow(nullptr),
-		mouseCallback(nullptr),
-		cursorCallback(nullptr),
-		windowCallback(nullptr),
-		keyboardCallback(nullptr),
-
 		vSyncEnabled(false)
 	{
-		initMembers();
-
-		createWindow();
-
-		prepareWindowContext();
-
-		createCallbacks();
-
-		if (glewInit() != GLEW_OK)
-			throw std::exception("GLEW could not initiate correctly!");
-		
-#ifdef UR_DEBUG
-		std::cout << glGetString(GL_VERSION) << std::endl;
-#endif // UR_DEBUG
-	}
-
-	Window::~Window() {
-		delete mouseCallback.release();
-		delete cursorCallback.release();
-		delete windowCallback.release();
-		delete keyboardCallback.release();
-
-		glfwDestroyWindow(glWindow);
-	}
-
-	void Window::initMembers() {
 		modes.visible = true;
 		modes.resizable = true;
 		modes.decorated = true;
@@ -65,9 +33,7 @@ namespace Uranium::Platform::Display {
 		props.dimension = glm::ivec2(MIN_WIDTH, MIN_HEIGHT);
 		props.resolution = glm::ivec2(MIN_WIDTH, MIN_HEIGHT);
 		props.opacity = 100;
-	}
 
-	void Window::createWindow() {
 		// Prepare default window hints before creation
 		glfwDefaultWindowHints();
 		glfwWindowHint(GLFW_FOCUSED, GLFW_TRUE);
@@ -75,22 +41,25 @@ namespace Uranium::Platform::Display {
 
 		// Create a GLFWwindow
 		glWindow = glfwCreateWindow(props.dimension.x, props.dimension.y, props.title.c_str(), nullptr, nullptr);
-	}
 
-	void Window::prepareWindowContext() {
 		// Make the window be the main context and set *this* as reference to window
 		glfwMakeContextCurrent(glWindow);
 		glfwSetWindowUserPointer(glWindow, this);
 
 		glfwSetWindowSizeLimits(glWindow, MIN_WIDTH, MIN_HEIGHT, GLFW_DONT_CARE, GLFW_DONT_CARE);
 		glfwShowWindow(glWindow);
+
+		if (glewInit() != GLEW_OK)
+			throw std::exception("GLEW could not initiate correctly!");
+		
+#ifdef UR_DEBUG
+		std::cout << glGetString(GL_VERSION) << std::endl;
+#endif // UR_DEBUG
 	}
 
-	void Window::createCallbacks() {
-		mouseCallback = std::make_unique<MouseCallback>(this);
-		cursorCallback = std::make_unique<CursorCallback>(this);
-		windowCallback = std::make_unique<WindowCallback>(this);
-		keyboardCallback = std::make_unique<KeyboardCallback>(this);
+	Window::~Window() {
+		glfwHideWindow(glWindow);
+		glfwDestroyWindow(glWindow);
 	}
 
 	Window::operator GLFWwindow* () const {
@@ -152,11 +121,22 @@ namespace Uranium::Platform::Display {
 			glfwSwapInterval(0);
 	}
 
-	Window::Event::EventCallbackFn& Window::getEventFunction() {
-		return callbackEvent;
+	void Window::createCallbacks() {
+		windowCallback = std::make_unique<WindowCallback>(this);
+		mouseCallback = std::make_unique<MouseCallback>(this);
+		cursorCallback = std::make_unique<CursorCallback>(this);
+		keyboardCallback = std::make_unique<KeyboardCallback>(this);
+	}
+
+	void Window::disposeCallbacks() {
+		delete windowCallback.release();
+		delete mouseCallback.release();
+		delete cursorCallback.release();
+		delete keyboardCallback.release();
 	}
 
 	void Window::setEventCallback(const Event::EventCallbackFn& callbackEvent) {
-		this->callbackEvent = callbackEvent;
+		this->callbackFunction = callbackEvent;
 	}
+
 }

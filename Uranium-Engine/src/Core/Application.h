@@ -68,6 +68,8 @@ namespace Uranium::Core {
 		*/
 		void start() noexcept;
 
+		/*
+		*/
 		void onEvent(Input::Events::Event& e);
 
 	private:

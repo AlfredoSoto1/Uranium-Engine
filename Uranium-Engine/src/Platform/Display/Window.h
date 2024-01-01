@@ -8,12 +8,8 @@
 
 struct GLFWwindow;
 
-namespace Uranium::Platform::Monitor {
-	class Monitor;
-}
-
-namespace Uranium::Input::Events {
-	class Event;
+namespace Uranium::Core {
+	class Application;
 }
 
 namespace Uranium::Input::Callbacks {
@@ -23,17 +19,14 @@ namespace Uranium::Input::Callbacks {
 	class KeyboardCallback;
 }
 
+namespace Uranium::Platform::Monitor {
+	class Monitor;
+}
+
 namespace Uranium::Platform::Display {
 
 	class Window {
 	protected:
-		using Event = Input::Events::Event;
-
-		using WindowCallback = Input::Callbacks::WindowCallback;
-		using MouseCallback = Input::Callbacks::MouseCallback;
-		using CursorCallback = Input::Callbacks::CursorCallback;
-		using KeyboardCallback = Input::Callbacks::KeyboardCallback;
-
 		using MonitorRef = std::shared_ptr<Monitor::Monitor>;
 
 		/*
@@ -44,6 +37,9 @@ namespace Uranium::Platform::Display {
 		static constexpr unsigned int MIN_HEIGHT = 180;
 
 	public:
+		/*
+		* Constructs and initiates the window context
+		*/
 		explicit Window() noexcept;
 
 		virtual ~Window();
@@ -114,22 +110,42 @@ namespace Uranium::Platform::Display {
 		*/
 		virtual void setVSync(bool enabled);
 
-	public:
-		/*
-		*/
-		Event::EventCallbackFn& getEventFunction();
+	protected:
+		friend class Core::Application;
+
+		using Event = Input::Events::Event;
+		
+		using WindowCallback   = Input::Callbacks::WindowCallback;
+		using MouseCallback    = Input::Callbacks::MouseCallback;
+		using CursorCallback   = Input::Callbacks::CursorCallback;
+		using KeyboardCallback = Input::Callbacks::KeyboardCallback;
+
+		friend class WindowCallback;
+		friend class MouseCallback;
+		friend class CursorCallback;
+		friend class KeyboardCallback;
+		
+		std::unique_ptr<WindowCallback> windowCallback;
+		std::unique_ptr<MouseCallback> mouseCallback;
+		std::unique_ptr<CursorCallback> cursorCallback;
+		std::unique_ptr<KeyboardCallback> keyboardCallback;
+
+		Event::EventCallbackFn callbackFunction;
 
 		/*
+		* Creates and disposes the callbacks.
+		* This is internally handled by the application
+		*/
+		void createCallbacks();
+		void disposeCallbacks();
+
+		/*
+		* Sets the event callback function. This is
+		* internally handled by the application
 		*/
 		void setEventCallback(const Event::EventCallbackFn& callbackEvent);
 
-	private:
-		void initMembers();          // Initiates all private members
-		void createWindow();         // Initializes all window hints and creates a window object
-		void prepareWindowContext(); // Prepares and initializes everything that depends on the window context
-		void createCallbacks();      // Creates and initializes all callbacks that the window can handle
-
-	private:
+	protected:
 		struct WindowModes {
 			bool visible;
 			bool resizable;
@@ -152,15 +168,6 @@ namespace Uranium::Platform::Display {
 			unsigned int opacity;
 		};
 
-	private:
-		std::unique_ptr<MouseCallback> mouseCallback;
-		std::unique_ptr<CursorCallback> cursorCallback;
-		std::unique_ptr<WindowCallback> windowCallback;
-		std::unique_ptr<KeyboardCallback> keyboardCallback;
-
-		Event::EventCallbackFn callbackEvent;
-
-	protected:
 		GLFWwindow* glWindow;
 
 		WindowModes modes;

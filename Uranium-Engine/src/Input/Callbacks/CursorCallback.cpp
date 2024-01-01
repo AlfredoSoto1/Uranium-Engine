@@ -5,7 +5,7 @@
 
 namespace Uranium::Input::Callbacks {
 
-	CursorCallback::CursorCallback(Platform::Display::Window* window) noexcept {
+	CursorCallback::CursorCallback(Window* window) noexcept {
 		glfwSetDropCallback(*window,        CursorCallback::dropEvent);
 		glfwSetCursorEnterCallback(*window, CursorCallback::enteredEvent);
 	}

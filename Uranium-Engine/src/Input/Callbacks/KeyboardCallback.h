@@ -40,11 +40,13 @@ namespace Uranium::Input::Callbacks {
 		KeyboardCallback& operator=(const KeyboardCallback&) = delete;
 
 	public:
+		using Window = Platform::Display::Window;
+
 		/*
 		* Keyboard Callback constructor
 		* creates all the monitor related callbacks
 		*/
-		explicit KeyboardCallback(Platform::Display::Window* window) noexcept;
+		explicit KeyboardCallback(Window* window) noexcept;
 
 	private:
 		bool* keys;
