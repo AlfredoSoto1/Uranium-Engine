@@ -26,9 +26,6 @@ namespace Uranium::Input::Events {
 		~KeyPressedEvent() = default;
 
 	public:
-		/*
-		* Returns the key code and the repeated ammount of times the key was pressed(on hold)
-		*/
 		int getKey() const {
 			return keyChar;
 		}
@@ -64,9 +61,6 @@ namespace Uranium::Input::Events {
 		~KeyReleasedEvent() = default;
 
 	public:
-		/*
-		* Returns the key code and the repeated ammount of times the key was pressed(on hold)
-		*/
 		int getKey() const {
 			return keyChar;
 		}
@@ -76,6 +70,31 @@ namespace Uranium::Input::Events {
 		}
 
 	private:
+		int keyChar;
+		int scancode;
+	};
+
+	class KeyHoldEvent final : public Event {
+	public:
+		friend Callbacks::KeyboardCallback;
+
+		/*
+		*/
+		explicit KeyHoldEvent(int keyChar, int count, int scancode) noexcept :
+			Event(EventType::KEYBOARD_KEY_HOLD),
+			keyChar(keyChar),
+			count(count),
+			scancode(scancode)
+		{
+
+		}
+
+		~KeyHoldEvent() = default;
+
+	public:
+		// TODO SEPARATE INTO DIFFERENT FILES :)
+	private:
+		int count;
 		int keyChar;
 		int scancode;
 	};

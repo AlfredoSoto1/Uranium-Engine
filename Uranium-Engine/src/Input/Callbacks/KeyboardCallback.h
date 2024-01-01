@@ -13,8 +13,6 @@ namespace Uranium::Input::Callbacks {
 	class KeyboardCallback final {
 	public:
 		bool isKeyDown(int key);
-		bool isKeyToggled(int key);
-		bool isKeyReleased(int key);
 
 	private:
 		/*
@@ -50,7 +48,5 @@ namespace Uranium::Input::Callbacks {
 		Events::KeyReleasedEvent keyReleasedEvent;
 
 		bool* keys;
-		bool toggled;
-		bool released;
 	};
 }

@@ -7,8 +7,6 @@ namespace Uranium::Input::Callbacks {
 
 	KeyboardCallback::KeyboardCallback(Window* window) noexcept :
 		keys(nullptr),
-		toggled(false),
-		released(false),
 		keyPressedEvent(0, 0, 0),
 		keyReleasedEvent(0, 0)
 	{
@@ -54,35 +52,5 @@ namespace Uranium::Input::Callbacks {
 
 	bool KeyboardCallback::isKeyDown(int key) {
 		return keys[key] ? true : false;
-	}
-
-	bool KeyboardCallback::isKeyToggled(int key) {
-		if (isKeyDown(key)) {
-			if (!toggled) {
-				toggled = true;
-				return true;
-			}
-			else {
-				return false;
-			}
-		}
-		else {
-			toggled = false;
-			return false;
-		}
-	}
-
-	bool KeyboardCallback::isKeyReleased(int key) {
-		if (!isKeyDown(key)) {
-			if (released) {
-				released = false;
-				return true;
-			}
-			return false;
-		}
-		else {
-			released = true;
-			return false;
-		}
 	}
 }
