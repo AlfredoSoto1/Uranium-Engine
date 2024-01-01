@@ -2,10 +2,19 @@
 
 #include <memory>
 #include <string>
-#include <functional>
 #include <glm/vec2.hpp>
 
+#include "Input/Events/Event.h"
+
 struct GLFWwindow;
+
+namespace Uranium::Platform::Monitor {
+	class Monitor;
+}
+
+namespace Uranium::Input::Events {
+	class Event;
+}
 
 namespace Uranium::Input::Callbacks {
 	class WindowCallback;
@@ -14,20 +23,18 @@ namespace Uranium::Input::Callbacks {
 	class KeyboardCallback;
 }
 
-namespace Uranium::Platform::Monitor {
-	class Monitor;
-}
-
 namespace Uranium::Platform::Display {
 
 	class Window {
 	protected:
-		using EventCallbackFn = std::function<void()>;
-		using MonitorRef = std::shared_ptr<Monitor::Monitor>;
+		using Event = Input::Events::Event;
+
 		using WindowCallback = Input::Callbacks::WindowCallback;
 		using MouseCallback = Input::Callbacks::MouseCallback;
 		using CursorCallback = Input::Callbacks::CursorCallback;
 		using KeyboardCallback = Input::Callbacks::KeyboardCallback;
+
+		using MonitorRef = std::shared_ptr<Monitor::Monitor>;
 
 		/*
 		* Minimun and maximum default dimensions
@@ -108,9 +115,13 @@ namespace Uranium::Platform::Display {
 		virtual void setVSync(bool enabled);
 
 	public:
-		EventCallbackFn getEventFunction() {
-			return event;
-		}
+		/*
+		*/
+		Event::EventCallbackFn& getEventFunction();
+
+		/*
+		*/
+		void setEventCallback(const Event::EventCallbackFn& callbackEvent);
 
 	private:
 		void initMembers();          // Initiates all private members
@@ -147,10 +158,10 @@ namespace Uranium::Platform::Display {
 		std::unique_ptr<WindowCallback> windowCallback;
 		std::unique_ptr<KeyboardCallback> keyboardCallback;
 
+		Event::EventCallbackFn callbackEvent;
+
 	protected:
 		GLFWwindow* glWindow;
-
-		EventCallbackFn event;
 
 		WindowModes modes;
 		WindowProps props;

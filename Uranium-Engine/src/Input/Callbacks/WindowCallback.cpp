@@ -4,6 +4,8 @@
 #include "WindowCallback.h"
 #include "Platform/Display/Window.h"
 
+#include "Input/Events/WindowEvents.h"
+
 namespace Uranium::Input::Callbacks {
 
 	using namespace Platform::Display;
@@ -27,14 +29,36 @@ namespace Uranium::Input::Callbacks {
 	}
 
 	void WindowCallback::closeEvent(GLFWwindow* glWindow) {
+		using namespace Events;
+		Window& window = *(Window*)glfwGetWindowUserPointer(glWindow);
+
+		// Create a new event with the new updated size
+		WindowCloseEvent event = WindowCloseEvent();
+
+		// Set the new event
+		window.getEventFunction() (event);
 	}
 
 	void WindowCallback::resizedEvent(GLFWwindow* glWindow, int width, int height) {
-		// set resize flag to true and update the window size
+		using namespace Events;
+		Window& window = *(Window*)glfwGetWindowUserPointer(glWindow);
+
+		// Create a new event with the new updated size
+		WindowResizeEvent event(width, height);
+
+		// Set the new event
+		window.getEventFunction() (event);
 	}
 
 	void WindowCallback::movedEvent(GLFWwindow* glWindow, int xpos, int ypos) {
-		Window* window = (Window*)glfwGetWindowUserPointer(glWindow);
+		using namespace Events;
+		Window& window = *(Window*)glfwGetWindowUserPointer(glWindow);
+		
+		// Create a new event with the new updated position
+		WindowPositionEvent event(xpos, ypos);
+
+		// Set the new event
+		window.getEventFunction() (event);
 	}
 
 	void WindowCallback::focusEvent(GLFWwindow* glWindow, int isFocused) {

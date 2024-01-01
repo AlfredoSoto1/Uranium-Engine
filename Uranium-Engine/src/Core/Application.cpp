@@ -1,9 +1,8 @@
 #include <GL/glfw3.h>
+#include <iostream>
 
 #include "Core/Application.h"
 #include "Platform/Display/Window.h"
-
-#include "Engine/CallbackManager.h"
 
 namespace Uranium::Core {
 
@@ -43,11 +42,19 @@ namespace Uranium::Core {
 
 		windowDisplay = createWindow();
 
+		windowDisplay->setEventCallback(std::bind(&Application::onEvent, this, std::placeholders::_1));
+
 		while (!windowDisplay->shouldClose()) {
 
 			windowDisplay->onUpdate();
 		}
 
 		delete windowDisplay.release();
+	}
+
+	void Application::onEvent(Input::Events::Event& e) {
+		// This gets called when an event happens
+
+		std::cout << "Moved" << std::endl;
 	}
 }

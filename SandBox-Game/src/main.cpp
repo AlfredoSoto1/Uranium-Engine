@@ -203,6 +203,7 @@
 #include "Core/Application.h"
 #include "Engine/BaseEngine.h"
 #include "Platform/Display/Window.h"
+#include "Platform/Display/OpenGLWindow.h"
 #include "Platform/Monitor/Monitor.h"
 #include "Platform/Monitor/MonitorHandler.h"
 #include "Scene/Scene.h"
@@ -294,7 +295,7 @@ public:
 	}
 
 	std::unique_ptr<Window> createWindow() override {
-		auto window = std::make_unique<Window>();
+		auto window = std::make_unique<OpenGLWindow>();
 
 		window->setDimension(glm::ivec2(1280, 720));
 		//window->center(MonitorHandler::getPrimary());

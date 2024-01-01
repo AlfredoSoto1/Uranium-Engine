@@ -1,7 +1,5 @@
 #pragma once
 
-#include "Input/Events/WindowPositionEvent.h"
-
 struct GLFWwindow;
 
 namespace Uranium::Platform::Display {
@@ -60,8 +58,5 @@ namespace Uranium::Input::Callbacks {
 		* creates all the window related callbacks
 		*/
 		explicit WindowCallback(Platform::Display::Window*) noexcept;
-
-	private:
-		Events::WindowPositionEvent windowPositionEvent;
 	};
 }

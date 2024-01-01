@@ -8,6 +8,10 @@ namespace Uranium::Platform::Display {
 	class Window;
 }
 
+namespace Uranium::Input::Events {
+	class Event;
+}
+
 namespace Uranium::Core {
 
 	class Application {
@@ -63,6 +67,8 @@ namespace Uranium::Core {
 		* Starts the application
 		*/
 		void start() noexcept;
+
+		void onEvent(Input::Events::Event& e);
 
 	private:
 		volatile bool isRunning;

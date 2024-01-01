@@ -11,7 +11,6 @@
 #include "SceneManager.h"
 #include "RenderManager.h"
 #include "ThreadManager.h"
-#include "CallbackManager.h"
 
 namespace Uranium::Engine {
 
@@ -45,7 +44,6 @@ namespace Uranium::Engine {
 		stateManager = new StateManager();
 		sceneManager = new SceneManager();
 		renderManager = new RenderManager();
-		callbackManager = new CallbackManager();
 	}
 
 	void BaseEngine::disposeManagers() {

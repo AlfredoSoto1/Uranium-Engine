@@ -18,16 +18,16 @@ namespace Uranium::Input::Callbacks {
 		glfwSetMouseButtonCallback(*window, MouseCallback::clickEvent);
 	}
 
-	MouseCallback::~MouseCallback() {
-		// Obtain the window reference from the application's engine
-		//std::shared_ptr<Window> window = Application::instance().getBaseEngine().getWindow();
+	//MouseCallback::~MouseCallback() {
+	//	// Obtain the window reference from the application's engine
+	//	//std::shared_ptr<Window> window = Application::instance().getBaseEngine().getWindow();
 
-		//delete[] mouseButtons;
+	//	//delete[] mouseButtons;
 
-		//glfwSetScrollCallback(*window,      nullptr);
-		//glfwSetCursorPosCallback(*window,   nullptr);
-		//glfwSetMouseButtonCallback(*window, nullptr);
-	}
+	//	//glfwSetScrollCallback(*window,      nullptr);
+	//	//glfwSetCursorPosCallback(*window,   nullptr);
+	//	//glfwSetMouseButtonCallback(*window, nullptr);
+	//}
 
 	void MouseCallback::clickEvent(GLFWwindow* window, int button, int action, int mods) {
 		//// obtain Application-program reference via glfw user pointer

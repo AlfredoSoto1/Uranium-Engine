@@ -151,4 +151,12 @@ namespace Uranium::Platform::Display {
 		else
 			glfwSwapInterval(0);
 	}
+
+	Window::Event::EventCallbackFn& Window::getEventFunction() {
+		return callbackEvent;
+	}
+
+	void Window::setEventCallback(const Event::EventCallbackFn& callbackEvent) {
+		this->callbackEvent = callbackEvent;
+	}
 }
