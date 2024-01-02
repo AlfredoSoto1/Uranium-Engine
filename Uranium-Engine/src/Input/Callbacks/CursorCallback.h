@@ -1,6 +1,8 @@
 #pragma once
 
-#include "Input/Events/CursorEvent.h"
+#include "Input/Events/CursorMovedEvent.h"
+#include "Input/Events/CursorEnteredEvent.h"
+#include "Input/Events/CursorDroppedEvent.h"
 
 struct GLFWwindow;
 

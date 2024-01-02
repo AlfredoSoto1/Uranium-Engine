@@ -4,7 +4,15 @@
 
 #include "WindowCallback.h"
 #include "Platform/Display/Window.h"
-#include "Input/Events/WindowEvents.h"
+
+#include "Input/Events/WindowResizeEvent.h"
+#include "Input/Events/WindowCloseEvent.h"
+#include "Input/Events/WindowFocusEvent.h"
+#include "Input/Events/WindowRefreshEvent.h"
+#include "Input/Events/WindowPositionEvent.h"
+#include "Input/Events/WindowMinimizeEvent.h"
+#include "Input/Events/WindowMaximizeEvent.h"
+#include "Input/Events/WindowBufferResizeEvent.h"
 
 namespace Uranium::Input::Callbacks {
 

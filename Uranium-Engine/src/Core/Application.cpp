@@ -3,7 +3,6 @@
 
 #include "Core/Application.h"
 #include "Platform/Display/Window.h"
-#include "Input/Events/KeyEvents.h"
 #include "Platform/Monitor/MonitorHandler.h"
 
 namespace Uranium::Core {
@@ -67,21 +66,5 @@ namespace Uranium::Core {
 	void Application::onEvent(Input::Events::Event& e) {
 		// This gets called when an event happens
 
-		using namespace Input::Events;
-
-		switch (e.getEventType()) {
-		case Event::EventType::KEYBOARD_KEY_PRESSED:
-		{
-			KeyPressedEvent& pressed = *static_cast<KeyPressedEvent*>(&e);
-			std::cout << "Pressed: " << glfwGetKeyName(pressed.getKey(), pressed.getScancode()) << std::endl;
-		}
-			break;
-		case Event::EventType::KEYBOARD_KEY_RELEASED:
-		{
-			KeyReleasedEvent& pressed = *static_cast<KeyReleasedEvent*>(&e);
-			std::cout << "Released: " << glfwGetKeyName(pressed.getKey(), pressed.getScancode()) << std::endl;
-		}
-			break;
-		}
 	}
 }

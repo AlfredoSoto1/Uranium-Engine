@@ -1,6 +1,7 @@
 #pragma once
 
-#include "Input/Events/KeyEvents.h"
+#include "Input/Events/KeyPressedEvent.h"
+#include "Input/Events/KeyReleasedEvent.h"
 
 struct GLFWwindow;
 

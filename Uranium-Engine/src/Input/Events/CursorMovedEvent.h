@@ -1,7 +1,5 @@
 #pragma once
 
-#include <string>
-#include <vector>
 #include "Event.h"
 
 namespace Uranium::Input::Callbacks {
@@ -53,55 +51,4 @@ namespace Uranium::Input::Events {
 		double y_normalPosition;
 	};
 
-	class CursorEnteredEvent final : public Event {
-	public:
-		friend Callbacks::CursorCallback;
-
-		/*
-		*
-		*/
-		explicit CursorEnteredEvent(bool entered) noexcept :
-			Event(EventType::CURSOR_ENTERED),
-			entered(entered)
-		{
-
-		}
-
-		~CursorEnteredEvent() = default;
-
-	public:
-		bool hasEntered() const {
-			return entered;
-		}
-
-	private:
-		bool entered;
-	};
-
-	class CursorDroppedEvent final : public Event {
-	public:
-		friend Callbacks::CursorCallback;
-
-		/*
-		*
-		*/
-		explicit CursorDroppedEvent() noexcept :
-			Event(EventType::CURSOR_DROPPED),
-			droppedPaths()
-		{
-
-		}
-
-		~CursorDroppedEvent() {
-			droppedPaths.clear();
-		}
-
-	public:
-		const std::vector<std::string>& getDroppedPaths() const {
-			return droppedPaths;
-		}
-
-	private:
-		std::vector<std::string> droppedPaths;
-	};
 }

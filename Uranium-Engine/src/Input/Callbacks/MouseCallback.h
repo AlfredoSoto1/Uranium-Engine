@@ -1,6 +1,8 @@
 #pragma once
 
-#include "Input/Events/MouseEvents.h"
+#include "Input/Events/MouseScrollEvent.h"
+#include "Input/Events/MouseButtonPressedEvent.h"
+#include "Input/Events/MouseButtonReleasedEvent.h"
 
 struct GLFWwindow;
 
