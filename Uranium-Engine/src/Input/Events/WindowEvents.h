@@ -40,6 +40,8 @@ namespace Uranium::Input::Events {
 	class WindowResizeEvent final : public Event {
 	public:
 		/*
+		* Creates a new resize event for the window.
+		* This holds the new dimensions of the window.
 		*/
 		explicit WindowResizeEvent(int width, int height) noexcept :
 			Event(EventType::WINDOW_RESIZE),
@@ -71,6 +73,7 @@ namespace Uranium::Input::Events {
 	class WindowCloseEvent final : public Event {
 	public:
 		/*
+		* Creates a new close event when the window request to be closed
 		*/
 		explicit WindowCloseEvent() noexcept :
 			Event(EventType::WINDOW_CLOSE)
@@ -84,6 +87,8 @@ namespace Uranium::Input::Events {
 	class WindowFocusEvent final : public Event {
 	public:
 		/*
+		* Creates a new focus event whenever the window
+		* detects that it needs to be focused
 		*/
 		explicit WindowFocusEvent(bool focused) noexcept :
 			Event(EventType::WINDOW_FOCUS),
@@ -109,6 +114,7 @@ namespace Uranium::Input::Events {
 	class WindowMinimizedEvent final : public Event {
 	public:
 		/*
+		* Creates a minimize event when the window gets iconified
 		*/
 		explicit WindowMinimizedEvent(bool minimized) noexcept :
 			Event(EventType::WINDOW_MINIMIZE),
@@ -134,6 +140,7 @@ namespace Uranium::Input::Events {
 	class WindowMaximizedEvent final : public Event {
 	public:
 		/*
+		* Creates a maximize event when the window gets maximized
 		*/
 		explicit WindowMaximizedEvent(bool maximized) noexcept :
 			Event(EventType::WINDOW_MAXIMIZE),
@@ -159,6 +166,7 @@ namespace Uranium::Input::Events {
 	class WindowRefreshEvent final : public Event {
 	public:
 		/*
+		* Creates a new refresh event when the window gets refreshed
 		*/
 		explicit WindowRefreshEvent() noexcept :
 			Event(EventType::WINDOW_REFRESH)
@@ -172,6 +180,7 @@ namespace Uranium::Input::Events {
 	class WindowBufferResizeEvent final : public Event {
 	public:
 		/*
+		* Creates a new frame buffer event when it updates the viewport
 		*/
 		explicit WindowBufferResizeEvent(int width, int height) noexcept :
 			Event(EventType::WINDOW_BUFFER_RESIZE),

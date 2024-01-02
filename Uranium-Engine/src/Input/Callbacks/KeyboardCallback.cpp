@@ -6,22 +6,14 @@
 namespace Uranium::Input::Callbacks {
 
 	KeyboardCallback::KeyboardCallback(Window* window) noexcept :
-		keys(nullptr),
 		keyPressedEvent(0, 0, 0),
 		keyReleasedEvent(0, 0)
 	{
-		// create and initialize key buffer
-		keys = new bool[GLFW_KEY_LAST];
-		for (int i = 0; i < GLFW_KEY_LAST; i++)
-			keys[i] = false;
-
 		glfwSetKeyCallback(*window,  KeyboardCallback::key_callback);
 	}
 
 	void KeyboardCallback::key_callback(GLFWwindow* glWindow, int key, int scancode, int action, int mods) {
-
 		Window& window = *(Window*)glfwGetWindowUserPointer(glWindow);
-		//program->getKeyboardCallback()->keys[key] = action != GLFW_RELEASE;
 
 		switch (action) {
 			case GLFW_PRESS:
@@ -48,9 +40,5 @@ namespace Uranium::Input::Callbacks {
 				break;
 			}
 		}
-	}
-
-	bool KeyboardCallback::isKeyDown(int key) {
-		return keys[key] ? true : false;
 	}
 }

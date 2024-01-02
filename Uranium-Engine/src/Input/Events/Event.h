@@ -6,8 +6,6 @@ namespace Uranium::Input::Events {
 
 	class Event {
 	public:
-		/*
-		*/
 		enum class EventType {
 			NO_EVENT = 0,
 			WINDOW_CLOSE,
@@ -22,10 +20,20 @@ namespace Uranium::Input::Events {
 			KEYBOARD_KEY_HOLD,
 			KEYBOARD_KEY_PRESSED,
 			KEYBOARD_KEY_RELEASED,
+
+			MOUSE_SCROLL,
+			MOUSE_CLICKED,
+			MOUSE_PRESSED,
+			MOUSE_RELEASED,
+
+			CURSOR_MOVED,
+			CURSOR_DROPPED,
+			CURSOR_ENTERED,
 		};
 
 	public:
 		/*
+		* Event callback function template
 		*/
 		using EventCallbackFn = std::function<void(Event&)>;
 

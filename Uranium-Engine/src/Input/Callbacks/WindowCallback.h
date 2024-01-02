@@ -13,30 +13,30 @@ namespace Uranium::Input::Callbacks {
 		/*
 		* Called when window close is requested
 		*/
-		static void closeEvent(GLFWwindow* glWindow);
+		static void close_callback(GLFWwindow* glWindow);
 
 		/*
 		* Called when window is moved or resized
 		*/
-		static void movedEvent(GLFWwindow* glWindow, int xpos, int ypos);
-		static void resizedEvent(GLFWwindow* glWindow, int width, int height);
+		static void position_callback(GLFWwindow* glWindow, int xpos, int ypos);
+		static void resized_callback(GLFWwindow* glWindow, int width, int height);
 
 		/*
 		* Called when the window is on or out of focus
 		*/
-		static void focusEvent(GLFWwindow* glWindow, int isFocused);
+		static void focus_callback(GLFWwindow* glWindow, int isFocused);
 
 		/*
 		* Called when the window gets minimized, maximized or fullscreen
 		*/
-		static void minimizeEvent(GLFWwindow* glWindow, int isMinimized);
-		static void maximizeEvent(GLFWwindow* glWindow, int isMaximized);
+		static void minimize_callback(GLFWwindow* glWindow, int isMinimized);
+		static void maximize_callback(GLFWwindow* glWindow, int isMaximized);
 
 		/*
 		* Called when the window canvas gets refreshed
 		*/
-		static void refreshEvent(GLFWwindow* glWindow);
-		static void frameBufferSizeEvent(GLFWwindow* glWindow, int width, int height);
+		static void refresh_callback(GLFWwindow* glWindow);
+		static void framebuffer_resize_callback(GLFWwindow* glWindow, int width, int height);
 
 	public:
 		~WindowCallback() = default;

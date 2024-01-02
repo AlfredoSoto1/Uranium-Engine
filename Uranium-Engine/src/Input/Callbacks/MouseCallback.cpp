@@ -5,68 +5,42 @@
 
 namespace Uranium::Input::Callbacks {
 
-	MouseCallback::MouseCallback(Window* window) noexcept:
-		mouseButtons(nullptr)
+	MouseCallback::MouseCallback(Window* window) noexcept :
+		pressed(GLFW_MOUSE_BUTTON_1),
+		released(GLFW_MOUSE_BUTTON_1),
+		scroll(0, 0)
 	{
-		// create bool array containing
-		// mouse button activation flag
-		// for each button when being interacted with
-		mouseButtons = new bool[GLFW_MOUSE_BUTTON_LAST];
-
-		glfwSetScrollCallback(*window,      MouseCallback::scrollEvent);
-		glfwSetCursorPosCallback(*window,   MouseCallback::movedEvent);
-		glfwSetMouseButtonCallback(*window, MouseCallback::clickEvent);
+		glfwSetScrollCallback(*window,      MouseCallback::scroll_callback);
+		glfwSetMouseButtonCallback(*window, MouseCallback::button_callback);
 	}
 
-	//MouseCallback::~MouseCallback() {
-	//	// Obtain the window reference from the application's engine
-	//	//std::shared_ptr<Window> window = Application::instance().getBaseEngine().getWindow();
+	void MouseCallback::button_callback(GLFWwindow* glWindow, int button, int action, int mods) {
+		using namespace Events;
+		Window& window = *(Window*)glfwGetWindowUserPointer(glWindow);
 
-	//	//delete[] mouseButtons;
-
-	//	//glfwSetScrollCallback(*window,      nullptr);
-	//	//glfwSetCursorPosCallback(*window,   nullptr);
-	//	//glfwSetMouseButtonCallback(*window, nullptr);
-	//}
-
-	void MouseCallback::clickEvent(GLFWwindow* window, int button, int action, int mods) {
-		//// obtain Application-program reference via glfw user pointer
-		//ApplicationProgram* program = static_cast<ApplicationProgram*>(glfwGetWindowUserPointer(window));
-		//if (program == nullptr)
-		//	return;
-
-		//// update mouse button actions
-		//program->getMouseCallback()->mouseButtons[button] = action != GLFW_RELEASE;
+		switch (action) {
+			case GLFW_PRESS:
+			{
+				window.mouseCallback->pressed.mouseButton = button;
+				window.callbackFunction(window.mouseCallback->pressed);
+				break;
+			}
+			case GLFW_RELEASE:
+			{
+				window.mouseCallback->released.mouseButton = button;
+				window.callbackFunction(window.mouseCallback->released);
+				break;
+			}
+		}
 	}
 
-	void MouseCallback::scrollEvent(GLFWwindow* window, double xOffset, double yOffset) {
-		//// obtain Application-program reference via glfw user pointer
-		//ApplicationProgram* program = static_cast<ApplicationProgram*>(glfwGetWindowUserPointer(window));
-		//if (program == nullptr)
-		//	return;
-	}
+	void MouseCallback::scroll_callback(GLFWwindow* glWindow, double xOffset, double yOffset) {
+		using namespace Events;
+		Window& window = *(Window*)glfwGetWindowUserPointer(glWindow);
 
-	void MouseCallback::movedEvent(GLFWwindow* window, double xpos, double ypos) {
-		//// obtain Application-program reference via glfw user pointer
-		//ApplicationProgram* program = static_cast<ApplicationProgram*>(glfwGetWindowUserPointer(window));
-		//if (program == nullptr)
-		//	return;
+		window.mouseCallback->scroll.xOffset = xOffset;
+		window.mouseCallback->scroll.yOffset = yOffset;
 
-		//// save window size for later use
-		//unsigned int width = program->getWindow()->getProperties().getWidth();
-		//unsigned int height = program->getWindow()->getProperties().getHeight();
-
-		//// change cursor position
-		//program->getCursor()->xPosition = xpos;
-		//program->getCursor()->yPosition = ypos;
-
-		//// change cursor position in normal coordinates
-		//program->getCursor()->setNormPosition((xpos * 2.0) / width - 1.0, -(ypos * 2.0) / height + 1.0);
-	}
-
-	bool MouseCallback::isButtonDown(int button) {
-		if (button < 0)
-			return false;
-		return mouseButtons[button] ? true : false;
+		window.callbackFunction(window.mouseCallback->scroll);
 	}
 }

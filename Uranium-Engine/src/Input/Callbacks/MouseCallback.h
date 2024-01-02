@@ -1,5 +1,7 @@
 #pragma once
 
+#include "Input/Events/MouseEvents.h"
+
 struct GLFWwindow;
 
 namespace Uranium::Platform::Display {
@@ -9,27 +11,16 @@ namespace Uranium::Platform::Display {
 namespace Uranium::Input::Callbacks {
 
 	class MouseCallback final {
-	public:
-		/*
-		* Returns true if a mouse button is being hold down
-		*/
-		bool isButtonDown(int button);
-	
 	private:
 		/*
-		* It gets called when the mouse gets clicked
+		* It gets called when the mouse button is pressed
 		*/
-		static void clickEvent(GLFWwindow* window, int button, int action, int mods);
-		
-		/*
-		* It gets called when the mouse gets moved
-		*/
-		static void movedEvent(GLFWwindow* window, double xpos, double ypos);
+		static void button_callback(GLFWwindow* glWindow, int button, int action, int mods);
 		
 		/*
 		* It gets called when the mouse uses the scroll wheel
 		*/
-		static void scrollEvent(GLFWwindow* window, double xOffset, double yOffset);
+		static void scroll_callback(GLFWwindow* glWindow, double xOffset, double yOffset);
 
 	public:
 		~MouseCallback() = default;
@@ -55,9 +46,8 @@ namespace Uranium::Input::Callbacks {
 		explicit MouseCallback(Window* window) noexcept;
 		
 	private:
-		/*
-		* Array of all mouse buttons available by GLFW
-		*/
-		bool* mouseButtons;
+		Events::MouseScrollEvent scroll;
+		Events::MouseButtonPressedEvent pressed;
+		Events::MouseButtonReleasedEvent released;
 	};
 }

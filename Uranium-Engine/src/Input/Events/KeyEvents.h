@@ -7,12 +7,14 @@ namespace Uranium::Input::Callbacks {
 }
 
 namespace Uranium::Input::Events {
-
+	
 	class KeyPressedEvent final : public Event {
 	public:
 		friend Callbacks::KeyboardCallback;
 
 		/*
+		* Creates a new key pressed event holding the
+		* key character and the scancode.
 		*/
 		explicit KeyPressedEvent(int keyChar, int count, int scancode) noexcept :
 			Event(EventType::KEYBOARD_KEY_PRESSED),
@@ -49,6 +51,7 @@ namespace Uranium::Input::Events {
 		friend Callbacks::KeyboardCallback;
 
 		/*
+		* Creates a new key release event holding the key character and scancode
 		*/
 		explicit KeyReleasedEvent(int keyChar, int scancode) noexcept :
 			Event(EventType::KEYBOARD_KEY_RELEASED),
@@ -70,31 +73,6 @@ namespace Uranium::Input::Events {
 		}
 
 	private:
-		int keyChar;
-		int scancode;
-	};
-
-	class KeyHoldEvent final : public Event {
-	public:
-		friend Callbacks::KeyboardCallback;
-
-		/*
-		*/
-		explicit KeyHoldEvent(int keyChar, int count, int scancode) noexcept :
-			Event(EventType::KEYBOARD_KEY_HOLD),
-			keyChar(keyChar),
-			count(count),
-			scancode(scancode)
-		{
-
-		}
-
-		~KeyHoldEvent() = default;
-
-	public:
-		// TODO SEPARATE INTO DIFFERENT FILES :)
-	private:
-		int count;
 		int keyChar;
 		int scancode;
 	};

@@ -1,5 +1,7 @@
 #pragma once
 
+#include "Input/Events/CursorEvent.h"
+
 struct GLFWwindow;
 
 namespace Uranium::Platform::Display {
@@ -13,12 +15,17 @@ namespace Uranium::Input::Callbacks {
 		/*
 		* Gets called when a link or file is dropped in window
 		*/
-		static void dropEvent(GLFWwindow* window, int pathCount, const char** paths);
+		static void drop_callback(GLFWwindow* glWindow, int pathCount, const char** paths);
 
 		/*
 		* Gets called if the cursor is inside the window
 		*/
-		static void enteredEvent(GLFWwindow* window, int isInside);
+		static void entered_callback(GLFWwindow* glWindow, int isInside);
+
+		/*
+		* It gets called when the mouse gets moved
+		*/
+		static void moved_callback(GLFWwindow* glWindow, double xpos, double ypos);
 
 	public:
 		~CursorCallback() = default;
@@ -42,6 +49,10 @@ namespace Uranium::Input::Callbacks {
 		* creates all the monitor related callbacks
 		*/
 		explicit CursorCallback(Window* window) noexcept;
-
+	
+	private:
+		Events::CursorMovedEvent cursorMoved;
+		Events::CursorEnteredEvent cusorEntered;
+		Events::CursorDroppedEvent cursorDropped;
 	};
 }

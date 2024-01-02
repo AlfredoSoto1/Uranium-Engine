@@ -11,9 +11,6 @@ namespace Uranium::Platform::Display {
 namespace Uranium::Input::Callbacks {
 
 	class KeyboardCallback final {
-	public:
-		bool isKeyDown(int key);
-
 	private:
 		/*
 		* Gets called when a key event happened
@@ -46,7 +43,5 @@ namespace Uranium::Input::Callbacks {
 	private:
 		Events::KeyPressedEvent keyPressedEvent;
 		Events::KeyReleasedEvent keyReleasedEvent;
-
-		bool* keys;
 	};
 }
