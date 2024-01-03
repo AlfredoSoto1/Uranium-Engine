@@ -206,80 +206,12 @@
 #include "Platform/Display/OpenGLWindow.h"
 #include "Platform/Monitor/Monitor.h"
 #include "Platform/Monitor/MonitorHandler.h"
-#include "Scene/Scene.h"
 
 using namespace Uranium::Core;
 using namespace Uranium::Scene;
 using namespace Uranium::Engine;
 using namespace Uranium::Platform::Display;
 using namespace Uranium::Platform::Monitor;
-
-class VoxelScene : public Scene {
-
-public:
-
-	VoxelScene() :
-		Scene()
-	{
-
-	}
-
-	~VoxelScene() {
-
-	}
-
-	void update() override {
-
-	}
-
-	void reset() override {
-
-	}
-
-	void load() override {
-		//Vertex vertices[] = {
-		//	vec2(-0.5, -0.5),
-		//	vec2( 0.5, -0.5),
-		//	vec2( 0.5,  0.5)
-		//};
-
-		//unsigned int indices[] = {
-		//	0, 1, 2
-		//};
-
-		//model = new Model();
-
-		//// create buffer
-		//IndexBuffer indexBuf = IndexBuffer(*model, GL_STATIC_DRAW, sizeof(indices) / sizeof(unsigned int), indices);
-
-		//// create buffer
-		//VertexBuffer verBuff = VertexBuffer(*model, GL_STATIC_DRAW, sizeof(vertices) / sizeof(Vertex), sizeof(Vertex), vertices);
-
-		//VertexBuffer::VertexAttribute attributes;
-		//attributes.location = 0;
-		//attributes.componentCount = 2;
-		//attributes.readType = GL_FLOAT;
-		//attributes.typeNormalization = GL_FALSE;
-		//attributes.attribIndex = 0;
-
-		//verBuff.setLayout(attributes);
-
-		//Shader vertexShader = Shader("src/testV.glsl", GL_VERTEX_SHADER);
-		//Shader fragmentShader = Shader("src/testF.glsl", GL_FRAGMENT_SHADER);
-
-		//program = new ShaderProgram(vertexShader, fragmentShader);
-
-		//// white color
-		//*color = vec4(1.0);
-
-		//program->setUniform("u_Color", color);
-	}
-
-	void unload() override {
-
-	}
-
-};
 
 class GameApplication : public Application {
 public:

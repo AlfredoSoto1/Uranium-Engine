@@ -1,8 +1,6 @@
-#include <GL/glfw3.h>
-
 #include "Scene.h"
 
-namespace Uranium::Scene {
+namespace Uranium::Layers::Scenes {
 
 	Scene::Scene() noexcept :
 		nextScene(nullptr),

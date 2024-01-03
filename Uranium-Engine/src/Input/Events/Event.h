@@ -43,7 +43,8 @@ namespace Uranium::Input::Events {
 		* to filter the type of event that *this* instance of event is
 		*/
 		explicit Event(EventType eventType) noexcept:
-			eventType(eventType)
+			eventType(eventType),
+			handled(false)
 		{
 
 		}
@@ -55,7 +56,16 @@ namespace Uranium::Input::Events {
 			return eventType;
 		}
 
+		void eventHandled(bool handled) {
+			this->handled = handled;
+		}
+
+		bool wasHandled() const {
+			return handled;
+		}
+
 	private:
 		EventType eventType;
+		bool handled;
 	};
 }

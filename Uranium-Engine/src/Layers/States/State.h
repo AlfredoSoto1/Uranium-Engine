@@ -6,11 +6,11 @@ namespace Uranium::Engine {
 	class StateManager;
 }
 
-namespace Uranium::Scene {
+namespace Uranium::Layers::Scenes {
 	class Scene;
 }
 
-namespace Uranium::States {
+namespace Uranium::Layers::States {
 
 	class State {
 	public:

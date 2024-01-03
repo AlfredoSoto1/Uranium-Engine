@@ -1,6 +1,6 @@
 #include "State.h"
 
-namespace Uranium::States {
+namespace Uranium::Layers::States {
 
 	State::State() noexcept :
 		finished(false),

@@ -6,7 +6,7 @@ namespace Uranium::Engine {
 	class SceneManager;
 }
 
-namespace Uranium::Scene {
+namespace Uranium::Layers::Scenes {
 
 	class Scene {
 	public:
