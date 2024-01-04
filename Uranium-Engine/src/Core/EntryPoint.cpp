@@ -41,12 +41,12 @@ namespace Uranium::Core {
 /*
 * Definition of the default main function
 */
-auto main(int argc, char* argv[]) -> int {
-
-	/*
-	* Start application from global space
-	*/
-	Uranium::Core::buildApplication(argc, argv);
-
-	return 0; // Exit success
-}
+//auto main(int argc, char* argv[]) -> int {
+//
+//	/*
+//	* Start application from global space
+//	*/
+//	Uranium::Core::buildApplication(argc, argv);
+//
+//	return 0; // Exit success
+//}

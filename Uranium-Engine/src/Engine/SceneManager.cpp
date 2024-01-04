@@ -1,4 +1,3 @@
-#include "Scene/Scene.h"
 #include "SceneManager.h"
 
 namespace Uranium::Engine {

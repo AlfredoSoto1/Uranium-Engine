@@ -21,12 +21,14 @@ project "SandBox-Game"
         "../Uranium-Engine/vendor",
         "../dependencies/glfw/include",
         "../dependencies/glew/include",
+        "../dependencies/vulkan/include",
         "../dependencies/openal/include"
     }
 
     libdirs {
         "../dependencies/glfw/lib",
         "../dependencies/glew/lib",
+        "../dependencies/vulkan/lib",
         "../dependencies/openal/lib"
     }
 
@@ -52,6 +54,7 @@ project "SandBox-Game"
             "Shell32",
             "OpenAL32",
             "kernel32",
+            "vulkan-1",
         }
 
     filter "system:linux"

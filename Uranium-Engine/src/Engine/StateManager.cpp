@@ -1,4 +1,3 @@
-#include "States/State.h"
 #include "StateManager.h"
 
 namespace Uranium::Engine {

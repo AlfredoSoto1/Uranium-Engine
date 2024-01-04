@@ -20,12 +20,14 @@ project "Uranium-Engine"
         "../Uranium-Engine/vendor",
         "../dependencies/glfw/include",
         "../dependencies/glew/include",
+        "../dependencies/vulkan/include",
         "../dependencies/openal/include"
     }
 
     libdirs {
         "../dependencies/glfw/lib",
         "../dependencies/glew/lib",
+        "../dependencies/vulkan/lib",
         "../dependencies/openal/lib"
     }
 
