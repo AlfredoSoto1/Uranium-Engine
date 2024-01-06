@@ -47,10 +47,7 @@ namespace Uranium::Graphics::Vulkan {
         * Vulkan validation debug support setup
         */
         bool checkValidationLayerSupport() const;
-
-        void prepareRequiredExtensions(VkInstanceCreateInfo& createInfo);
         void prepareValidationLayers(VkInstanceCreateInfo& createInfo);
-
         auto getDebugMessengerCreateInfo() -> VkDebugUtilsMessengerCreateInfoEXT;
 
         VkResult createDebugUtilsMessengerEXT(
@@ -60,18 +57,12 @@ namespace Uranium::Graphics::Vulkan {
             VkDebugUtilsMessengerEXT*                 pDebugMessenger
         ) const;
 
-        void destroyDebugUtilsMessengerEXT(VkInstance instance,
-            VkDebugUtilsMessengerEXT debugMessenger, 
+        void destroyDebugUtilsMessengerEXT(
+            VkInstance                   instance,
+            VkDebugUtilsMessengerEXT     debugMessenger, 
             const VkAllocationCallbacks* pAllocator
         );
        
-        bool isDeviceSuitable(VkPhysicalDevice device);
-        bool checkDeviceExtensionSupport(VkPhysicalDevice device);
-        
-        int rateDeviceSuitability(VkPhysicalDevice device) const;
-        
-        std::vector<VkPhysicalDevice> scanForPhysicalDevices() const;
-
     private:
         /*
         * Queue Family Indices
@@ -92,11 +83,30 @@ namespace Uranium::Graphics::Vulkan {
             }
         };
 
+        /*
+        * Returns the struct of queue family indices
+        */
         QueueFamilyIndices findQueueFamilies(VkPhysicalDevice device);
 
+    private:
+        /*
+        * Physical and logical device setup helpers
+        */
+        std::vector<VkPhysicalDevice> scanForPhysicalDevices() const;
+        int rateDeviceSuitability(VkPhysicalDevice device) const;
+
+        bool isDeviceSuitable(VkPhysicalDevice device);
+
         void populateDeviceFeatures(VkDeviceCreateInfo& createInfo);
-        void populateDeviceExtensions(VkDeviceCreateInfo& createInfo);
         void populateQueueCreateInfos(const QueueFamilyIndices& indices, VkDeviceCreateInfo& createInfo);
+
+    private:
+        /*
+        * Extensions helpers
+        */
+        bool checkDeviceExtensionSupport(VkPhysicalDevice device);
+        void populateDeviceExtensions(VkDeviceCreateInfo& createInfo);
+        void prepareRequiredExtensions(VkInstanceCreateInfo& createInfo);
 
     private:
         static constexpr bool enableValidationLayers = true; // DEBUG
