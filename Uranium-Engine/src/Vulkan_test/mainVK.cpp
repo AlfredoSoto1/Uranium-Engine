@@ -123,7 +123,6 @@ private:
     }
 
     void initVulkan() {
-        // Create
         createInstance();
         setupDebugMessenger();
         createSurface();
