@@ -2,7 +2,6 @@
 #include <GLFW/glfw3.h>
 
 #include <set>
-#include <map>
 #include <iostream>
 #include <stdexcept>
 #include "VulkanQueueManager.h"
