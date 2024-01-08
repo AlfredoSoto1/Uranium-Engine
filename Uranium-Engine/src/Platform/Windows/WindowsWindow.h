@@ -1,10 +1,11 @@
 #pragma once
 
 #include <string>
+#include "Core/CoreMacros.h"
 
 namespace Uranium::Platform::Windows {
 
-	class WindowsWindow final {
+	URANIUM_API class WindowsWindow final {
 	public:
 		explicit WindowsWindow(const std::string& title, unsigned int width, unsigned int height);
 

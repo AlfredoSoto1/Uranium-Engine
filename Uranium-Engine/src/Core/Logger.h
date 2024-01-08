@@ -37,11 +37,11 @@ namespace Uranium::Core {
     public:
         /*
         */
-        void consolePrint(LogLevel level, const char* message) noexcept;
+        void consolePrint(LogLevel level, const char* type, const char* message) noexcept;
 
         /*
         */
-        void filePrint(/*Select file output here*/LogLevel level, const char* message) noexcept;
+        void filePrint(/*Select file output here*/LogLevel level, const char* type, const char* message) noexcept;
 
     private:
         /*
@@ -88,119 +88,125 @@ namespace Uranium::Core {
         };
     };
 
-
 /*
 * Evaluate these macros in debug configuration ONLY
 */
 #if defined(UR_DEBUG)
+    /*
+    * An error occurred. The program may need to handle this.
+    *
+    * @param message
+    */
+    #define UR_ERROR(type, message) Logger::instance().consolePrint(LogLevel::ERROR, type, message)
 
-/*
-* An error occurred. The program may need to handle this.
-*
-* @param message
-*/
-#define UR_ERROR(message) Logger::instance().consolePrint(LogLevel::ERROR,  message)
+    /*
+    * Application cannot continue, must close program entirely
+    *
+    * @param type
+    * @param message
+    */
+    #define UR_FATAL(type, message) Logger::instance().consolePrint(LogLevel::FATAL, type, message)
 
-/*
-* Application cannot continue, must close program entirely
-*
-* @param message
-*/
-#define UR_FATAL(message) Logger::instance().consolePrint(LogLevel::FATAL,  message)
+    /*
+    * Provides information to the client through the console
+    * 
+    * @param type
+    * @param message
+    */
+    #define UR_INFO(type, message)  Logger::instance().consolePrint(LogLevel::INFO, type, message)
 
-/*
-* Provides information to the client through the console
-* 
-* @param message
-*/
-#define UR_INFO(message)  Logger::instance().consolePrint(LogLevel::INFO,  message)
+    /*
+    * Provides detailed trace information
+    *
+    * @param type
+    * @param message
+    */
+    #define UR_TRACE(type, message) Logger::instance().consolePrint(LogLevel::TRACE, type, message)
 
-/*
-* Provides detailed trace information
-*
-* @param message
-*/
-#define UR_TRACE(message) Logger::instance().consolePrint(LogLevel::TRACE, message)
-
-/*
-* A warning occurred, but the program can continue
-*
-* @param message
-*/
-#define UR_WARN(message)  Logger::instance().consolePrint(LogLevel::WARN,  message)
+    /*
+    * A warning occurred, but the program can continue
+    *
+    * @param type
+    * @param message
+    */
+    #define UR_WARN(type, message)  Logger::instance().consolePrint(LogLevel::WARN, type, message)
     
-/*
-* This is evaluated at run-time
-* 
-* @param condition - establishes if it should do an assert
-* @param message   - displays the message of the assertion
-*/
-#define UR_ASSERT(condition, message) \
-{                                     \
-    if (condition) {                  \
-        UR_ERROR(message);            \
-        UR_DEBUG_BREAK();             \
-    }                                 \
-}                                     \
+    /*
+    * This is evaluated at run-time
+    * 
+    * @param condition - establishes if it should do an assert
+    * @param message   - displays the message of the assertion
+    */
+    #define UR_ASSERT(condition, message) \
+    {                                     \
+        if (condition) {                  \
+            UR_ERROR(message);            \
+            UR_DEBUG_BREAK();             \
+        }                                 \
+    }                                     \
 
-/*
-* This is evaluated at compile-time
-* 
-* @param condition - establishes if it should do an assert
-* @param message   - displays the message of the assertion
-*/
-#define UR_STATIC_ASSERT(condition, message) \
-{                                            \
-    static_assert(condition, message);       \
-}                                            \
+    /*
+    * This is evaluated at compile-time
+    * 
+    * @param condition - establishes if it should do an assert
+    * @param message   - displays the message of the assertion
+    */
+    #define UR_STATIC_ASSERT(condition, message) \
+    {                                            \
+        static_assert(condition, message);       \
+    }                                            \
 
 #elif defined(UR_RELEASE)
+    /*
+    * An error occurred. The program may need to handle this.
+    * Writes to a log file the error.
+    * 
+    * @param type
+    * @param message
+    */
+    #define UR_ERROR(type, message) Logger::instance().filePrint(LogLevel::ERROR, type, message)
 
-/*
-* An error occurred. The program may need to handle this.
-* Writes to a log file the error.
-* @param message
-*/
-#define UR_ERROR(message) Logger::instance().filePrint(LogLevel::ERROR,  message)
+    /*
+    * Application cannot continue, must close program entirely
+    * Writes to a log file the fatal error.
+    *
+    * @param type
+    * @param message
+    */
+    #define UR_FATAL(type, message) Logger::instance().filePrint(LogLevel::FATAL, type, message)
 
-/*
-* Application cannot continue, must close program entirely
-* Writes to a log file the fatal error.
-*
-* @param message
-*/
-#define UR_FATAL(message) Logger::instance().filePrint(LogLevel::FATAL,  message)
+    #define UR_INFO(type, message)  Logger::instance().filePrint(LogLevel::INFO, type, message)
+    #define UR_TRACE(type, message) /*Nothing*/
+    #define UR_WARN(type, message)  /*Nothing*/
 
-#define UR_INFO(message)  Logger::instance().filePrint(LogLevel::INFO,  message)
-#define UR_TRACE(message) /*Nothing*/
-#define UR_WARN(message)  /*Nothing*/
-
-#define UR_ASSERT(condition, message)
-#define UR_STATIC_ASSERT(condition, message)
+    #define UR_ASSERT(condition, message)
+    #define UR_STATIC_ASSERT(condition, message)
 
 #elif defined(UR_DISTRIBUTION)
+    /*
+    * An error occurred. The program may need to handle this.
+    * Writes to a log file the error.
+    * 
+    * @param type
+    * @param message
+    */
+    #define UR_ERROR(type, message) Logger::instance().filePrint(LogLevel::ERROR, type, message)
 
-/*
-* An error occurred. The program may need to handle this.
-* Writes to a log file the error.
-* @param message
-*/
-#define UR_ERROR(message) Logger::instance().filePrint(LogLevel::ERROR,  message)
+    /*
+    * Application cannot continue, must close program entirely
+    * Writes to a log file the fatal error.
+    *
+    * @param type
+    * @param message
+    */
+    #define UR_FATAL(type, message) Logger::instance().filePrint(LogLevel::FATAL, type, message)
 
-/*
-* Application cannot continue, must close program entirely
-* Writes to a log file the fatal error.
-*
-* @param message
-*/
-#define UR_FATAL(message) Logger::instance().filePrint(LogLevel::FATAL,  message)
+    #define UR_INFO(type, message)  /*Nothing*/
+    #define UR_TRACE(type, message) /*Nothing*/
+    #define UR_WARN(type, message)  /*Nothing*/
 
-#define UR_INFO(message)  /*Nothing*/
-#define UR_TRACE(message) /*Nothing*/
-#define UR_WARN(message)  /*Nothing*/
-
-#define UR_ASSERT(condition, message)        /*Nothing*/
-#define UR_STATIC_ASSERT(condition, message) /*Nothing*/
+    #define UR_ASSERT(condition, message)        /*Nothing*/
+    #define UR_STATIC_ASSERT(condition, message) /*Nothing*/
 
 #endif
 }

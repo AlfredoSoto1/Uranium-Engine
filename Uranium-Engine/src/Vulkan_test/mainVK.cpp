@@ -953,72 +953,14 @@ private:
     }
 };
 
-enum class TextColor {
-    Black,
-    Red,
-    Green,
-    Yellow,
-    Blue,
-    Magenta,
-    Cyan,
-    White,
-    Count
-};
-
-class ConsoleColors {
-public:
-    static const char* ColorCodes[static_cast<int>(TextColor::Count)];
-
-    static const char* GetColorCode(TextColor color) {
-        return ColorCodes[static_cast<int>(color)];
-    }
-};
-
-const char* ConsoleColors::ColorCodes[] = {
-    "\033[0;30m",  // Black
-    "\033[0;31m",  // Red
-    "\033[0;32m",  // Green
-    "\033[0;33m",  // Yellow
-    "\033[0;34m",  // Blue
-    "\033[0;35m",  // Magenta
-    "\033[0;36m",  // Cyan
-    "\033[0;37m"   // White
-};
-
-void PrintColoredText(
-    TextColor headerColor,
-    TextColor messageColor,
-    const std::string& header,
-    const std::string& message
-) {
-    const char* headerColorCode = ConsoleColors::GetColorCode(headerColor);
-    const char* messageColorCode = ConsoleColors::GetColorCode(messageColor);
-
-    std::cout << headerColorCode << "[" << header << "]";
-    std::cout << " yes " << ConsoleColors::ColorCodes[static_cast<int>(TextColor::White)];
-    std::cout << " <- " << messageColorCode << message << ConsoleColors::ColorCodes[static_cast<int>(TextColor::White)] << std::endl;
-}
-
 #include "../Core/Logger.h"
 
 int main() {
-    //PrintColoredText(TextColor::Green, TextColor::Green, "URANIUM TRACE", "This is a green message.");
-    //PrintColoredText(TextColor::Green, TextColor::Red, "URANIUM WARNING", "This is a red message.");
-    //PrintColoredText(TextColor::Green, TextColor::Yellow, "URANIUM ERROR", "This is a yellow message.");
-
     using namespace Uranium::Core;
     Logger::init();
 
-
-    Logger::instance().consolePrint(LogLevel::INFO, "important message");
-    Logger::instance().consolePrint(LogLevel::DEBUG, "important message");
-    Logger::instance().consolePrint(LogLevel::ERROR, "important message");
-    Logger::instance().consolePrint(LogLevel::FATAL, "important message");
-    Logger::instance().consolePrint(LogLevel::TRACE, "important message");
-    Logger::instance().consolePrint(LogLevel::WARN, "important message");
+    Logger::instance().consolePrint(LogLevel::WARN, "[GLFW : initGLFW()]", "another improtn");
     
-    Logger::instance().filePrint(LogLevel::COUNT, "dsa");
-
     Logger::shutdown();
 
     HelloTriangleApplication app;

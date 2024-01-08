@@ -3,6 +3,7 @@
 #include <memory>
 #include <vector>
 #include <string>
+#include "CoreMacros.h"
 
 namespace Uranium::Platform::Display {
 	class Window;
@@ -14,7 +15,7 @@ namespace Uranium::Input::Events {
 
 namespace Uranium::Core {
 
-	class Application {
+	URANIUM_API class Application {
 	public:
 		/*
 		* Creates and initializes a unique instance of the application
