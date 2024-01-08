@@ -994,15 +994,32 @@ void PrintColoredText(
     const char* headerColorCode = ConsoleColors::GetColorCode(headerColor);
     const char* messageColorCode = ConsoleColors::GetColorCode(messageColor);
 
-    std::cout << headerColorCode << "[" << header << "]" << ConsoleColors::ColorCodes[static_cast<int>(TextColor::White)];
+    std::cout << headerColorCode << "[" << header << "]";
+    std::cout << " yes " << ConsoleColors::ColorCodes[static_cast<int>(TextColor::White)];
     std::cout << " <- " << messageColorCode << message << ConsoleColors::ColorCodes[static_cast<int>(TextColor::White)] << std::endl;
 }
 
-int main() {
-    PrintColoredText(TextColor::Green, TextColor::Green, "URANIUM TRACE", "This is a green message.");
-    PrintColoredText(TextColor::Green, TextColor::Red, "URANIUM WARNING", "This is a red message.");
-    PrintColoredText(TextColor::Green, TextColor::Yellow, "URANIUM ERROR", "This is a yellow message.");
+#include "../Core/Logger.h"
 
+int main() {
+    //PrintColoredText(TextColor::Green, TextColor::Green, "URANIUM TRACE", "This is a green message.");
+    //PrintColoredText(TextColor::Green, TextColor::Red, "URANIUM WARNING", "This is a red message.");
+    //PrintColoredText(TextColor::Green, TextColor::Yellow, "URANIUM ERROR", "This is a yellow message.");
+
+    using namespace Uranium::Core;
+    Logger::init();
+
+
+    Logger::instance().consolePrint(LogLevel::INFO, "important message");
+    Logger::instance().consolePrint(LogLevel::DEBUG, "important message");
+    Logger::instance().consolePrint(LogLevel::ERROR, "important message");
+    Logger::instance().consolePrint(LogLevel::FATAL, "important message");
+    Logger::instance().consolePrint(LogLevel::TRACE, "important message");
+    Logger::instance().consolePrint(LogLevel::WARN, "important message");
+    
+    Logger::instance().filePrint(LogLevel::COUNT, "dsa");
+
+    Logger::shutdown();
 
     HelloTriangleApplication app;
 

@@ -13,6 +13,9 @@
 #else
 // Build Engine as static lib
 #define URANIUM_API
+
+#define UR_DEBUG_BREAK() __debugbreak()
+
 #endif
 
 #elif defined(UR_PLATFORM_LINUX)
@@ -27,6 +30,8 @@
 // Build Engine as static lib
 #define URANIUM_API
 #endif
+
+#define UR_DEBUG_BREAK() __builtin_debugtrap()
 
 #else
 #error Urainum Engine only supports Windows and Linux platforms

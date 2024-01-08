@@ -1,6 +1,3 @@
-#include <string>
-#include <iostream>
-
 #include "CoreMacros.h"
 
 namespace Uranium::Core {
@@ -17,40 +14,6 @@ namespace Uranium::Core {
         ERROR,
         FATAL,
         COUNT
-    };
-
-    /*
-    * Console Text Color enum definitions
-    * These define the console text color,
-    * these are orderer in a way that match
-    * the color codes for the next statement.
-    */
-    URANIUM_API enum class ConsoleTextColor {
-        BLACK = 0,
-        RED,
-        GREEN,
-        YELLOW,
-        BLUE,
-        MAGENTA,
-        CYAN,
-        WHITE,
-        COUNT
-    };
-
-    /*
-    * Color codes literal definitions
-    * These define the color code to be
-    * inserted in the console to print.
-    */
-    URANIUM_API constexpr const char* s_ColorCodes[static_cast<uint32_t>(ConsoleTextColor::COUNT)] = {
-        "\033[0;30m",  // BLACK
-        "\033[0;31m",  // RED
-        "\033[0;32m",  // GREEN
-        "\033[0;33m",  // YELLOW
-        "\033[0;34m",  // BLUE
-        "\033[0;35m",  // MAGENTA
-        "\033[0;36m",  // CYAN
-        "\033[0;37m"   // WHITE
     };
 
     class URANIUM_API Logger final {
@@ -74,61 +37,170 @@ namespace Uranium::Core {
     public:
         /*
         */
-        void consolePrint(LogLevel level, const std::string& message) noexcept;
+        void consolePrint(LogLevel level, const char* message) noexcept;
 
         /*
         */
-        void filePrint(/*Select file output here*/LogLevel level, const std::string& message) noexcept;
+        void filePrint(/*Select file output here*/LogLevel level, const char* message) noexcept;
 
     private:
+        /*
+        */
         explicit Logger() noexcept;
 
         ~Logger();
 
     private:
         static Logger* logger;
+
+        /*
+        * Console Text Color enum definitions
+        * These define the console text color,
+        * these are orderer in a way that match
+        * the color codes for the next statement.
+        */
+        enum class ConsoleTextColor {
+            BLACK = 0,
+            RED,
+            GREEN,
+            YELLOW,
+            BLUE,
+            MAGENTA,
+            CYAN,
+            WHITE,
+            COUNT
+        };
+
+        /*
+        * Color codes literal definitions
+        * These define the color code to be
+        * inserted in the console to print.
+        */
+        const char* s_ColorCodes[static_cast<unsigned int>(ConsoleTextColor::COUNT)] = {
+            "\033[0;30m",  // BLACK
+            "\033[0;31m",  // RED
+            "\033[0;32m",  // GREEN
+            "\033[0;33m",  // YELLOW
+            "\033[0;34m",  // BLUE
+            "\033[0;35m",  // MAGENTA
+            "\033[0;36m",  // CYAN
+            "\033[0;37m"   // WHITE
+        };
     };
 
-    /*
-    */
-#define UR_ERROR(message) Logger::instance().consolePrint(LogLevel::WARN,  message)
 
-    /*
-    */
+/*
+* Evaluate these macros in debug configuration ONLY
+*/
 #if defined(UR_DEBUG)
+
+/*
+* An error occurred. The program may need to handle this.
+*
+* @param message
+*/
+#define UR_ERROR(message) Logger::instance().consolePrint(LogLevel::ERROR,  message)
+
+/*
+* Application cannot continue, must close program entirely
+*
+* @param message
+*/
+#define UR_FATAL(message) Logger::instance().consolePrint(LogLevel::FATAL,  message)
+
+/*
+* Provides information to the client through the console
+* 
+* @param message
+*/
 #define UR_INFO(message)  Logger::instance().consolePrint(LogLevel::INFO,  message)
+
+/*
+* Provides detailed trace information
+*
+* @param message
+*/
 #define UR_TRACE(message) Logger::instance().consolePrint(LogLevel::TRACE, message)
+
+/*
+* A warning occurred, but the program can continue
+*
+* @param message
+*/
 #define UR_WARN(message)  Logger::instance().consolePrint(LogLevel::WARN,  message)
+    
+/*
+* This is evaluated at run-time
+* 
+* @param condition - establishes if it should do an assert
+* @param message   - displays the message of the assertion
+*/
+#define UR_ASSERT(condition, message) \
+{                                     \
+    if (condition) {                  \
+        UR_ERROR(message);            \
+        UR_DEBUG_BREAK();             \
+    }                                 \
+}                                     \
 
-#define UR_ASSERT(condition, message)
-
+/*
+* This is evaluated at compile-time
+* 
+* @param condition - establishes if it should do an assert
+* @param message   - displays the message of the assertion
+*/
+#define UR_STATIC_ASSERT(condition, message) \
+{                                            \
+    static_assert(condition, message);       \
+}                                            \
 
 #elif defined(UR_RELEASE)
-#define UR_INFO(message) 
-#define UR_TRACE(message)
-#define UR_WARN(message) 
+
+/*
+* An error occurred. The program may need to handle this.
+* Writes to a log file the error.
+* @param message
+*/
+#define UR_ERROR(message) Logger::instance().filePrint(LogLevel::ERROR,  message)
+
+/*
+* Application cannot continue, must close program entirely
+* Writes to a log file the fatal error.
+*
+* @param message
+*/
+#define UR_FATAL(message) Logger::instance().filePrint(LogLevel::FATAL,  message)
+
+#define UR_INFO(message)  Logger::instance().filePrint(LogLevel::INFO,  message)
+#define UR_TRACE(message) /*Nothing*/
+#define UR_WARN(message)  /*Nothing*/
+
+#define UR_ASSERT(condition, message)
+#define UR_STATIC_ASSERT(condition, message)
+
+#elif defined(UR_DISTRIBUTION)
+
+/*
+* An error occurred. The program may need to handle this.
+* Writes to a log file the error.
+* @param message
+*/
+#define UR_ERROR(message) Logger::instance().filePrint(LogLevel::ERROR,  message)
+
+/*
+* Application cannot continue, must close program entirely
+* Writes to a log file the fatal error.
+*
+* @param message
+*/
+#define UR_FATAL(message) Logger::instance().filePrint(LogLevel::FATAL,  message)
+
+#define UR_INFO(message)  /*Nothing*/
+#define UR_TRACE(message) /*Nothing*/
+#define UR_WARN(message)  /*Nothing*/
+
+#define UR_ASSERT(condition, message)        /*Nothing*/
+#define UR_STATIC_ASSERT(condition, message) /*Nothing*/
 
 #endif
-
-
-
-
-    static void print(ConsoleTextColor headerColor, ConsoleTextColor messageColor, const std::string& header, const std::string& message) {
-            
-        const char* headerColorCode = s_ColorCodes[static_cast<uint32_t>(headerColor)];
-        const char* messageColorCode = s_ColorCodes[static_cast<uint32_t>(messageColor)];
-
-        std::cout                                             << 
-        headerColorCode << "[" << header << "] "              << // print header with default color
-        s_ColorCodes[static_cast<uint32_t>(ConsoleTextColor::WHITE)] << // set the color back to white
-        messageColorCode << message                           << // print the message and with the selected color
-        s_ColorCodes[static_cast<uint32_t>(ConsoleTextColor::WHITE)] << // set the color back to white
-        std::endl;
-    }
-
-#ifdef UR_DEBUG
-#define UR_TRACE(message) print(ConsoleTextColor::GREEN,  ConsoleTextColor::WHITE, "[Uranium TRACE]: ", message);
-#define UR_WARN(message)  print(ConsoleTextColor::YELLOW, ConsoleTextColor::WHITE, "[Uranium TRACE]: ", message);
-#define UR_ERROR(message) print(ConsoleTextColor::RED,    ConsoleTextColor::WHITE, "[Uranium TRACE]: ", message);
-#endif // UR_DEBUG
 }
