@@ -4,6 +4,8 @@
 
 #if defined(UR_PLATFORM_WINDOWS)
 
+#define UR_DEBUG_BREAK() __debugbreak()
+
 #if defined(UR_BUILD_DLL)
 // Build Engine to export to dll
 #define URANIUM_API __declspec(dllexport)
@@ -13,14 +15,12 @@
 #else
 // Build Engine as static lib
 #define URANIUM_API
-
-#define UR_DEBUG_BREAK() __debugbreak()
-
 #endif
 
 #elif defined(UR_PLATFORM_LINUX)
 
 #error Urainum Engine does not support Linux at the moment
+#define UR_DEBUG_BREAK() __builtin_debugtrap()
 
 #if defined(UR_BUILD_DLL)
 #define URANIUM_API 
@@ -30,8 +30,6 @@
 // Build Engine as static lib
 #define URANIUM_API
 #endif
-
-#define UR_DEBUG_BREAK() __builtin_debugtrap()
 
 #else
 #error Urainum Engine only supports Windows and Linux platforms
