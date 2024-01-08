@@ -1,7 +1,6 @@
 #include "Logger.h"
 
 #if defined(UR_PLATFORM_WINDOWS)
-#include <cstdarg>
 #include <iostream>
 #endif
 
