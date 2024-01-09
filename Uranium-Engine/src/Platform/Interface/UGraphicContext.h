@@ -34,10 +34,12 @@ namespace Uranium::Platform::Interface {
 		void shutdown() noexcept;
 
 	public:
+		using InstanceRef = void*;
+
 		/*
 		* @returns the instance in relation to the graphics API used
 		*/
-		//virtual UGraphicInstance<> getInstance() const noexcept = 0;
+		virtual InstanceRef getInstance() const noexcept = 0;
 
 	public:
 		/*
@@ -48,35 +50,27 @@ namespace Uranium::Platform::Interface {
 		* is set to UR_RELEASE, all logs will appear on a log file as the
 		* default output.
 		* 
-		* @param enableValidationLogs
+		* @param enable - true/false
 		*/
-		void enableValidationLog(bool enableValidationLogs) noexcept;
+		void enableValidationLayers(bool enable) noexcept;
 
 	protected:
-		/*
-		* Creates an instance that references the graphics API
-		*/
 		virtual void createInstance() = 0;
-		
-		/*
-		* Disposes the instance that references the graphics API
-		*/
 		virtual void disposeInstance() noexcept = 0;
+		virtual void catchLatestVersion() noexcept = 0;
 
 	protected:
+		virtual bool hasValidationLayerSupport() const noexcept = 0;
+
 		/*
 		* Prepares and initializes all debug configurations.
 		* This is done only when the application configuration
 		* is set to UR_DEBUG.
 		*/
 		virtual void setupDebugConfigurations() noexcept = 0;
+		virtual bool checkValidationLayerSupport() const noexcept = 0;
 
-		/*
-		* This obtains the latest API version
-		*/
-		virtual void catchLatestVersion() noexcept = 0;
-
-	private:
+	protected:
 		// Application & Engine names
 		std::string engineName;
 		std::string applicationName;
@@ -91,6 +85,6 @@ namespace Uranium::Platform::Interface {
 		uint32_t engineMinor;
 		uint32_t enginePatch;
 
-		bool enableValidationLogs;
+		bool validationLayerEnabled;
 	};
 }

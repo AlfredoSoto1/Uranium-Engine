@@ -1,5 +1,6 @@
 #pragma once
 
+#include <vector>
 #include "Core/CoreMacros.h"
 #include "Platform/Interface/UGraphicContext.h"
 
@@ -30,30 +31,69 @@ namespace Uranium::Platform::Vulkan {
 
 		virtual ~VulkanContext() noexcept;
 
-	protected:
+	public:
 		/*
-		* Creates an instance that references the graphics API
+		* @returns the instance in relation to the graphics API used
 		*/
-		virtual void createInstance() override;
-
-		/*
-		* Disposes the instance that references the graphics API
-		*/
-		virtual void disposeInstance() noexcept override;
-
-	protected:
-		/*
-		* Prepares and initializes all debug configurations.
-		* This is done only when the application configuration
-		* is set to UR_DEBUG.
-		*/
-		virtual void setupDebugConfigurations() noexcept override;
-
-		/*
-		* This obtains the latest API version
-		*/
-		virtual void catchLatestVersion() noexcept override;
+		InstanceRef getInstance() const noexcept;
 
 	private:
+		void createInstance() override;
+		void disposeInstance() noexcept override;
+		void catchLatestVersion() noexcept override;
+
+	private:
+		VkApplicationInfo createVulkanApplication();
+
+	private:
+		bool hasValidationLayerSupport() const noexcept override;
+		bool checkValidationLayerSupport() const noexcept override;
+
+		void populateValidationLayers(VkInstanceCreateInfo& createInfo);
+
+	private:
+		/*
+		* Prepares the debug configurations
+		*/
+		void setupDebugConfigurations() noexcept override;
+
+		/*
+		* @returns Information related to the debug messenger
+		*/
+		VkDebugUtilsMessengerCreateInfoEXT getDebugMessengerCreateInfo() noexcept;
+
+		/*
+		* Creates the debug messenger
+		*/
+		VkResult createDebugUtilsMessengerEXT(
+			VkInstance                                instance,
+			const VkDebugUtilsMessengerCreateInfoEXT* pCreateInfo,
+			const VkAllocationCallbacks*              pAllocator,
+			VkDebugUtilsMessengerEXT*                 pDebugMessenger
+		) const;
+		
+		/*
+		* Disposes the debug messenger
+		*/
+		void destroyDebugUtilsMessengerEXT(
+			VkInstance                   instance,
+			VkDebugUtilsMessengerEXT     debugMessenger,
+			const VkAllocationCallbacks* pAllocator
+		);
+
+	private:
+		void populateRequiredExtensions(VkInstanceCreateInfo& createInfo);
+
+	private:
+		// Add other Vulkan-related members as needed
+		const std::vector<const char*> validationLayers = {
+			"VK_LAYER_KHRONOS_validation"
+		};
+		
+		VkInstance instance;
+		VkDebugUtilsMessengerEXT debugMessenger;
+
+		bool isDebugMessengerSupported;
+		bool isValidationLayerSupported;
 	};
 }

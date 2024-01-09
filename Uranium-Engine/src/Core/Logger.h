@@ -97,7 +97,7 @@ namespace Uranium::Core {
     *
     * @param message
     */
-    #define UR_ERROR(type, message) Logger::instance().consolePrint(LogLevel::ERROR, type, message)
+    #define UR_ERROR(type, message) Logger::instance().consolePrint(Core::LogLevel::ERROR, type, message)
 
     /*
     * Application cannot continue, must close program entirely
@@ -105,7 +105,7 @@ namespace Uranium::Core {
     * @param type
     * @param message
     */
-    #define UR_FATAL(type, message) Logger::instance().consolePrint(LogLevel::FATAL, type, message)
+    #define UR_FATAL(type, message) Logger::instance().consolePrint(Core::LogLevel::FATAL, type, message)
 
     /*
     * Provides information to the client through the console
@@ -113,7 +113,7 @@ namespace Uranium::Core {
     * @param type
     * @param message
     */
-    #define UR_INFO(type, message)  Logger::instance().consolePrint(LogLevel::INFO, type, message)
+    #define UR_INFO(type, message)  Logger::instance().consolePrint(Core::LogLevel::INFO, type, message)
 
     /*
     * Provides detailed trace information
@@ -121,7 +121,7 @@ namespace Uranium::Core {
     * @param type
     * @param message
     */
-    #define UR_TRACE(type, message) Logger::instance().consolePrint(LogLevel::TRACE, type, message)
+    #define UR_TRACE(type, message) Logger::instance().consolePrint(Core::LogLevel::TRACE, type, message)
 
     /*
     * A warning occurred, but the program can continue
@@ -129,7 +129,7 @@ namespace Uranium::Core {
     * @param type
     * @param message
     */
-    #define UR_WARN(type, message)  Logger::instance().consolePrint(LogLevel::WARN, type, message)
+    #define UR_WARN(type, message)  Logger::instance().consolePrint(Core::LogLevel::WARN, type, message)
     
     /*
     * This is evaluated at run-time
@@ -164,7 +164,7 @@ namespace Uranium::Core {
     * @param type
     * @param message
     */
-    #define UR_ERROR(type, message) Logger::instance().filePrint(LogLevel::ERROR, type, message)
+    #define UR_ERROR(type, message) Logger::instance().filePrint(Core::LogLevel::ERROR, type, message)
 
     /*
     * Application cannot continue, must close program entirely
@@ -173,9 +173,9 @@ namespace Uranium::Core {
     * @param type
     * @param message
     */
-    #define UR_FATAL(type, message) Logger::instance().filePrint(LogLevel::FATAL, type, message)
+    #define UR_FATAL(type, message) Logger::instance().filePrint(Core::LogLevel::FATAL, type, message)
 
-    #define UR_INFO(type, message)  Logger::instance().filePrint(LogLevel::INFO, type, message)
+    #define UR_INFO(type, message)  Logger::instance().filePrint(Core::LogLevel::INFO, type, message)
     #define UR_TRACE(type, message) /*Nothing*/
     #define UR_WARN(type, message)  /*Nothing*/
 
@@ -190,7 +190,7 @@ namespace Uranium::Core {
     * @param type
     * @param message
     */
-    #define UR_ERROR(type, message) Logger::instance().filePrint(LogLevel::ERROR, type, message)
+    #define UR_ERROR(type, message) Logger::instance().filePrint(Core::LogLevel::ERROR, type, message)
 
     /*
     * Application cannot continue, must close program entirely
@@ -199,7 +199,7 @@ namespace Uranium::Core {
     * @param type
     * @param message
     */
-    #define UR_FATAL(type, message) Logger::instance().filePrint(LogLevel::FATAL, type, message)
+    #define UR_FATAL(type, message) Logger::instance().filePrint(Core::LogLevel::FATAL, type, message)
 
     #define UR_INFO(type, message)  /*Nothing*/
     #define UR_TRACE(type, message) /*Nothing*/

@@ -25,7 +25,7 @@ namespace Uranium::Platform::Interface {
 		engineMinor(engineMinor),
 		enginePatch(enginePatch),
 
-		enableValidationLogs(UR_ON_DEBUG_SWAP(true, false))
+		validationLayerEnabled(UR_ON_DEBUG_SWAP(true, false))
 	{
 	}
 
@@ -41,7 +41,7 @@ namespace Uranium::Platform::Interface {
 
 	}
 
-	void UGraphicContext::enableValidationLog(bool enableValidationLogs = UR_ON_DEBUG_SWAP(true, false)) noexcept {
-		UR_ON_DEBUG(this->enableValidationLogs = enableValidationLogs);
+	void UGraphicContext::enableValidationLayers(bool enable = UR_ON_DEBUG_SWAP(true, false)) noexcept {
+		UR_ON_DEBUG(this->validationLayerEnabled = enable);
 	}
 }
