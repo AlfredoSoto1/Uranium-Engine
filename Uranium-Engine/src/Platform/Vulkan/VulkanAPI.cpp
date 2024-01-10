@@ -65,6 +65,8 @@ namespace Uranium::Platform::Vulkan {
     }
 
     void VulkanAPI::prepare() {
+        deviceManager->setDeviceSurface(surface);
+
         deviceManager->pickPhysicalDevice();
         deviceManager->createLogicalDevice();
         deviceManager->obtainDeviceQueues();

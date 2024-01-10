@@ -29,6 +29,12 @@ namespace Uranium::Platform::Vulkan {
         // Provide requirements
     };
 
+    URANIUM_API struct DeviceSwapChainSupportDetails final {
+        VkSurfaceCapabilitiesKHR capabilities;
+        std::vector<VkSurfaceFormatKHR> formats;
+        std::vector<VkPresentModeKHR> presentModes;
+    };
+
     URANIUM_API class VulkanDeviceManager final {
     public:
         explicit VulkanDeviceManager(const VulkanAPI& vulkanAPI, const VulkanContext& context) noexcept;
@@ -36,6 +42,12 @@ namespace Uranium::Platform::Vulkan {
         ~VulkanDeviceManager() noexcept = default;
 
     public:
+        /*
+        * Gives the device manager knowledge of which surface the API
+        * is going to work on.
+        */
+        void setDeviceSurface(VkSurfaceKHR surfaceRef) noexcept;
+
         /*
         * Picks the suitable physical device for the application
         * to use.
@@ -140,6 +152,15 @@ namespace Uranium::Platform::Vulkan {
         */
         bool checkDeviceExtensionSupport(VkPhysicalDevice device) const noexcept;
 
+        /*
+        * Queries all the swap chain support details to a struct
+        * from the provided physical device.
+        * 
+        * @param physicalDevice
+        * @returns swapchain-support-details
+        */
+        DeviceSwapChainSupportDetails querySwapChainSupport(VkPhysicalDevice device) const noexcept;
+
     private:
         const VulkanAPI& vulkanAPI;
         const VulkanContext& context;
@@ -150,5 +171,8 @@ namespace Uranium::Platform::Vulkan {
         VkQueue graphicsQueue;
         VkQueue presentQueue;
         DeviceQueueFamilyIndices queueIndices;
+
+        VkSurfaceKHR surfaceRef;
+        DeviceSwapChainSupportDetails swapChainSupport;
     };
 }

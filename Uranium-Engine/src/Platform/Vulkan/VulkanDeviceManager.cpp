@@ -16,14 +16,21 @@ namespace Uranium::Platform::Vulkan {
         vulkanAPI(vulkanAPI),
         context(context),
 
+        device(VK_NULL_HANDLE),
+        physicalDevice(VK_NULL_HANDLE),
+        
         graphicsQueue(VK_NULL_HANDLE),
         presentQueue(VK_NULL_HANDLE),
         queueIndices(),
 
-        device(VK_NULL_HANDLE),
-        physicalDevice(VK_NULL_HANDLE)
+        surfaceRef(VK_NULL_HANDLE),
+        swapChainSupport()
     {
 
+    }
+
+    void VulkanDeviceManager::setDeviceSurface(VkSurfaceKHR surfaceRef) noexcept {
+        this->surfaceRef = surfaceRef;
     }
 
     void VulkanDeviceManager::pickPhysicalDevice() {
@@ -136,12 +143,13 @@ namespace Uranium::Platform::Vulkan {
         // Obtain the family queues indices
         queueIndices = findQueueFamilies(device);
 
+        // Check for extension support
         bool extensionsSupported = checkDeviceExtensionSupport(device);
 
         bool swapChainAdequate = false;
         if (extensionsSupported) {
-            //SwapChainSupportDetails swapChainSupport = querySwapChainSupport(device);
-            //swapChainAdequate = !swapChainSupport.formats.empty() && !swapChainSupport.presentModes.empty();
+            swapChainSupport = querySwapChainSupport(device);
+            swapChainAdequate = !swapChainSupport.formats.empty() && !swapChainSupport.presentModes.empty();
         }
 
         return queueIndices.isComplete() && extensionsSupported && swapChainAdequate;
@@ -249,7 +257,7 @@ namespace Uranium::Platform::Vulkan {
 
             // Check if the queue family supports presentation to the specified surface
             VkBool32 presentSupport = false;
-            //vkGetPhysicalDeviceSurfaceSupportKHR(device, index, surface, &presentSupport); // TODO
+            vkGetPhysicalDeviceSurfaceSupportKHR(device, index, surfaceRef, &presentSupport);
 
             if (presentSupport)
                 indices.presentFamily = index;
@@ -278,5 +286,29 @@ namespace Uranium::Platform::Vulkan {
             requiredExtensions.erase(extension.extensionName);
 
         return requiredExtensions.empty();
+    }
+
+    DeviceSwapChainSupportDetails VulkanDeviceManager::querySwapChainSupport(VkPhysicalDevice device) const noexcept {
+        DeviceSwapChainSupportDetails details = {};
+
+        vkGetPhysicalDeviceSurfaceCapabilitiesKHR(device, surfaceRef, &details.capabilities);
+
+        uint32_t formatCount;
+        vkGetPhysicalDeviceSurfaceFormatsKHR(device, surfaceRef, &formatCount, nullptr);
+
+        if (formatCount != 0) {
+            details.formats.resize(formatCount);
+            vkGetPhysicalDeviceSurfaceFormatsKHR(device, surfaceRef, &formatCount, details.formats.data());
+        }
+
+        uint32_t presentModeCount;
+        vkGetPhysicalDeviceSurfacePresentModesKHR(device, surfaceRef, &presentModeCount, nullptr);
+
+        if (presentModeCount != 0) {
+            details.presentModes.resize(presentModeCount);
+            vkGetPhysicalDeviceSurfacePresentModesKHR(device, surfaceRef, &presentModeCount, details.presentModes.data());
+        }
+
+        return details;
     }
 }
