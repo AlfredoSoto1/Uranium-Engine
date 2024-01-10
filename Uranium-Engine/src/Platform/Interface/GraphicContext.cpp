@@ -1,8 +1,8 @@
-#include "UGraphicContext.h"
+#include "GraphicContext.h"
 
 namespace Uranium::Platform::Interface {
 
-	UGraphicContext::UGraphicContext(
+	GraphicContext::GraphicContext(
 		const std::string& engineName      = "Engine",
 		const std::string& applicationName = "Application",
 
@@ -23,25 +23,7 @@ namespace Uranium::Platform::Interface {
 
 		engineMajor(engineMajor),
 		engineMinor(engineMinor),
-		enginePatch(enginePatch),
-
-		validationLayerEnabled(UR_ON_DEBUG_SWAP(true, false))
+		enginePatch(enginePatch)
 	{
-	}
-
-	UGraphicContext::~UGraphicContext() noexcept {
-
-	}
-
-	void UGraphicContext::init() {
-
-	}
-
-	void UGraphicContext::shutdown() noexcept {
-
-	}
-
-	void UGraphicContext::enableValidationLayers(bool enable = UR_ON_DEBUG_SWAP(true, false)) noexcept {
-		UR_ON_DEBUG(this->validationLayerEnabled = enable);
 	}
 }

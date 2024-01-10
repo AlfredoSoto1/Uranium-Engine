@@ -22,13 +22,10 @@ namespace Uranium::Core {
 	* and declarations.
 	*/
 	void buildApplication(int argc, char* argv[]) {
+		// Terminal arguments are here in case we need them in the future mostly for debugging
 
 		// Create a new application instance
 		Application::application = createApplication();
-
-		// Pass all the arguments from the terminal to the application
-		for (int i = 0; i < argc; i++)
-			Application::application->terminalArguments.push_back(argv[i]);
 
 		// Starts the application
 		Application::application->start();

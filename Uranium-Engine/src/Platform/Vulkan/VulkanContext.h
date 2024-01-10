@@ -1,14 +1,16 @@
 #pragma once
 
 #include <vector>
+#include <string>
+#include <cstdint>
+
 #include "Core/CoreMacros.h"
-#include "Platform/Interface/UGraphicContext.h"
 
 namespace Uranium::Platform::Vulkan {
 
-	URANIUM_API class VulkanContext final :
-		UR_EXTENDS Interface::UGraphicContext
-	{
+	UR_DECLARE VulkanAPI;
+
+	URANIUM_API class VulkanContext final {
 	public:
 		/*
 		* @param App-Name
@@ -17,6 +19,7 @@ namespace Uranium::Platform::Vulkan {
 		* @param Engine-Version (mayor, minor, patch)
 		*/
 		explicit VulkanContext(
+			const VulkanAPI& vulkanAPI,
 			const std::string& engineName,
 			const std::string& applicationName,
 
@@ -29,71 +32,62 @@ namespace Uranium::Platform::Vulkan {
 			uint32_t enginePatch
 		) noexcept;
 
-		virtual ~VulkanContext() noexcept;
+		~VulkanContext() noexcept = default;
 
 	public:
 		/*
 		* @returns the instance in relation to the graphics API used
 		*/
-		InstanceRef getInstance() const noexcept;
+		VkInstance getInstance() const noexcept;
+	
+	public:
+		/*
+		* Creates a unique instance to reference the API selected.
+		* Disposes the instance if initialized before.
+		* Catches the latest version of the API to run as default.
+		*/
 
-	private:
-		void createInstance() override;
-		void disposeInstance() noexcept override;
-		void catchLatestVersion() noexcept override;
-
-	private:
-		VkApplicationInfo createVulkanApplication();
-
-	private:
-		bool hasValidationLayerSupport() const noexcept override;
-		bool checkValidationLayerSupport() const noexcept override;
-
-		void populateValidationLayers(VkInstanceCreateInfo& createInfo);
-
+		void createInstance();
+		void disposeInstance() noexcept;
+		void catchLatestVersion() noexcept;
+	
 	private:
 		/*
-		* Prepares the debug configurations
+		* @returns Vulkan specific application information.
 		*/
-		void setupDebugConfigurations() noexcept override;
+		VkApplicationInfo createVulkanApplication() noexcept;
 
 		/*
-		* @returns Information related to the debug messenger
+		* Populates the validation layer information for the vulkan instance.
+		* 
+		* @param createInfo-ref
 		*/
-		VkDebugUtilsMessengerCreateInfoEXT getDebugMessengerCreateInfo() noexcept;
+		void populateValidationLayers(VkInstanceCreateInfo& createInfo) noexcept;
 
 		/*
-		* Creates the debug messenger
+		* Populates the required extensions information for the vulkan instance.
+		*
+		* @param createInfo-ref
 		*/
-		VkResult createDebugUtilsMessengerEXT(
-			VkInstance                                instance,
-			const VkDebugUtilsMessengerCreateInfoEXT* pCreateInfo,
-			const VkAllocationCallbacks*              pAllocator,
-			VkDebugUtilsMessengerEXT*                 pDebugMessenger
-		) const;
+		void populateRequiredExtensions(VkInstanceCreateInfo& createInfo) noexcept;
+
+	private:
+		// Engine name
+		std::string engineName;
+		// Application name
+		std::string applicationName; 
 		
-		/*
-		* Disposes the debug messenger
-		*/
-		void destroyDebugUtilsMessengerEXT(
-			VkInstance                   instance,
-			VkDebugUtilsMessengerEXT     debugMessenger,
-			const VkAllocationCallbacks* pAllocator
-		);
+		// Application version
+		uint32_t appMajor;            
+		uint32_t appMinor;           
+		uint32_t appPatch;
 
-	private:
-		void populateRequiredExtensions(VkInstanceCreateInfo& createInfo);
+		// Engine version		                              
+		uint32_t engineMajor;        
+		uint32_t engineMinor;        
+		uint32_t enginePatch;        
 
-	private:
-		// Add other Vulkan-related members as needed
-		const std::vector<const char*> validationLayers = {
-			"VK_LAYER_KHRONOS_validation"
-		};
-		
 		VkInstance instance;
-		VkDebugUtilsMessengerEXT debugMessenger;
-
-		bool isDebugMessengerSupported;
-		bool isValidationLayerSupported;
+		const VulkanAPI& vulkanAPI;
 	};
 }

@@ -16,16 +16,22 @@ namespace Uranium::Input::Events {
 namespace Uranium::Core {
 
 	URANIUM_API class Application {
+	private:
+		/*
+		* Holds a reference to the unique application instance
+		* throughout the life time of the program
+		*/
+		static std::unique_ptr<Application> application;
+
+		/*
+		* Extern friend to start application
+		* Located at: EntryPoint.cpp
+		*/
+		friend void buildApplication(int argc, char* argv[]);
+
 	public:
-		/*
-		* Creates and initializes a unique instance of the application
-		*/
 		explicit Application() noexcept;
-		
-		/*
-		* Destroys and cleans up the application
-		*/
-		virtual ~Application();
+		virtual ~Application() noexcept;
 
 		Application(Application&) = delete;
 		Application(Application&&) = delete;
@@ -48,23 +54,6 @@ namespace Uranium::Core {
 
 	private:
 		/*
-		* Holds a reference to the unique application instance
-		* throughout the life time of the program
-		*/
-		static std::unique_ptr<Application> application;
-		
-		/*
-		* Default method that logs any GL errors
-		*/
-		static void diagnosticErrors(int error, const char* description);
-		
-		/*
-		* Extern friend to start application
-		* Located at: EntryPoint.cpp
-		*/
-		friend void buildApplication(int argc, char* argv[]);
-
-		/*
 		* Starts the application
 		*/
 		void start() noexcept;
@@ -75,8 +64,6 @@ namespace Uranium::Core {
 
 	private:
 		volatile bool isRunning;
-
-		std::vector<std::string> terminalArguments;
 
 		std::unique_ptr<Platform::Display::Window> windowDisplay;
 	};

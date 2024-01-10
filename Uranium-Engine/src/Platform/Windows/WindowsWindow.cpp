@@ -7,30 +7,68 @@
 
 namespace Uranium::Platform::Windows {
 
-	WindowsWindow::WindowsWindow(const std::string& title, unsigned int width, unsigned int height) :
-		title(title),
-		width(width),
-		height(height),
-		frameBufferResized(false)
+	WindowsWindow::WindowsWindow(
+		const std::string& title = "Uranium-Window", // 
+		uint32_t width  = MIN_WIDTH,			     // default values are set if no arguments are provided
+		uint32_t height = MIN_HEIGHT				 // 
+	):		
+		Window(title, width, height)
 	{
-		// glfw should be already initiated
-		glfwInit();
+	}
 
-		// Prepare hints
-		glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
-		glfwWindowHint(GLFW_CENTER_CURSOR, GLFW_TRUE);
+	WindowsWindow::~WindowsWindow() noexcept {
 
-		glfwWindow = glfwCreateWindow(width, height, title.c_str(), nullptr, nullptr);
+	}
 
-        if (glfwWindow == nullptr)
-            throw std::runtime_error("Failed to create GLFW window!");
+	void WindowsWindow::setVSync(bool enabled) {
 
-		glfwSetWindowUserPointer(glfwWindow, this);
+	}
 
-		// Create and prepare callbacks (must do in application)
-		glfwSetFramebufferSizeCallback(glfwWindow, [](GLFWwindow* glfwWindow, int width, int height) {
-			WindowsWindow& window = *(WindowsWindow*)glfwGetWindowUserPointer(glfwWindow);
-			window.frameBufferResized = true;
-		});
+	void WindowsWindow::setVisible(bool visible) {
+
+	}
+
+	void WindowsWindow::setResizable(bool resizable) {
+
+	}
+
+	void WindowsWindow::setDecorated(bool decorated) {
+
+	}
+
+	void WindowsWindow::setAlwaysOnTop(bool alwaysOnTop) {
+
+	}
+
+	void WindowsWindow::close() {
+
+	}
+
+	void WindowsWindow::focus() {
+
+	}
+
+	void WindowsWindow::requestAttention() {
+
+	}
+
+	void WindowsWindow::restore() {
+
+	}
+
+	void WindowsWindow::maximize() {
+
+	}
+
+	void WindowsWindow::minimize() {
+
+	}
+
+	void WindowsWindow::center(MonitorRef monitor) {
+
+	}
+
+	void WindowsWindow::setFullscreen(MonitorRef monitor) {
+
 	}
 }

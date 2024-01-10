@@ -959,8 +959,8 @@ int main() {
     using namespace Uranium::Core;
     Logger::init();
 
-    Logger::instance().consolePrint(LogLevel::WARN, "[GLFW : initGLFW()]", "another improtn");
-    
+    Logger::instance().consolePrint(LogLevel::WARN, "[GLFW : initGLFW()]", "text");
+
     Logger::shutdown();
 
     HelloTriangleApplication app;

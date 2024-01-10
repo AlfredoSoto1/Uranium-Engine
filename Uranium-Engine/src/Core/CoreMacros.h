@@ -77,6 +77,8 @@
 	#define UR_ON_DEBUG_SWAP(debug_statement, release_statement) release_statement
 #endif
 
+#define UR_DECLARE class
+
 #define UR_GENERIC(type, ...) template <class type, __VA_ARGS__>
 
 #define UR_INTERFACE       class

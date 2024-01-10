@@ -26,15 +26,13 @@ namespace Uranium::Platform::Monitor {
 
 namespace Uranium::Platform::Interface {
 	
-	URANIUM_API class UWindow {
+	URANIUM_API class Window {
 	public:
 		static void initWindowAPI();              // Initiates the windowing API
 		static void shutdownWindowAPI() noexcept; // Shuts down the windowing API
 
-		/*
-		* Minimun and maximum default dimensions
-		* for a window when resizing and creation
-		*/
+		// Minimun and maximum default dimensions
+		// for a window when resizing and creation
 		static constexpr unsigned int MIN_WIDTH = 320;
 		static constexpr unsigned int MIN_HEIGHT = 180;
 
@@ -55,8 +53,8 @@ namespace Uranium::Platform::Interface {
 		* @param width
 		* @param height
 		*/
-		explicit UWindow(const std::string& title, uint32_t width, uint32_t height) noexcept;
-		virtual ~UWindow() noexcept;
+		explicit Window(const std::string& title, uint32_t width, uint32_t height);
+		virtual ~Window() noexcept;
 		
 		/*
 		* Returns a raw pointer reference to a GLFWwindow
@@ -91,6 +89,18 @@ namespace Uranium::Platform::Interface {
 		* @param enabled - true or false
 		*/
 		virtual void setVSync(bool enabled);
+
+	protected:
+		friend class GraphicsAPI;
+
+		using SurfaceRef = void*;
+
+		/*
+		* @returns surface reference for the graphics API chosen to use.
+		* 
+		* @throw runtime_error if fails to create.
+		*/
+		virtual SurfaceRef createSurface() const = 0;
 
 	protected:
 		virtual void setVisible(bool visible)         = 0;
@@ -160,17 +170,19 @@ namespace Uranium::Platform::Interface {
 
 		Event::EventCallbackFn callbackFunction;
 
+	private:
 		/*
 		* Creates and disposes the callbacks.
 		* This is internally handled by the application
 		*/
-		void createCallbacks() noexcept;
+
+		void createCallbacks();
 		void disposeCallbacks() noexcept;
 
 		/*
 		* Sets the event callback function. This is
 		* internally handled by the application
 		*/
-		void setEventCallback(const Event::EventCallbackFn& callbackEvent);
+		void setEventCallback(const Event::EventCallbackFn& callbackEvent) noexcept;
 	};
 }

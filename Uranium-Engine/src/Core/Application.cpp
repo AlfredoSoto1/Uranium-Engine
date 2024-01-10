@@ -9,42 +9,21 @@ namespace Uranium::Core {
 
 	std::unique_ptr<Application> Application::application = nullptr;
 
-	void Application::diagnosticErrors(int error, const char* description) {
-		// Print the error to the console. We dont use the built-in
-		// print_status() macro because we want to detect errors even
-		// on release. (Could change in the future)
-		std::printf("Error [%i]: %s\n", error, description);
-	}
-
 	Application::Application() noexcept :
-		isRunning(true),
-		terminalArguments()
+		isRunning(true)
 	{
-		if (application != nullptr)
-			__debugbreak(); // REMOVE
-
-		// Initialize GLFW and check it did it correctly
-		// If the application doesn't initiate, exit the application
-		if (glfwInit() == GLFW_FALSE)
-			__debugbreak(); // REMOVE // throw std::exception("Application could not initiate GLFW.");
-
-		// Set the custom error callback
-		// to diagnostic any possible error in 
-		// the lifetime of the glfw application
-		glfwSetErrorCallback(&Application::diagnosticErrors);
+		if (Application::application != nullptr)
+			throw std::runtime_error("Application has already started!!");
 
 		using namespace Platform::Monitor;
 		// Initiate the monitor handler
 		Platform::Monitor::MonitorHandler::initMonitors();
 	}
 
-	Application::~Application() {
+	Application::~Application() noexcept {
 		using namespace Platform::Monitor;
 		// Dispose all window instances
 		MonitorHandler::disposeMonitors();
-
-		glfwTerminate();
-		terminalArguments.clear();
 	}
 
 	void Application::start() noexcept {
