@@ -24,6 +24,5 @@ namespace Uranium::Platform::Vulkan {
 		const VulkanContext& context;
 
 		VkSurfaceKHR surfaceRef;
-		DeviceSwapChainSupportDetails swapChainSupport;
 	};
 }

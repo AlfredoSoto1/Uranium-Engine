@@ -67,7 +67,7 @@ namespace Uranium::Platform::Vulkan {
 
     void VulkanDeviceManager::createLogicalDevice() {
 
-        VkDeviceCreateInfo createInfo = {};
+        VkDeviceCreateInfo createInfo{};
         createInfo.sType = VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO;
 
         // Populate the required information for the device to be created
@@ -236,7 +236,7 @@ namespace Uranium::Platform::Vulkan {
     }
 
     DeviceQueueFamilyIndices VulkanDeviceManager::findQueueFamilies(VkPhysicalDevice device) const noexcept {
-        DeviceQueueFamilyIndices indices = {};
+        DeviceQueueFamilyIndices indices{};
 
         // Obtain the family queue count
         uint32_t queueFamilyCount = 0;
@@ -289,7 +289,7 @@ namespace Uranium::Platform::Vulkan {
     }
 
     DeviceSwapChainSupportDetails VulkanDeviceManager::querySwapChainSupport(VkPhysicalDevice device) const noexcept {
-        DeviceSwapChainSupportDetails details = {};
+        DeviceSwapChainSupportDetails details{};
 
         vkGetPhysicalDeviceSurfaceCapabilitiesKHR(device, surfaceRef, &details.capabilities);
 

@@ -76,6 +76,8 @@ namespace Uranium::Platform::Vulkan {
 
         deviceManager->disposeDevice();
 
+        vkDestroySurfaceKHR(context->getInstance(), surface, nullptr);
+
         if constexpr (VulkanAPI::validationLayerSupported)
             destroyDebugUtilsMessengerEXT(context->getInstance(), debugMessenger, nullptr);
 
@@ -138,7 +140,7 @@ namespace Uranium::Platform::Vulkan {
     }
 
     VkDebugUtilsMessengerCreateInfoEXT VulkanAPI::getDebugMessengerCreateInfo() const noexcept {
-        VkDebugUtilsMessengerCreateInfoEXT debugCreateInfo = {};
+        VkDebugUtilsMessengerCreateInfoEXT debugCreateInfo{};
 
         // Set up the Vulkan Debug Utils Messenger creation info
         debugCreateInfo.sType = VK_STRUCTURE_TYPE_DEBUG_UTILS_MESSENGER_CREATE_INFO_EXT;
