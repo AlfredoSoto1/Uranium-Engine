@@ -42,13 +42,18 @@ namespace Uranium::Platform::Vulkan {
 	
 	public:
 		/*
-		* Creates a unique instance to reference the API selected.
-		* Disposes the instance if initialized before.
-		* Catches the latest version of the API to run as default.
+		* Creates a vulkan instance as main reference for the API.
 		*/
+		void create();
 
-		void createInstance();
-		void disposeInstance() noexcept;
+		/*
+		* Destroys the vulkan instance and the context context.
+		*/
+		void destroy() noexcept;
+
+		/*
+		* Catches the latest Vulkan Version
+		*/
 		void catchLatestVersion() noexcept;
 	
 	private:

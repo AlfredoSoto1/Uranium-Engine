@@ -4,22 +4,51 @@
 
 namespace Uranium::Platform::Interface {
 
-    URANIUM_API class GraphicsAPI {
-    public:
-        explicit GraphicsAPI() noexcept;
-        ~GraphicsAPI() noexcept;
+	UR_DECLARE Window;
 
-    public:
-        void init();
-        void shutdown();
+	URANIUM_API class GraphicsAPI {
+	public:
+		explicit GraphicsAPI(
+			const std::string& engineName,
+			const std::string& applicationName,
 
-    private:
-        virtual void createInstance() = 0;
-        virtual void pickPhysicalDevice() = 0;
-        virtual void createLogicalDevice() = 0;
-        virtual void createSurface() = 0;
-        virtual void createSwapChain() = 0;
+			uint32_t appMajor,
+			uint32_t appMinor,
+			uint32_t appPatch,
 
-    private:
-    };
+			uint32_t engineMajor,
+			uint32_t engineMinor,
+			uint32_t enginePatch
+		) noexcept;
+
+		virtual ~GraphicsAPI() noexcept = default;
+
+	public:
+		/*
+		* Initiates the Vulkan API
+		*/
+		void init(const Interface::Window& window);
+		void shutdown() noexcept;
+
+	public:
+		/*
+		* @returns true if the device supports validation layers
+		* for the graphics API.
+		*/
+		bool hasValidationLayerSupport() const noexcept;
+
+	private:
+		/*
+		* Prepares and initializes all debug configurations.
+		* This is done only when the application configuration
+		* is set to UR_DEBUG.
+		*/
+
+		void setupDebugConfigurations();
+		bool checkValidationLayerSupport() const noexcept;
+
+	protected:
+		static constexpr const bool validationLayerSupported = UR_ON_DEBUG_SWAP(true, false);
+
+	};
 }

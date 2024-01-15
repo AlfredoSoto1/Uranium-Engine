@@ -42,7 +42,7 @@ namespace Uranium::Platform::Vulkan {
         return instance;
     }
 
-	void VulkanContext::createInstance() {
+	void VulkanContext::create() {
         // Prepare the Vulkan Application information
         VkApplicationInfo appInfo = createVulkanApplication();
 
@@ -78,7 +78,7 @@ namespace Uranium::Platform::Vulkan {
         }
 	}
 
-    void VulkanContext::disposeInstance() noexcept {
+    void VulkanContext::destroy() noexcept {
         if (instance != VK_NULL_HANDLE) {
             vkDestroyInstance(instance, nullptr);
             instance = VK_NULL_HANDLE;

@@ -1,20 +1,23 @@
 #pragma once
 
+#include "Core/CoreMacros.h"
+
 struct GLFWmonitor;
 
 namespace Uranium::Input::Callbacks {
 
-	class MonitorCallback final {
+	URANIUM_API class MonitorCallback final {
 	private:
 		/*
-		* it gets called when a monitor gets created
+		* @brief gets called when a monitor event happens.
 		*/
-		static void monitorEvent(GLFWmonitor* monitor, int event);
+		static void monitor_callback(GLFWmonitor* monitor, int event) noexcept;
 
 	public:
-		~MonitorCallback() = default;
+		~MonitorCallback() noexcept = default;
 
 		/*
+		* @brief
 		* Copy and move constructor deleted
 		* this is beacause we dont want the client
 		* to move or copy this class by accident since
@@ -27,6 +30,7 @@ namespace Uranium::Input::Callbacks {
 
 	public:
 		/*
+		* @brief
 		* Monitor Callback constructor
 		* creates all the monitor related callbacks
 		*/

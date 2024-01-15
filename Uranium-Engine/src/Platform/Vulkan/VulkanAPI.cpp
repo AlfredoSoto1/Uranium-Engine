@@ -6,7 +6,7 @@
 
 #include "VulkanAPI.h"
 #include "VulkanContext.h"
-#include "VulkanDeviceManager.h"
+#include "VulkanDevice.h"
 
 #include "Platform/Interface/Window.h"
 
@@ -41,11 +41,9 @@ namespace Uranium::Platform::Vulkan {
             engineMinor,
             enginePatch
         );
-
-        deviceManager = std::make_unique<VulkanDeviceManager>(*this, *context);
     }
 
-    void VulkanAPI::init() {
+    void VulkanAPI::init(const Interface::Window& window) {
         //Check if vulkan is supported, if not use opengl
         //glfwVulkanSupported();
 
@@ -58,35 +56,32 @@ namespace Uranium::Platform::Vulkan {
             Core::UR_WARN("[Vulkan]", "Validation layers requested, but not available!");
         );
         
+        // Create the main context
         context->catchLatestVersion();
-        context->createInstance();
+        context->create();
 
+        // Prepare debug configurations for the API
         setupDebugConfigurations();
-    }
 
-    void VulkanAPI::prepare() {
-        deviceManager->setDeviceSurface(surface);
+        // Create the surface
+        if (glfwCreateWindowSurface(context->getInstance(), window, nullptr, &surface) != VK_SUCCESS)
+            throw std::runtime_error("failed to create window surface!");
 
-        deviceManager->pickPhysicalDevice();
-        deviceManager->createLogicalDevice();
-        deviceManager->obtainDeviceQueues();
+        // Create a new vulkan device
+        deviceManager = std::make_unique<VulkanDevice>(*this);
     }
 
     void VulkanAPI::shutdown() noexcept {
 
-        deviceManager->disposeDevice();
+        deviceManager.reset();
 
+        // destroy the surface
         vkDestroySurfaceKHR(context->getInstance(), surface, nullptr);
 
         if constexpr (VulkanAPI::validationLayerSupported)
             destroyDebugUtilsMessengerEXT(context->getInstance(), debugMessenger, nullptr);
 
-        context->disposeInstance();
-    }
-
-    void VulkanAPI::createSurface(const Interface::Window& window) {
-        if (glfwCreateWindowSurface(context->getInstance(), window, nullptr, &surface) != VK_SUCCESS)
-            throw std::runtime_error("failed to create window surface!");
+        context->destroy();
     }
 
     bool VulkanAPI::hasValidationLayerSupport() const noexcept {

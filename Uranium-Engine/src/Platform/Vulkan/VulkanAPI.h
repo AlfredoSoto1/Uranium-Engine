@@ -15,12 +15,14 @@ namespace Uranium::Platform::Interface {
 namespace Uranium::Platform::Vulkan {
 
 	UR_DECLARE VulkanContext;
-	UR_DECLARE VulkanDeviceManager;
+	UR_DECLARE VulkanDevice;
+	UR_DECLARE VulkanSwapChain;
 
     URANIUM_API class VulkanAPI {// : UR_EXTENDS GraphicsAPI {
     public:
 		friend VulkanContext;
-		friend VulkanDeviceManager;
+		friend VulkanDevice;
+		friend VulkanSwapChain;
 
     public:
         explicit VulkanAPI(
@@ -39,11 +41,11 @@ namespace Uranium::Platform::Vulkan {
         virtual ~VulkanAPI() noexcept = default;
 
     public:
-        void init();
-        void prepare();
+		/*
+		* Initiates the Vulkan API
+		*/
+        void init(const Interface::Window& window);
         void shutdown() noexcept;
-
-		void createSurface(const Interface::Window& window);
 
 	public:
 		/*
@@ -122,7 +124,7 @@ namespace Uranium::Platform::Vulkan {
 		VkDebugUtilsMessengerEXT debugMessenger;
 		
 		std::unique_ptr<VulkanContext> context;
-		std::unique_ptr<VulkanDeviceManager> deviceManager;
+		std::unique_ptr<VulkanDevice> deviceManager;
 
 		VkSurfaceKHR surface;
     };

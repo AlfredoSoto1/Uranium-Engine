@@ -137,13 +137,13 @@ namespace Uranium::Core {
     * @param condition - establishes if it should do an assert
     * @param message   - displays the message of the assertion
     */
-    #define UR_ASSERT(condition, message) \
-    {                                     \
-        if (condition) {                  \
-            UR_ERROR(message);            \
-            UR_DEBUG_BREAK();             \
-        }                                 \
-    }                                     \
+    #define UR_ASSERT(condition, type, message) \
+    {                                           \
+        if (condition) {                        \
+            Core::UR_ERROR(type, message);      \
+            UR_DEBUG_BREAK();                   \
+        }                                       \
+    }                                           \
 
     /*
     * This is evaluated at compile-time
@@ -175,11 +175,11 @@ namespace Uranium::Core {
     */
     #define UR_FATAL(type, message, ...) Logger::instance().filePrint(Core::LogLevel::FATAL, type, message, __VA_ARGS__)
 
-    #define UR_INFO(type, message, ...)  Logger::instance().filePrint(Core::LogLevel::INFO, type, message, __VA_ARGS__)
-    #define UR_TRACE(type, message, ...) /*Nothing*/
-    #define UR_WARN(type, message, ...)  /*Nothing*/
+    #define UR_INFO(type,  message, ...)  Logger::instance().filePrint(Core::LogLevel::INFO, type, message, __VA_ARGS__)
+    #define UR_TRACE(type, message, ...)  /*Nothing*/
+    #define UR_WARN(type,  message, ...)  /*Nothing*/
 
-    #define UR_ASSERT(condition, message)
+    #define UR_ASSERT(condition, type,  message)
     #define UR_STATIC_ASSERT(condition, message)
 
 #elif defined(UR_DISTRIBUTION)
@@ -201,11 +201,11 @@ namespace Uranium::Core {
     */
     #define UR_FATAL(type, message, ...) Logger::instance().filePrint(Core::LogLevel::FATAL, type, message, __VA_ARGS__)
 
-    #define UR_INFO(type, message, ...)  /*Nothing*/
-    #define UR_TRACE(type, message, ...) /*Nothing*/
-    #define UR_WARN(type, message, ...)  /*Nothing*/
+    #define UR_INFO(type,  message, ...)  /*Nothing*/
+    #define UR_TRACE(type, message, ...)  /*Nothing*/
+    #define UR_WARN(type,  message, ...)  /*Nothing*/
 
-    #define UR_ASSERT(condition, message)        /*Nothing*/
+    #define UR_ASSERT(condition, type, message)  /*Nothing*/
     #define UR_STATIC_ASSERT(condition, message) /*Nothing*/
 
 #endif

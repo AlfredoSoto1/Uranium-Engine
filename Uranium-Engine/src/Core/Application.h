@@ -5,52 +5,70 @@
 #include <string>
 #include "CoreMacros.h"
 
-namespace Uranium::Platform::Display {
-	class Window;
+namespace Uranium::Platform::Interface {
+	UR_DECLARE Window;
+	UR_DECLARE GraphicsAPI;
 }
 
 namespace Uranium::Input::Events {
-	class Event;
+	UR_DECLARE Event;
 }
 
 namespace Uranium::Core {
 
 	URANIUM_API class Application {
-	private:
+	public:
 		/*
-		* Holds a reference to the unique application instance
-		* throughout the life time of the program
+		* @returns unique instance of application.
 		*/
-		static std::unique_ptr<Application> application;
-
-		/*
-		* Extern friend to start application
-		* Located at: EntryPoint.cpp
-		*/
-		friend void buildApplication(int argc, char* argv[]);
+		static Application& instance();
 
 	public:
 		explicit Application() noexcept;
 		virtual ~Application() noexcept;
 
-		Application(Application&) = delete;
+		Application(Application&)  = delete;
 		Application(Application&&) = delete;
 		Application& operator=(const Application&) = delete;
 
 	public:
-		static Application& instance() {
-			return *application;
-		}
+		using Window = Platform::Interface::Window;
+		using GraphicsAPI = Platform::Interface::GraphicsAPI;
 
-		const Platform::Display::Window& getWindow() {
-			return *windowDisplay;
-		}
+		/*
+		* @returns window reference
+		*/
+		Window& getWindow();
 		
 	protected:
 		/*
 		* Creates a unique instance of a window
+		* 
+		* @return unique reference to window
 		*/
-		virtual std::unique_ptr<Platform::Display::Window> createWindow() = 0;
+		virtual std::unique_ptr<Window> createWindow() = 0;
+
+		/*
+		* Creates the proper graphics API to use throught the Application.
+		* You cannot change in run-time once having an API selected. If you
+		* would like to change the API, the application must restart.
+		*
+		* @return unique reference to window
+		*/
+		virtual std::unique_ptr<GraphicsAPI> prepareGraphicsAPI() = 0;
+
+	private:
+		/*
+		* @brief Holds a reference to the unique application instance
+		* throughout the life time of the program
+		*/
+		static std::unique_ptr<Application> application;
+
+		/*
+		* @brief Extern friend to start application
+		* Located at: EntryPoint.cpp
+		*/
+		friend void buildApplication(int argc, char* argv[]);
 
 	private:
 		/*
@@ -63,8 +81,9 @@ namespace Uranium::Core {
 		void onEvent(Input::Events::Event& e);
 
 	private:
+		std::unique_ptr<Window> window;
+		std::unique_ptr<GraphicsAPI> graphicsAPI;
+		
 		volatile bool isRunning;
-
-		std::unique_ptr<Platform::Display::Window> windowDisplay;
 	};
 }

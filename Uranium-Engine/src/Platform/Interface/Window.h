@@ -10,21 +10,19 @@
 struct GLFWwindow;
 
 namespace Uranium::Core {
-	class Application;
+	UR_DECLARE Application;
 }
 
 namespace Uranium::Input::Callbacks {
-	class WindowCallback;
-	class MouseCallback;
-	class CursorCallback;
-	class KeyboardCallback;
-}
-
-namespace Uranium::Platform::Monitor {
-	class Monitor;
+	UR_DECLARE WindowCallback;
+	UR_DECLARE MouseCallback;
+	UR_DECLARE CursorCallback;
+	UR_DECLARE KeyboardCallback;
 }
 
 namespace Uranium::Platform::Interface {
+
+	UR_DECLARE Monitor;
 	
 	URANIUM_API class Window {
 	public:
@@ -57,7 +55,7 @@ namespace Uranium::Platform::Interface {
 		virtual ~Window() noexcept;
 		
 		/*
-		* Returns a raw pointer reference to a GLFWwindow
+		* @return raw pointer reference to a GLFWwindow
 		*/
 		operator GLFWwindow* () const noexcept;
 
@@ -119,7 +117,7 @@ namespace Uranium::Platform::Interface {
 		virtual void minimize() = 0;
 
 	protected:
-		using MonitorRef = std::shared_ptr<Monitor::Monitor>;
+		using MonitorRef = std::shared_ptr<Monitor>;
 
 		virtual void center(MonitorRef monitor) = 0;
 		virtual void setFullscreen(MonitorRef monitor) = 0;

@@ -12,19 +12,19 @@ namespace Uranium::Platform::Vulkan {
     UR_DECLARE VulkanAPI;
     UR_DECLARE VulkanContext;
 
-    URANIUM_API class VulkanDeviceManager final {
+    URANIUM_API class VulkanDevice final {
     public:
-        explicit VulkanDeviceManager(const VulkanAPI& vulkanAPI, const VulkanContext& context) noexcept;
+        explicit VulkanDevice(const VulkanAPI& vulkanAPI) noexcept;
 
-        ~VulkanDeviceManager() noexcept = default;
+        ~VulkanDevice() noexcept;
 
     public:
-        /*
-        * Gives the device manager knowledge of which surface the API
-        * is going to work on.
-        */
-        void setDeviceSurface(VkSurfaceKHR surfaceRef) noexcept;
+        VkDevice getDevice() const noexcept;
+        
+        const DeviceQueueFamilyIndices& getQueueFamilies() const noexcept;
+        const SwapChainSupportDetails&  getSwapChainSupportDetails() const noexcept;
 
+    private:
         /*
         * Picks the suitable physical device for the application
         * to use.
@@ -42,21 +42,9 @@ namespace Uranium::Platform::Vulkan {
         void createLogicalDevice();
 
         /*
-        * Disposes every allocated data from this instance
-        * from device manager.
-        */
-        void disposeDevice() noexcept;
-
-        /*
         * Obtains the device queues from the indices
         */
         void obtainDeviceQueues() noexcept;
-
-    public:
-        /*
-        * @returns logical device object reference
-        */
-        VkDevice getDevice() const noexcept;
 
     private:
         /*
@@ -136,20 +124,18 @@ namespace Uranium::Platform::Vulkan {
         * @param physicalDevice
         * @returns swapchain-support-details
         */
-        DeviceSwapChainSupportDetails querySwapChainSupport(VkPhysicalDevice device) const noexcept;
+        SwapChainSupportDetails querySwapChainSupport(VkPhysicalDevice device) const noexcept;
 
     private:
         const VulkanAPI& vulkanAPI;
-        const VulkanContext& context;
 
-        VkDevice device;
-        VkPhysicalDevice physicalDevice; // GPU selected
+        VkDevice device;                  // Logical device
+        VkPhysicalDevice physicalDevice;  // GPU device
     
-        VkQueue graphicsQueue;
-        VkQueue presentQueue;
+        VkQueue graphicsQueue;           
+        VkQueue presentQueue;            
         DeviceQueueFamilyIndices queueIndices;
 
-        VkSurfaceKHR surfaceRef;
-        DeviceSwapChainSupportDetails swapChainSupport;
+        SwapChainSupportDetails swapChainSupport;
     };
 }

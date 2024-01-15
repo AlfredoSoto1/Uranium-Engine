@@ -1,7 +1,3 @@
-#ifdef UR_DEBUG
-#include <iostream>
-#endif
-
 #include "Application.h"
 
 /*
@@ -9,6 +5,8 @@
 * the application can start without the need of
 * a main function. With this the application can handle
 * efficiently the lifetime of the Application.
+* 
+* @return unique application reference
 */
 extern std::unique_ptr<Uranium::Core::Application> createApplication();
 
@@ -20,6 +18,9 @@ namespace Uranium::Core {
 	* singleton have access to all private members of the
 	* Application class members including static functions
 	* and declarations.
+	* 
+	* @param arguments count
+	* @param arguments array
 	*/
 	void buildApplication(int argc, char* argv[]) {
 		// Terminal arguments are here in case we need them in the future mostly for debugging

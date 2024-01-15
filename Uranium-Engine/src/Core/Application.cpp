@@ -1,45 +1,62 @@
-#include <GLFW/glfw3.h>
-#include <iostream>
+#include <stdexcept>
 
-#include "Core/Application.h"
-#include "Platform/Display/Window.h"
+#include "Logger.h"
+#include "Application.h"
+
+#include "Platform/Interface/Window.h"
+#include "Platform/Interface/GraphicsAPI.h"
 #include "Platform/Monitor/MonitorHandler.h"
 
 namespace Uranium::Core {
 
 	std::unique_ptr<Application> Application::application = nullptr;
 
+	Application& Application::instance() {
+		return *application;
+	}
+
 	Application::Application() noexcept :
-		isRunning(true)
+		isRunning(true),
+
+		window(nullptr),
+		graphicsAPI(nullptr)
 	{
-		if (Application::application != nullptr)
-			throw std::runtime_error("Application has already started!!");
+		UR_ASSERT(Application::application != nullptr, "[Application]", "Already instantiated!");
 
 		using namespace Platform::Monitor;
 		// Initiate the monitor handler
 		Platform::Monitor::MonitorHandler::initMonitors();
+
+		Window::initWindowAPI();
 	}
 
 	Application::~Application() noexcept {
 		using namespace Platform::Monitor;
 		// Dispose all window instances
 		MonitorHandler::disposeMonitors();
+
+		Window::shutdownWindowAPI();
+	}
+
+	Application::Window& Application::getWindow() {
+		return *window;
 	}
 
 	void Application::start() noexcept {
-		windowDisplay = createWindow();
+		graphicsAPI = prepareGraphicsAPI();
 
-		windowDisplay->createCallbacks();
-		windowDisplay->setEventCallback(std::bind(&Application::onEvent, this, std::placeholders::_1));
+		window = createWindow();
 
-		while (!windowDisplay->shouldClose()) {
+		window->createCallbacks();
+		window->setEventCallback(std::bind(&Application::onEvent, this, std::placeholders::_1));
 
-			windowDisplay->onUpdate();
+		while (!window->shouldClose()) {
+			window->onUpdate();
 		}
 
-		windowDisplay->disposeCallbacks();
+		window->disposeCallbacks();
 
-		delete windowDisplay.release();
+		delete window.release();
 	}
 
 	void Application::onEvent(Input::Events::Event& e) {

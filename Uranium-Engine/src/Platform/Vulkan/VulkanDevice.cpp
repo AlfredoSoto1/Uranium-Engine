@@ -8,13 +8,12 @@
 
 #include "VulkanAPI.h"
 #include "VulkanContext.h"
-#include "VulkanDeviceManager.h"
+#include "VulkanDevice.h"
 
 namespace Uranium::Platform::Vulkan {
 
-    VulkanDeviceManager::VulkanDeviceManager(const VulkanAPI& vulkanAPI, const VulkanContext& context) noexcept :
+    VulkanDevice::VulkanDevice(const VulkanAPI& vulkanAPI) noexcept :
         vulkanAPI(vulkanAPI),
-        context(context),
 
         device(VK_NULL_HANDLE),
         physicalDevice(VK_NULL_HANDLE),
@@ -23,17 +22,35 @@ namespace Uranium::Platform::Vulkan {
         presentQueue(VK_NULL_HANDLE),
         queueIndices(),
 
-        surfaceRef(VK_NULL_HANDLE),
         swapChainSupport()
     {
-
+        pickPhysicalDevice();
+        createLogicalDevice();
+        obtainDeviceQueues();
     }
 
-    void VulkanDeviceManager::setDeviceSurface(VkSurfaceKHR surfaceRef) noexcept {
-        this->surfaceRef = surfaceRef;
+    VulkanDevice::~VulkanDevice() noexcept {
+        if (device != VK_NULL_HANDLE) {
+            vkDestroyDevice(device, nullptr);
+            device = VK_NULL_HANDLE;
+        }
+        else
+            Core::UR_WARN("[Vulkan]", "Failed to dispose logical device reference since it was already NULL.");
     }
 
-    void VulkanDeviceManager::pickPhysicalDevice() {
+    VkDevice VulkanDevice::getDevice() const noexcept {
+        return device;
+    }
+
+    const DeviceQueueFamilyIndices& VulkanDevice::getQueueFamilies() const noexcept {
+        return queueIndices;
+    }
+
+    const SwapChainSupportDetails& VulkanDevice::getSwapChainSupportDetails() const noexcept {
+        return swapChainSupport;
+    }
+
+    void VulkanDevice::pickPhysicalDevice() {
         // Obtain all the GPU devices connected to the hardware
         std::vector<VkPhysicalDevice> devices = scanForPhysicalDevices();
 
@@ -65,7 +82,7 @@ namespace Uranium::Platform::Vulkan {
             throw std::runtime_error("failed to find a suitable GPU!");
     }
 
-    void VulkanDeviceManager::createLogicalDevice() {
+    void VulkanDevice::createLogicalDevice() {
 
         VkDeviceCreateInfo createInfo{};
         createInfo.sType = VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO;
@@ -107,39 +124,26 @@ namespace Uranium::Platform::Vulkan {
             Core::UR_INFO("[Vulkan]", "Logical device created.");
     }
 
-    void VulkanDeviceManager::disposeDevice() noexcept {
-        if (device != VK_NULL_HANDLE) {
-            vkDestroyDevice(device, nullptr);
-            device = VK_NULL_HANDLE;
-        }
-        else
-            Core::UR_WARN("[Vulkan]", "Failed to dispose logical device reference since it was already NULL.");
-    }
-
-    void VulkanDeviceManager::obtainDeviceQueues() noexcept {
+    void VulkanDevice::obtainDeviceQueues() noexcept {
         // Get the device queue for the graphics and present families
         vkGetDeviceQueue(device, queueIndices.graphicsFamily.value(), 0, &graphicsQueue);
         vkGetDeviceQueue(device, queueIndices.presentFamily.value(), 0, &presentQueue);
     }
 
-    VkDevice VulkanDeviceManager::getDevice() const noexcept {
-        return device;
-    }
-
-    std::vector<VkPhysicalDevice> VulkanDeviceManager::scanForPhysicalDevices() const noexcept {
+    std::vector<VkPhysicalDevice> VulkanDevice::scanForPhysicalDevices() const noexcept {
         uint32_t deviceCount = 0;
-        vkEnumeratePhysicalDevices(context.getInstance(), &deviceCount, nullptr);
+        vkEnumeratePhysicalDevices(vulkanAPI.context->getInstance(), &deviceCount, nullptr);
 
         if (deviceCount == 0)
             return {}; // No devices available
 
         std::vector<VkPhysicalDevice> devices(deviceCount);
-        vkEnumeratePhysicalDevices(context.getInstance(), &deviceCount, devices.data());
+        vkEnumeratePhysicalDevices(vulkanAPI.context->getInstance(), &deviceCount, devices.data());
 
         return devices;
     }
 
-    bool VulkanDeviceManager::isDeviceSuitable(VkPhysicalDevice device) noexcept {
+    bool VulkanDevice::isDeviceSuitable(VkPhysicalDevice device) noexcept {
         // Obtain the family queues indices
         queueIndices = findQueueFamilies(device);
 
@@ -155,7 +159,7 @@ namespace Uranium::Platform::Vulkan {
         return queueIndices.isComplete() && extensionsSupported && swapChainAdequate;
     }
 
-    int VulkanDeviceManager::rateDeviceProperties(VkPhysicalDevice device) const noexcept {
+    int VulkanDevice::rateDeviceProperties(VkPhysicalDevice device) const noexcept {
         int score = 0;
 
         // Obtain the properties of the physical device
@@ -182,7 +186,7 @@ namespace Uranium::Platform::Vulkan {
         return score;
     }
 
-    void VulkanDeviceManager::populateDeviceFeatures(VkDeviceCreateInfo& createInfo) noexcept {
+    void VulkanDevice::populateDeviceFeatures(VkDeviceCreateInfo& createInfo) noexcept {
         // Set physical device features to default
         VkPhysicalDeviceFeatures deviceFeatures{};
 
@@ -190,13 +194,13 @@ namespace Uranium::Platform::Vulkan {
         createInfo.pEnabledFeatures = &deviceFeatures;
     }
 
-    void VulkanDeviceManager::populateDeviceExtensions(VkDeviceCreateInfo& createInfo) noexcept {
+    void VulkanDevice::populateDeviceExtensions(VkDeviceCreateInfo& createInfo) noexcept {
         // Pass the device extension names
         createInfo.enabledExtensionCount = static_cast<uint32_t>(vulkanAPI.deviceExtensions.size());
         createInfo.ppEnabledExtensionNames = vulkanAPI.deviceExtensions.data();
     }
 
-    void VulkanDeviceManager::populateDeviceQueueFamilyInfo(VkDeviceCreateInfo& createInfo) noexcept {
+    void VulkanDevice::populateDeviceQueueFamilyInfo(VkDeviceCreateInfo& createInfo) noexcept {
         std::vector<VkDeviceQueueCreateInfo> queueCreateInfos;
 
         // Create a set for all the queue families. This is to eliminate the duplicate
@@ -222,7 +226,7 @@ namespace Uranium::Platform::Vulkan {
         createInfo.pQueueCreateInfos = queueCreateInfos.data();
     }
 
-    void VulkanDeviceManager::populateDeviceValidationLayerSupport(VkDeviceCreateInfo& createInfo) noexcept {
+    void VulkanDevice::populateDeviceValidationLayerSupport(VkDeviceCreateInfo& createInfo) noexcept {
         if constexpr (VulkanAPI::validationLayerSupported) {
             // If the validation layers are enabled, pass the current validation layers
             // information to the logical device information struct to create.
@@ -235,7 +239,7 @@ namespace Uranium::Platform::Vulkan {
         }
     }
 
-    DeviceQueueFamilyIndices VulkanDeviceManager::findQueueFamilies(VkPhysicalDevice device) const noexcept {
+    DeviceQueueFamilyIndices VulkanDevice::findQueueFamilies(VkPhysicalDevice device) const noexcept {
         DeviceQueueFamilyIndices indices{};
 
         // Obtain the family queue count
@@ -257,7 +261,7 @@ namespace Uranium::Platform::Vulkan {
 
             // Check if the queue family supports presentation to the specified surface
             VkBool32 presentSupport = false;
-            vkGetPhysicalDeviceSurfaceSupportKHR(device, index, surfaceRef, &presentSupport);
+            vkGetPhysicalDeviceSurfaceSupportKHR(device, index, vulkanAPI.surface, &presentSupport);
 
             if (presentSupport)
                 indices.presentFamily = index;
@@ -271,7 +275,7 @@ namespace Uranium::Platform::Vulkan {
         return indices;
     }
 
-    bool VulkanDeviceManager::checkDeviceExtensionSupport(VkPhysicalDevice device) const noexcept {
+    bool VulkanDevice::checkDeviceExtensionSupport(VkPhysicalDevice device) const noexcept {
         uint32_t extensionCount;
         vkEnumerateDeviceExtensionProperties(device, nullptr, &extensionCount, nullptr);
 
@@ -288,25 +292,25 @@ namespace Uranium::Platform::Vulkan {
         return requiredExtensions.empty();
     }
 
-    DeviceSwapChainSupportDetails VulkanDeviceManager::querySwapChainSupport(VkPhysicalDevice device) const noexcept {
-        DeviceSwapChainSupportDetails details{};
+    SwapChainSupportDetails VulkanDevice::querySwapChainSupport(VkPhysicalDevice device) const noexcept {
+        SwapChainSupportDetails details{};
 
-        vkGetPhysicalDeviceSurfaceCapabilitiesKHR(device, surfaceRef, &details.capabilities);
+        vkGetPhysicalDeviceSurfaceCapabilitiesKHR(device, vulkanAPI.surface, &details.capabilities);
 
         uint32_t formatCount;
-        vkGetPhysicalDeviceSurfaceFormatsKHR(device, surfaceRef, &formatCount, nullptr);
+        vkGetPhysicalDeviceSurfaceFormatsKHR(device, vulkanAPI.surface, &formatCount, nullptr);
 
         if (formatCount != 0) {
             details.formats.resize(formatCount);
-            vkGetPhysicalDeviceSurfaceFormatsKHR(device, surfaceRef, &formatCount, details.formats.data());
+            vkGetPhysicalDeviceSurfaceFormatsKHR(device, vulkanAPI.surface, &formatCount, details.formats.data());
         }
 
         uint32_t presentModeCount;
-        vkGetPhysicalDeviceSurfacePresentModesKHR(device, surfaceRef, &presentModeCount, nullptr);
+        vkGetPhysicalDeviceSurfacePresentModesKHR(device, vulkanAPI.surface, &presentModeCount, nullptr);
 
         if (presentModeCount != 0) {
             details.presentModes.resize(presentModeCount);
-            vkGetPhysicalDeviceSurfacePresentModesKHR(device, surfaceRef, &presentModeCount, details.presentModes.data());
+            vkGetPhysicalDeviceSurfacePresentModesKHR(device, vulkanAPI.surface, &presentModeCount, details.presentModes.data());
         }
 
         return details;

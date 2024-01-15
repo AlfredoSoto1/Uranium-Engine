@@ -23,7 +23,7 @@ namespace Uranium::Platform::Vulkan {
         // Provide requirements
     };
 
-    URANIUM_API struct DeviceSwapChainSupportDetails final {
+    URANIUM_API struct SwapChainSupportDetails final {
         VkSurfaceCapabilitiesKHR capabilities;
         std::vector<VkSurfaceFormatKHR> formats;
         std::vector<VkPresentModeKHR> presentModes;
