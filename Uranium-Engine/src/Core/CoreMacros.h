@@ -77,6 +77,7 @@
 	#define UR_ON_DEBUG_SWAP(debug_statement, release_statement) release_statement
 #endif
 
+
 #define UR_DECLARE class
 
 #define UR_GENERIC(type, ...) template <class type, __VA_ARGS__>
@@ -85,3 +86,11 @@
 #define UR_ABSTRACT_CLASS  class
 #define UR_EXTENDS         public
 #define UR_IMPLEMENTS      public
+
+/*
+* @brief
+* Binds a class member function-method to an std::function<?>(...)
+* You can pass as arguments the required paramenters for such
+* member function to work.
+*/
+#define UR_BIND_FUNC(class_function, ...) std::bind(&class_function, this, __VA_ARGS__)

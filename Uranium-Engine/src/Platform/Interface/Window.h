@@ -26,22 +26,23 @@ namespace Uranium::Platform::Interface {
 	
 	URANIUM_API class Window {
 	public:
-		static void initWindowAPI();              // Initiates the windowing API
-		static void shutdownWindowAPI() noexcept; // Shuts down the windowing API
-
-		// Minimun and maximum default dimensions
-		// for a window when resizing and creation
-		static constexpr unsigned int MIN_WIDTH = 320;
-		static constexpr unsigned int MIN_HEIGHT = 180;
+		static void init();             // Initiates the windowing API
+		static void dispose() noexcept; // Shuts down the windowing API
 
 	private:
 		/*
 		* Logs any GLFW errors
-		* 
+		*
 		* @param error-code
 		* @param description
 		*/
 		static void displayGLFWErrors(int error, const char* description) noexcept;
+
+	public:
+		// Minimun and maximum default dimensions
+		// for a window when resizing and creation
+		static constexpr unsigned int MIN_WIDTH = 320;
+		static constexpr unsigned int MIN_HEIGHT = 180;
 
 	public:
 		/*
@@ -87,18 +88,6 @@ namespace Uranium::Platform::Interface {
 		* @param enabled - true or false
 		*/
 		virtual void setVSync(bool enabled);
-
-	protected:
-		friend class GraphicsAPI;
-
-		using SurfaceRef = void*;
-
-		/*
-		* @returns surface reference for the graphics API chosen to use.
-		* 
-		* @throw runtime_error if fails to create.
-		*/
-		virtual SurfaceRef createSurface() const = 0;
 
 	protected:
 		virtual void setVisible(bool visible)         = 0;
@@ -156,10 +145,10 @@ namespace Uranium::Platform::Interface {
 		using CursorCallback   = Input::Callbacks::CursorCallback;
 		using KeyboardCallback = Input::Callbacks::KeyboardCallback;
 
-		friend class WindowCallback;
-		friend class MouseCallback;
-		friend class CursorCallback;
-		friend class KeyboardCallback;
+		friend WindowCallback;
+		friend MouseCallback;
+		friend CursorCallback;
+		friend KeyboardCallback;
 			
 		std::unique_ptr<WindowCallback>   windowCallback;
 		std::unique_ptr<MouseCallback>    mouseCallback;
@@ -179,7 +168,9 @@ namespace Uranium::Platform::Interface {
 
 		/*
 		* Sets the event callback function. This is
-		* internally handled by the application
+		* internally handled by the application.
+		* 
+		* @param callback-event
 		*/
 		void setEventCallback(const Event::EventCallbackFn& callbackEvent) noexcept;
 	};

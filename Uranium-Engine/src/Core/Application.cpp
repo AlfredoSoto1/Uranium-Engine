@@ -1,13 +1,16 @@
 #include <stdexcept>
+#include <stdexcept>
 
 #include "Logger.h"
 #include "Application.h"
 
 #include "Platform/Interface/Window.h"
+#include "Platform/Interface/Monitor.h"
 #include "Platform/Interface/GraphicsAPI.h"
-#include "Platform/Monitor/MonitorHandler.h"
 
 namespace Uranium::Core {
+
+	using namespace Platform::Interface;
 
 	std::unique_ptr<Application> Application::application = nullptr;
 
@@ -23,19 +26,15 @@ namespace Uranium::Core {
 	{
 		UR_ASSERT(Application::application != nullptr, "[Application]", "Already instantiated!");
 
-		using namespace Platform::Monitor;
-		// Initiate the monitor handler
-		Platform::Monitor::MonitorHandler::initMonitors();
-
-		Window::initWindowAPI();
+		// Initialize windowing and monitor
+		Window::init();
+		Monitor::init();
 	}
 
 	Application::~Application() noexcept {
-		using namespace Platform::Monitor;
-		// Dispose all window instances
-		MonitorHandler::disposeMonitors();
-
-		Window::shutdownWindowAPI();
+		// Dispose monitor and all windowing
+		Monitor::dispose();
+		Window::dispose();
 	}
 
 	Application::Window& Application::getWindow() {
@@ -43,12 +42,20 @@ namespace Uranium::Core {
 	}
 
 	void Application::start() noexcept {
+
+		// Fetch the available monitors and bind the event function
+		// to react whenever an event happens during callback.
+		Monitor::fetchAvailableMonitors(UR_BIND_FUNC(Application::onEvent, std::placeholders::_1));
+
+		// Initialize and prepare the Graphics API.
+		// The desired API is provided by the client who will
+		// choose which API to use.
 		graphicsAPI = prepareGraphicsAPI();
 
 		window = createWindow();
 
 		window->createCallbacks();
-		window->setEventCallback(std::bind(&Application::onEvent, this, std::placeholders::_1));
+		window->setEventCallback(UR_BIND_FUNC(Application::onEvent, std::placeholders::_1));
 
 		while (!window->shouldClose()) {
 			window->onUpdate();

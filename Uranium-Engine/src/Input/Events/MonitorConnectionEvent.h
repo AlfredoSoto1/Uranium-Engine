@@ -23,7 +23,7 @@ namespace Uranium::Input::Events {
 		* 
 		* @param connected
 		*/
-		explicit MonitorConnectionEvent(bool connected, Platform::Interface::Monitor* monitor) noexcept :
+		explicit MonitorConnectionEvent(bool connected, const Platform::Interface::Monitor& monitor) noexcept :
 			Event(EventType::MONITOR_CONNECTION),
 			connected(connected),
 			monitor(monitor)
@@ -38,8 +38,12 @@ namespace Uranium::Input::Events {
 			return connected;
 		}
 
+		const Platform::Interface::Monitor& getMonitor() const {
+			return monitor;
+		}
+
 	private:
 		bool connected;
-		Platform::Interface::Monitor* monitor;
+		const Platform::Interface::Monitor& monitor;
 	};
 }

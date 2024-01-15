@@ -1,8 +1,9 @@
 #include <GLFW/glfw3.h>
+
 #include <stdexcept>
+#include "Core/Logger.h"
 
 #include "Window.h"
-#include "Core/Logger.h"
 
 #include "Input/Callbacks/WindowCallback.h"
 #include "Input/Callbacks/MouseCallback.h"
@@ -11,15 +12,16 @@
 
 namespace Uranium::Platform::Interface {
 	
-	void Window::initWindowAPI() {
+	void Window::init() {
 		if (glfwInit() == GLFW_FALSE)
 			throw std::runtime_error("Could not initiate. Application cannot start.");
 
 		glfwSetErrorCallback(&Window::displayGLFWErrors);
 	}
 
-	void Window::shutdownWindowAPI() noexcept {
+	void Window::dispose() noexcept {
 		glfwTerminate();
+		Core::UR_INFO("[GLFW]", "Terminated successfully.");
 	}
 
 	void Window::displayGLFWErrors(int error, const char* description) noexcept {
