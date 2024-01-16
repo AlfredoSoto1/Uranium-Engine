@@ -31,7 +31,7 @@ namespace Uranium::Core {
 			Monitor::init();
 		}
 		catch (const std::runtime_error& error) {
-			Core::UR_ERROR("[Application]", error.what());
+			Core::UR_ERROR("[Application : Initiation]", error.what());
 			return;
 		}
 
@@ -41,9 +41,11 @@ namespace Uranium::Core {
 			Monitor::fetchAvailableMonitors(UR_BIND_FUNC(Application::onEvent, std::placeholders::_1));
 		}
 		catch (const std::runtime_error& error) {
-			Core::UR_ERROR("[Application]", error.what());
+			Core::UR_ERROR("[Application : Monitor fetch]", error.what());
 			return;
 		}
+
+
 
 		// Initialize and prepare the Graphics API.
 		// The desired API is provided by the client who will
