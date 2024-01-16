@@ -1,5 +1,4 @@
 #include <stdexcept>
-#include <stdexcept>
 
 #include "Logger.h"
 #include "Application.h"
@@ -19,40 +18,39 @@ namespace Uranium::Core {
 	}
 
 	Application::Application() noexcept :
-		isRunning(true),
-
-		window(nullptr),
-		graphicsAPI(nullptr)
+		isRunning(true)
 	{
 		UR_ASSERT(Application::application != nullptr, "[Application]", "Already instantiated!");
-
-		// Initialize windowing and monitor
-		Window::init();
-		Monitor::init();
-	}
-
-	Application::~Application() noexcept {
-		// Dispose monitor and all windowing
-		Monitor::dispose();
-		Window::dispose();
-	}
-
-	Application::Window& Application::getWindow() {
-		return *window;
 	}
 
 	void Application::start() noexcept {
 
-		// Fetch the available monitors and bind the event function
-		// to react whenever an event happens during callback.
-		Monitor::fetchAvailableMonitors(UR_BIND_FUNC(Application::onEvent, std::placeholders::_1));
+		try {
+			// Initialize windowing and monitor
+			Window::init();
+			Monitor::init();
+		}
+		catch (const std::runtime_error& error) {
+			Core::UR_ERROR("[Application]", error.what());
+			return;
+		}
+
+		try {
+			// Fetch the available monitors and bind the event function
+			// to react whenever an event happens during callback.
+			Monitor::fetchAvailableMonitors(UR_BIND_FUNC(Application::onEvent, std::placeholders::_1));
+		}
+		catch (const std::runtime_error& error) {
+			Core::UR_ERROR("[Application]", error.what());
+			return;
+		}
 
 		// Initialize and prepare the Graphics API.
 		// The desired API is provided by the client who will
 		// choose which API to use.
-		graphicsAPI = prepareGraphicsAPI();
+		//graphicsAPI = prepareGraphicsAPI(); // TODO
 
-		window = createWindow();
+	/*	window = createWindow();
 
 		window->createCallbacks();
 		window->setEventCallback(UR_BIND_FUNC(Application::onEvent, std::placeholders::_1));
@@ -63,7 +61,11 @@ namespace Uranium::Core {
 
 		window->disposeCallbacks();
 
-		delete window.release();
+		delete window.release();*/
+
+		// Dispose monitor and all windowing
+		Monitor::dispose();
+		Window::dispose();
 	}
 
 	void Application::onEvent(Input::Events::Event& e) {

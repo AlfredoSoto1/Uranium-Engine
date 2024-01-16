@@ -6,8 +6,9 @@
 #include <stdexcept>
 #include "Core/Logger.h"
 
-#include "VulkanAPI.h"
 #include "VulkanStructs.h"
+
+#include "VulkanAPI.h"
 #include "VulkanDevice.h"
 #include "VulkanSwapChain.h"
 

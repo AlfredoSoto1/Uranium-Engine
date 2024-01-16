@@ -3,11 +3,12 @@
 #include <memory>
 #include <vector>
 #include <string>
+
 #include "CoreMacros.h"
 
 namespace Uranium::Platform::Interface {
-	UR_DECLARE Window;
-	UR_DECLARE GraphicsAPI;
+	//UR_DECLARE Window;
+	//UR_DECLARE GraphicsAPI;
 }
 
 namespace Uranium::Input::Events {
@@ -25,20 +26,14 @@ namespace Uranium::Core {
 
 	public:
 		explicit Application() noexcept;
-		virtual ~Application() noexcept;
+		virtual ~Application() noexcept = default;
 
 		Application(Application&)  = delete;
 		Application(Application&&) = delete;
 		Application& operator=(const Application&) = delete;
 
 	public:
-		using Window = Platform::Interface::Window;
-		using GraphicsAPI = Platform::Interface::GraphicsAPI;
-
-		/*
-		* @returns window reference
-		*/
-		Window& getWindow();
+		//using Window = Platform::Interface::Window;
 		
 	protected:
 		/*
@@ -46,7 +41,7 @@ namespace Uranium::Core {
 		* 
 		* @return unique reference to window
 		*/
-		virtual std::unique_ptr<Window> createWindow() = 0;
+		//virtual std::unique_ptr<Window> createWindow() = 0;
 
 		/*
 		* Creates the proper graphics API to use throught the Application.
@@ -55,7 +50,7 @@ namespace Uranium::Core {
 		*
 		* @return unique reference to window
 		*/
-		virtual std::unique_ptr<GraphicsAPI> prepareGraphicsAPI() = 0;
+		//virtual std::unique_ptr<GraphicsAPI> prepareGraphicsAPI() = 0;
 
 	private:
 		/*
@@ -81,8 +76,8 @@ namespace Uranium::Core {
 		void onEvent(Input::Events::Event& e);
 
 	private:
-		std::unique_ptr<Window> window;
-		std::unique_ptr<GraphicsAPI> graphicsAPI;
+		//std::unique_ptr<Window> window;
+		//std::unique_ptr<GraphicsAPI> graphicsAPI;
 		
 		volatile bool isRunning;
 	};

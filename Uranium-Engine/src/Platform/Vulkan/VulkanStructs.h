@@ -1,5 +1,9 @@
 #pragma once
 
+#include <vector>
+#include <cstdint>
+#include <optional>
+
 #include "Core/CoreMacros.h"
 
 namespace Uranium::Platform::Vulkan {

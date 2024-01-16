@@ -133,7 +133,7 @@ namespace Uranium::Platform::Interface {
 		bool vSyncEnabled;
 
 	private:
-		friend class Core::Application;
+		friend Core::Application;
 
 		void onUpdate() const;
 

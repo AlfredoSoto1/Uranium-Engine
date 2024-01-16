@@ -81,7 +81,7 @@ namespace Uranium::Platform::Interface {
 	private:
 		friend Input::Callbacks::MonitorCallback;
 		
-		static std::vector<MonitorRef>* availableMonitors;
+		//static std::vector<MonitorRef>* availableMonitors;
 		static Input::Callbacks::MonitorCallback* callback;
 
 	private:

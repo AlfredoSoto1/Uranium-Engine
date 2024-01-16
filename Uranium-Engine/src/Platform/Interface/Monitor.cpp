@@ -10,18 +10,20 @@
 
 namespace Uranium::Platform::Interface {
 
+	Input::Callbacks::MonitorCallback* Monitor::callback = nullptr;
+
 	void Monitor::init() {
 		UR_ASSERT(Monitor::callback != nullptr, "[Monitor]", "Monitor instance cannot be initialized more than once!");
 
 		// Create new monitor callback and avaliable monitor list.
 		Monitor::callback = new Input::Callbacks::MonitorCallback();
-		Monitor::availableMonitors = new std::vector<MonitorRef>();
+		//Monitor::availableMonitors = new std::vector<MonitorRef>();
 	}
 
 	void Monitor::dispose() noexcept {
-		Monitor::availableMonitors->clear();
+		//Monitor::availableMonitors->clear();
 
-		delete Monitor::availableMonitors;
+		//delete Monitor::availableMonitors;
 		delete Monitor::callback;
 	}
 
@@ -29,26 +31,28 @@ namespace Uranium::Platform::Interface {
 		UR_ASSERT(Monitor::callback == nullptr, "[Monitor]", "Monitor instance has to be initailized before use!");
 
 		// Clear before fetching
-		Monitor::availableMonitors->clear(); 
+		//Monitor::availableMonitors->clear(); 
 		
 		int monitorCount;
 		GLFWmonitor** monitors = glfwGetMonitors(&monitorCount);
 
-		for (int i = 0; i < monitorCount; i++)
-			Monitor::availableMonitors->push_back(std::make_shared<Monitor>(monitors[i], callbackEvent));
+		//for (int i = 0; i < monitorCount; i++)
+		//	Monitor::availableMonitors->push_back(std::make_shared<Monitor>(monitors[i], callbackEvent));
 
 		if (monitorCount == 0)
 			throw std::runtime_error("No monitors were available.");
 	}
 
 	Monitor::MonitorRef Monitor::getPrimary() noexcept {
-		if (Monitor::availableMonitors->empty())
-			return nullptr;
-		return Monitor::availableMonitors->at(0);
+		//if (Monitor::availableMonitors->empty())
+		//	return nullptr;
+		//return Monitor::availableMonitors->at(0);
+		return nullptr;
 	}
 
 	const std::vector<Monitor::MonitorRef>& Monitor::getConnectedMonitors() noexcept {
-		return *Monitor::availableMonitors;
+		//return *Monitor::availableMonitors;
+		return {};
 	}
 
 	Monitor::Monitor(GLFWmonitor* monitor, const Input::Events::Event::EventCallbackFn& callbackEvent) noexcept :
