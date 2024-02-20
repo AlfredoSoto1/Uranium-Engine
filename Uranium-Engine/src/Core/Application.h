@@ -6,11 +6,6 @@
 
 #include "CoreMacros.h"
 
-namespace Uranium::Platform::Interface {
-	//UR_DECLARE Window;
-	//UR_DECLARE GraphicsAPI;
-}
-
 namespace Uranium::Input::Events {
 	UR_DECLARE Event;
 }
@@ -32,9 +27,6 @@ namespace Uranium::Core {
 		Application(Application&&) = delete;
 		Application& operator=(const Application&) = delete;
 
-	public:
-		//using Window = Platform::Interface::Window;
-		
 	protected:
 		/*
 		* Creates a unique instance of a window

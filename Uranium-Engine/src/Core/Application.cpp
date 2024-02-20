@@ -45,8 +45,6 @@ namespace Uranium::Core {
 			return;
 		}
 
-
-
 		// Initialize and prepare the Graphics API.
 		// The desired API is provided by the client who will
 		// choose which API to use.
