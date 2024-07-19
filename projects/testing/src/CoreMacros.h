@@ -1,8 +1,5 @@
 #pragma once
 
-#define	UR_MSVC_COMPILER
-#define	UR_PLATFORM_WINDOWS
-
 /*
 * Check if platform is available before compiling
 */
@@ -13,12 +10,12 @@
 /*
 * Choose compiler for dll import/export
 */
-#if defined(UR_MSVC_COMPILER)
+#if defined(UR_COMPILER_MSVC)
 	#define UR_EXPORT_DLL __declspec(dllexport)
 	#define UR_IMPORT_DLL __declspec(dllimport)
-#elif defined(UR_GCC_COMPILER)
+#elif defined(UR_COMPILER_GCC)
 	#define UR_EXPORT_DLL __attribute__((visibility("default")))
-	#define UR_IMPORT_DLL __attribute__((visibility("hidden")))
+	#define UR_IMPORT_DLL
 #else
 	#error Uranium-Engine only supports MSVC and GCC compilers
 #endif
@@ -86,8 +83,6 @@
 #define UR_ABSTRACT_CLASS  class
 #define UR_EXTENDS         public
 #define UR_IMPLEMENTS      public
-
-
 
 /*
 * @brief

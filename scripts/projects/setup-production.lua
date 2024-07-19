@@ -20,7 +20,7 @@ project "production"
         root.. "projects/%{prj.name}/src/**.glsl",
     }
     -- Project define-specific
-    -- defines { }
+    defines { "UR_USE_DLL" }
 
     -- Include directories
     includedirs {
@@ -39,6 +39,10 @@ project "production"
         systemversion "latest"
         staticruntime "default"
         defines {"UR_PLATFORM_WINDOWS"}
+
+    filter "system:linux"
+        toolset "gcc" -- Use GCC as the toolset for Linux
+        defines { "UR_PLATFORM_LINUX" }
         
     -- Set default build configurations
     include "../config/compiler-build.lua"
