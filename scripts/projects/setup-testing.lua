@@ -20,15 +20,16 @@ project "testing"
         root.. "projects/%{prj.name}/src/**.glsl",
     }
     -- Project define-specific
-    defines { "UR_USE_DLL" }
+    -- defines { "UR_USE_DLL" }
 
     -- Include directories
     includedirs {
         root.. "projects/%{prj.name}/src",
+        root.. "projects/uranium/src",
     }
     -- Linking with
     links {
-        "core"
+        "uranium"
     }
 
     -- Load all the dependencies to their corresponding platform

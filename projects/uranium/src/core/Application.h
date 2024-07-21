@@ -1,23 +1,18 @@
 #pragma once
 
-#include <memory>
+#include "URAPI.h"
+
 #include <vector>
 #include <string>
+#include <memory>
 
-#include "CoreMacros.h"
-
-namespace Uranium::Input::Events {
-	UR_DECLARE Event;
-}
-
-namespace Uranium::Core {
+namespace uranium::core {
 
 	URANIUM_API class Application {
 	public:
-		/*
-		* @returns unique instance of application.
-		*/
 		static Application& instance();
+
+		static int start(std::unique_ptr<Application> application);
 
 	public:
 		explicit Application() noexcept;
@@ -45,6 +40,15 @@ namespace Uranium::Core {
 		//virtual std::unique_ptr<GraphicsAPI> prepareGraphicsAPI() = 0;
 
 	private:
+		void init()      noexcept;
+		void shutdown()  noexcept;
+		void interrupt() noexcept;
+		
+		void exit(int code) noexcept;
+
+		std::vector<int> queryErrors() noexcept;
+
+	private:
 		/*
 		* @brief Holds a reference to the unique application instance
 		* throughout the life time of the program
@@ -55,17 +59,7 @@ namespace Uranium::Core {
 		* @brief Extern friend to start application
 		* Located at: EntryPoint.cpp
 		*/
-		friend void buildApplication(int argc, char* argv[]);
-
-	private:
-		/*
-		* Starts the application
-		*/
-		void start() noexcept;
-
-		/*
-		*/
-		void onEvent(Input::Events::Event& e);
+		friend void buildApplication();
 
 	private:
 		//std::unique_ptr<Window> window;

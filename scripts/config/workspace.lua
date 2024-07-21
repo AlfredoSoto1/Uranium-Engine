@@ -23,4 +23,4 @@ include "../projects/setup-testing.lua"
 include "../projects/setup-production.lua"
 
 group "core"
-    include "../projects/setup-core.lua"
+    include "../projects/setup-uranium.lua"

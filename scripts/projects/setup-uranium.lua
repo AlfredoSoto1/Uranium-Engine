@@ -1,5 +1,5 @@
 -- Define project
-project "core"
+project "uranium"
     location (root.. "projects/%{prj.name}")
     kind "StaticLib"
     language "C++"
@@ -20,7 +20,10 @@ project "core"
         root.. "projects/%{prj.name}/src/**.glsl",
     }
     -- Project define-specific
-    defines { "UR_BUILD_DLL" }
+    filter { "kind:SharedLib" }
+        defines { "UR_BUILD_DLL" }
+    filter { "kind:StaticLib" }
+        defines { "UR_BUILD_STATIC" }
 
     -- Include directories
     includedirs {

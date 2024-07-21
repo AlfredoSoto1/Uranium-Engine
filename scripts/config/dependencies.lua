@@ -5,7 +5,7 @@ IncludeDirs = {
     GLEW   = root .. "dependencies/glew/include",
     VULKAN = root .. "dependencies/vulkan/include",
     OPENAL = root .. "dependencies/openal/include",
-    STB    = root .. "dependencies/stb"
+    STB    = root .. "dependencies/stb/include"
 }
 
 LibraryDirs = {
