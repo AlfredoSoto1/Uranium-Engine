@@ -1,14 +1,16 @@
+module uranium.core;
+
+import uranium.services;
+
 //#include <stdexcept>
 //#include "Logger.h"
-#include "Application.h"
+//#include "Application.h"
 
 //#include "Platform/Interface/Window.h"
 //#include "Platform/Interface/Monitor.h"
 //#include "Platform/Interface/GraphicsAPI.h"
 
 namespace uranium::core {
-
-	//using namespace Platform::Interface;
 
 	std::unique_ptr<Application> Application::application = nullptr;
 
@@ -17,28 +19,30 @@ namespace uranium::core {
 	}
 
 	Application::Application() noexcept :
+		logger(),
 		isRunning(true)
 	{
+		logger.consolePrint(services::LogLevel::FATAL, "[Main Function]", "This string is about to work {}", "Inserted string text ;)");
 		//UR_ASSERT(Application::application != nullptr, "[Application]", "Already instantiated!");
 	}
 
 	int Application::start(std::unique_ptr<Application> application) {
 		// Assert here if application is started more than once
 		// Set up singleton
-		Application::application = std::move(application);
+		//Application::application = std::move(application);
 		
 		// Boot up services
 		
 
 		// Handle application life-time
-		Application::application->init();
-		Application::application->shutdown();
+		//Application::application->init();
+		//Application::application->shutdown();
 
 		// Query for application errors
 		// Display all the errors and return error code
 
 		// Free application
-		Application::application.reset();
+		//Application::application.reset();
 
 		return 0; // Success error code
 	}

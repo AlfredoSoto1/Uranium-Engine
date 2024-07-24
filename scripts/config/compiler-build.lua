@@ -1,18 +1,20 @@
 
 -- Compiler configurations
-filter "configurations:debug"
-    runtime "debug"
-    symbols "on"
-    defines { "UR_DEBUG" }
+function setBuildConfigurations()
+    filter "configurations:Debug"
+        runtime "Debug"
+        symbols "on"
+        defines { "UR_DEBUG" }
 
-filter "configurations:release"
-    runtime "release"
-    optimize "on"
-    symbols "on"
-    defines { "UR_RELEASE" }
+    filter "configurations:Release"
+        runtime "Release"
+        optimize "on"
+        symbols "on"
+        defines { "UR_RELEASE" }
 
-filter "configurations:dist"
-    runtime "release"
-    optimize "on"
-    symbols "off"
-    defines { "UR_DISTRIBUTION" }
+    filter "configurations:Dist"
+        runtime "Release"
+        optimize "on"
+        symbols "off"
+        defines { "UR_DISTRIBUTION" }
+end

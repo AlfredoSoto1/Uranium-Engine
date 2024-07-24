@@ -58,8 +58,15 @@
 //    return 0;
 //}
 
-#include "core/Application.h"
+#include <core/URAPI.h>
 
+import uranium.core;
+import uranium.services;
+
+//#include <core/Application.h>
+
+using uranium::services::Logger;
+using uranium::services::LogLevel;
 using uranium::core::Application;
 
 class MyApplication : UR_EXTENDS Application {
@@ -68,7 +75,6 @@ public:
 	MyApplication() : Application() {
 
 	}
-
 };
 
 /*

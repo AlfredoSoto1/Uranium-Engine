@@ -44,4 +44,4 @@ project "uranium"
         defines { "UR_PLATFORM_LINUX" }
         
     -- Set default build configurations
-    include "../config/compiler-build.lua"
+    setBuildConfigurations()

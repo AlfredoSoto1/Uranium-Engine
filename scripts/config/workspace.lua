@@ -6,7 +6,7 @@ output_binaries = "%{cfg.system}-%{cfg.architecture}/%{cfg.buildcfg}"
 workspace "Uranium-Engine"
     location (root)
     architecture "x64"
-    configurations { "debug", "release", "dist" }
+    configurations { "Debug", "Release", "Dist" }
     startproject "production"
     
     filter "action:vs2022"
@@ -17,6 +17,7 @@ workspace "Uranium-Engine"
 
 -- Load the dependency paths
 include "dependencies.lua"
+include "compiler-build.lua"
 
 -- Prepare and set the projects
 include "../projects/setup-testing.lua"
