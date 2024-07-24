@@ -59,6 +59,7 @@
 //}
 
 #include <core/URAPI.h>
+#include <services/LogCalls.h>
 
 import uranium.core;
 import uranium.services;
@@ -74,6 +75,10 @@ public:
 
 	MyApplication() : Application() {
 
+	}
+
+	void init() noexcept {
+		
 	}
 };
 

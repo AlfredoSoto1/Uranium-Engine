@@ -22,27 +22,30 @@ namespace uranium::core {
 		logger(),
 		isRunning(true)
 	{
-		logger.consolePrint(services::LogLevel::FATAL, "[Main Function]", "This string is about to work {}", "Inserted string text ;)");
 		//UR_ASSERT(Application::application != nullptr, "[Application]", "Already instantiated!");
+	}
+
+	services::Logger& Application::log() noexcept {
+		return logger;
 	}
 
 	int Application::start(std::unique_ptr<Application> application) {
 		// Assert here if application is started more than once
 		// Set up singleton
-		//Application::application = std::move(application);
+		Application::application = std::move(application);
 		
 		// Boot up services
 		
 
 		// Handle application life-time
-		//Application::application->init();
+		Application::application->init();
 		//Application::application->shutdown();
 
 		// Query for application errors
 		// Display all the errors and return error code
 
 		// Free application
-		//Application::application.reset();
+		Application::application.reset();
 
 		return 0; // Success error code
 	}

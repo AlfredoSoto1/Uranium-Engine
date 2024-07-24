@@ -24,13 +24,16 @@ export namespace uranium::core {
 		Application(Application&&) = delete;
 		Application& operator=(const Application&) = delete;
 
+	public:
+		services::Logger& log() noexcept;
+
 	protected:
 		/*
 		* Put virtual methods here
 		*/
 
 	private:
-		void init()      noexcept;
+		virtual void init()      noexcept;
 		void shutdown()  noexcept;
 		void interrupt() noexcept;
 
