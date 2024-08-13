@@ -1,9 +1,8 @@
 #include <GLFW/glfw3.h>
 
 #include "MouseCallback.h"
-#include "Platform/Display/Window.h"
 
-namespace Uranium::Input::Callbacks {
+namespace uranium::io::callbacks {
 
 	MouseCallback::MouseCallback(Window* window) noexcept :
 		pressed(GLFW_MOUSE_BUTTON_1),

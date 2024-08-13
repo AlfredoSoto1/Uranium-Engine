@@ -953,16 +953,7 @@ private:
     }
 };
 
-#include "../Core/Logger.h"
-
 int main() {
-    using namespace Uranium::Core;
-    Logger::init();
-
-    Logger::instance().consolePrint(LogLevel::WARN, "[GLFW : initGLFW()]", "text");
-
-    Logger::shutdown();
-
     HelloTriangleApplication app;
 
     try {

@@ -59,33 +59,43 @@
 //}
 
 #include <core/URAPI.h>
-#include <services/LogCalls.h>
+//#include <services/LogCalls.h>
+#include <core/Application.h>
 
-import uranium.core;
-import uranium.services;
+//import uranium.core.EntryPoint;
+//import uranium.core.Application;
+//import uranium.services;
 
-//#include <core/Application.h>
-
-using uranium::services::Logger;
-using uranium::services::LogLevel;
 using uranium::core::Application;
+//using uranium::services::Logger;
+//using uranium::services::LogLevel;
 
-class MyApplication : UR_EXTENDS Application {
-public:
+//class MyApplication : UR_IMPLEMENTS Application {
+//public:
+//
+//	MyApplication() {
+//
+//	}
+//
+//	void init() noexcept override {
+//
+//	}
+//
+//	void shutdown() noexcept override {
+//
+//	}
+//
+//	void loadConfig() noexcept override {
+//
+//	}
+//
+//	void saveConfig() noexcept override {
+//
+//	}
+//};
 
-	MyApplication() : Application() {
-
-	}
-
-	void init() noexcept {
-		
-	}
-};
-
-/*
-* Definition of the default main function
-* No arguments needed for starting the uranium app
-*/
-auto main() -> int {
-	return Application::start(std::make_unique<MyApplication>());
+int main(int argc, char** argv) {
+	// Start a new Uranium Context
+	// Return the code error after application is fully closed
+	return Application::start(argc, argv, nullptr);
 }

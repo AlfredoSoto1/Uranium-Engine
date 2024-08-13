@@ -1,4 +1,5 @@
 #pragma once
+#include "core/URAPI.h"
 
 #include "Input/Events/MouseScrollEvent.h"
 #include "Input/Events/MouseButtonPressedEvent.h"
@@ -6,24 +7,9 @@
 
 struct GLFWwindow;
 
-namespace Uranium::Platform::Display {
-	class Window;
-}
+namespace uranium::io::callbacks {
 
-namespace Uranium::Input::Callbacks {
-
-	class MouseCallback final {
-	private:
-		/*
-		* It gets called when the mouse button is pressed
-		*/
-		static void button_callback(GLFWwindow* glWindow, int button, int action, int mods);
-		
-		/*
-		* It gets called when the mouse uses the scroll wheel
-		*/
-		static void scroll_callback(GLFWwindow* glWindow, double xOffset, double yOffset);
-
+	URANIUM_API class MouseCallback final {
 	public:
 		~MouseCallback() = default;
 
@@ -51,5 +37,16 @@ namespace Uranium::Input::Callbacks {
 		Events::MouseScrollEvent scroll;
 		Events::MouseButtonPressedEvent pressed;
 		Events::MouseButtonReleasedEvent released;
+
+	private:
+		/*
+		* It gets called when the mouse button is pressed
+		*/
+		static void button_callback(GLFWwindow* glWindow, int button, int action, int mods);
+
+		/*
+		* It gets called when the mouse uses the scroll wheel
+		*/
+		static void scroll_callback(GLFWwindow* glWindow, double xOffset, double yOffset);
 	};
 }

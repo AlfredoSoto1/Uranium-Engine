@@ -1,9 +1,8 @@
 #include <GLFW/glfw3.h>
 
 #include "KeyboardCallback.h"
-#include "Platform/Display/Window.h"
 
-namespace Uranium::Input::Callbacks {
+namespace uranium::io::callbacks {
 
 	KeyboardCallback::KeyboardCallback(Window* window) noexcept :
 		keyPressedEvent(0, 0, 0),

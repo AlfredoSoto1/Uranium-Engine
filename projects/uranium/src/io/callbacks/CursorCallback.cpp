@@ -1,9 +1,8 @@
 #include <GLFW/glfw3.h>
 
 #include "CursorCallback.h"
-#include "Platform/Display/Window.h"
 
-namespace Uranium::Input::Callbacks {
+namespace uranium::io::callbacks {
 
 	CursorCallback::CursorCallback(Window* window) noexcept :
 		cursorMoved(0, 0),

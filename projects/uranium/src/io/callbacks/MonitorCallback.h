@@ -1,19 +1,14 @@
 #pragma once
 
-#include "Core/CoreMacros.h"
+#include "core/URAPI.h"
 
 struct GLFWmonitor;
 
-namespace Uranium::Input::Callbacks {
+namespace uranium::io::callbacks {
 
 	URANIUM_API class MonitorCallback final {
-	private:
-		/*
-		* @brief gets called when a monitor event happens.
-		*/
-		static void monitor_callback(GLFWmonitor* monitor, int event) noexcept;
-
 	public:
+		explicit MonitorCallback() noexcept;
 		~MonitorCallback() noexcept = default;
 
 		/*
@@ -28,12 +23,11 @@ namespace Uranium::Input::Callbacks {
 		MonitorCallback(MonitorCallback&&) = delete;
 		MonitorCallback& operator=(const MonitorCallback&) = delete;
 
-	public:
+	private:
 		/*
-		* @brief
-		* Monitor Callback constructor
-		* creates all the monitor related callbacks
+		* @brief 
+		* Gets called when a monitor event happens.
 		*/
-		explicit MonitorCallback() noexcept;
+		static void monitor_callback(GLFWmonitor* monitor, int event) noexcept;
 	};
 }

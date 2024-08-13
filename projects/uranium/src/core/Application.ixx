@@ -1,57 +1,16 @@
 module;
 #include "URAPI.h"
 
-export module uranium.core;
-
-export import <vector>;
-export import <memory>;
-
-import uranium.services;
+export module uranium.core.Application;
 
 export namespace uranium::core {
 
-	URANIUM_API class Application {
+	URANIUM_API UR_ABSTRACT_CLASS Application {
 	public:
-		static Application& instance();
+		virtual void init()     noexcept = 0;
+		virtual void shutdown() noexcept = 0;
 
-		static int start(std::unique_ptr<Application> application);
-
-	public:
-		explicit Application() noexcept;
-		virtual ~Application() noexcept = default;
-
-		Application(Application&) = delete;
-		Application(Application&&) = delete;
-		Application& operator=(const Application&) = delete;
-
-	public:
-		services::Logger& log() noexcept;
-
-	protected:
-		/*
-		* Put virtual methods here
-		*/
-
-	private:
-		virtual void init()      noexcept;
-		void shutdown()  noexcept;
-		void interrupt() noexcept;
-
-		void exit(int code) noexcept;
-
-		std::vector<int> queryErrors() noexcept;
-
-	private:
-		/*
-		* @brief
-		* Holds a reference to the unique application instance
-		* throughout the life time of the program
-		*/
-		static std::unique_ptr<Application> application;
-
-	private:
-		services::Logger logger;
-
-		volatile bool isRunning;
+		virtual void loadConfig() noexcept = 0;
+		virtual void saveConfig() noexcept = 0;
 	};
 }

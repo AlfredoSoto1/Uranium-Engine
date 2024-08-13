@@ -14,9 +14,9 @@
 #include "Input/Events/WindowMaximizeEvent.h"
 #include "Input/Events/WindowBufferResizeEvent.h"
 
-namespace Uranium::Input::Callbacks {
+namespace uranium::io::callbacks {
 
-	WindowCallback::WindowCallback(Window* window) noexcept {	
+	WindowCallback::WindowCallback(Window* window) noexcept {
 		// On position and size callbacks
 		glfwSetWindowPosCallback(*window,       WindowCallback::position_callback);
 		glfwSetWindowSizeCallback(*window,      WindowCallback::resized_callback);

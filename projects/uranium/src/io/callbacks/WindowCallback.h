@@ -1,14 +1,26 @@
 #pragma once
+#include "core/URAPI.h"
 
 struct GLFWwindow;
 
-namespace Uranium::Platform::Display {
-	class Window;
-}
+namespace uranium::io::callbacks {
 
-namespace Uranium::Input::Callbacks {
+	URANIUM_API class WindowCallback final {
+	public:
+		WindowCallback()  noexcept = default;
+		~WindowCallback() noexcept = default;
 
-	class WindowCallback final {
+		/*
+		* Copy and move constructor deleted
+		* this is beacause we dont want the client
+		* to move or copy this class by accident since
+		* the one who must have ownership of this class
+		* instance is the engine only.
+		*/
+		WindowCallback(WindowCallback&) = delete;
+		WindowCallback(WindowCallback&&) = delete;
+		WindowCallback& operator=(const WindowCallback&) = delete;
+
 	private:
 		/*
 		* Called when window close is requested
@@ -37,28 +49,5 @@ namespace Uranium::Input::Callbacks {
 		*/
 		static void refresh_callback(GLFWwindow* glWindow);
 		static void framebuffer_resize_callback(GLFWwindow* glWindow, int width, int height);
-
-	public:
-		~WindowCallback() = default;
-
-		/*
-		* Copy and move constructor deleted
-		* this is beacause we dont want the client
-		* to move or copy this class by accident since
-		* the one who must have ownership of this class
-		* instance is the engine only.
-		*/
-		WindowCallback(WindowCallback&) = delete;
-		WindowCallback(WindowCallback&&) = delete;
-		WindowCallback& operator=(const WindowCallback&) = delete;
-
-	public:
-		using Window = Platform::Display::Window;
-
-		/*
-		* Window Callback constructor
-		* creates all the window related callbacks
-		*/
-		explicit WindowCallback(Window* window) noexcept;
 	};
 }

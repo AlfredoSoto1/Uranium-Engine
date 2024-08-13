@@ -1,11 +1,10 @@
 #include <GLFW/glfw3.h>
-#include "Core/Logger.h"
 
 #include "MonitorCallback.h"
 #include "Platform/Interface/Monitor.h"
 #include "Input/Events/MonitorConnectionEvent.h"
 
-namespace Uranium::Input::Callbacks {
+namespace uranium::io::callbacks {
 
 	MonitorCallback::MonitorCallback() noexcept {
         // Set the monitor callback        
