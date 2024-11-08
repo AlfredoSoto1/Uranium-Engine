@@ -1,0 +1,105 @@
+{
+  "version": 3,
+  "cmakeMinimumRequired": {
+    "major": 3,
+    "minor": 19,
+    "patch": 0
+  },
+  "configurePresets": [
+    {
+      "name": "linux-base",
+      "hidden": true,
+      "generator": "Unix Makefiles",
+      "binaryDir": "${sourceDir}/build/${presetName}",
+      "condition": {
+        "type": "equals",
+        "lhs": "${hostSystemName}",
+        "rhs": "Linux"
+      }
+    },
+    {
+      "name": "windows-base",
+      "hidden": true,
+      "generator": "Ninja",
+      "binaryDir": "${sourceDir}/build/${presetName}",
+      "cacheVariables": {
+        "CMAKE_C_COMPILER": "cl.exe",
+        "CMAKE_CXX_COMPILER": "cl.exe"
+      },
+      "condition": {
+        "type": "equals",
+        "lhs": "${hostSystemName}",
+        "rhs": "Windows"
+      }
+    },
+
+
+    {
+      "name": "debug-linux",
+      "inherits": "linux-base",
+      "displayName": "Debug",
+      "description": "Debug build with platform-specific settings",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Debug",
+        "CMAKE_CXX_FLAGS_DEBUG": "-g -O0"
+      }
+    },
+    {
+      "name": "debug-windows",
+      "inherits": "windows-base",
+      "displayName": "Debug",
+      "description": "Debug build with platform-specific settings for Windows",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Debug",
+        "CMAKE_CXX_FLAGS_DEBUG": "/Zi /Od",
+        "CMAKE_MSVC_RUNTIME_LIBRARY": "MultiThreadedDebug"
+      }
+    },
+
+
+    {
+      "name": "release-linux",
+      "inherits": "linux-base",
+      "displayName": "Release",
+      "description": "Release build with platform-specific settings",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Release",
+        "CMAKE_CXX_FLAGS_RELEASE": "-O3 -DNDEBUG"
+      }
+    },
+    {
+      "name": "release-windows",
+      "inherits": "windows-base",
+      "displayName": "Release",
+      "description": "Release build with platform-specific settings for Windows",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Release",
+        "CMAKE_CXX_FLAGS_RELEASE": "/O2 /DNDEBUG"
+      }
+    },
+
+
+    {
+      "name": "distribution-linux",
+      "inherits": "linux-base",
+      "displayName": "Distribution",
+      "description": "Distribution build with platform-specific settings",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "MinSizeRel",
+        "CMAKE_CXX_FLAGS_MINSIZEREL": "-O3 -DNDEBUG -s"
+      }
+    },
+    {
+      "name": "distribution-windows",
+      "inherits": "windows-base",
+      "displayName": "Distribution",
+      "description": "Distribution build with platform-specific settings for Windows",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "MinSizeRel",
+        "CMAKE_CXX_FLAGS_MINSIZEREL": "/O2 /DNDEBUG /OPT:REF /INCREMENTAL:NO",
+        "CMAKE_EXE_LINKER_FLAGS": "/SUBSYSTEM:WINDOWS /ENTRY:mainCRTStartup",
+        "HEADLESS_DIST": "ON"
+      }
+    }
+  ]
+}
